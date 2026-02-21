@@ -1,0 +1,7 @@
+{
+  "name": "Bless Nails Lisbon",
+  "description": "Landing page elegante para o salão de unhas Bless Nails Lisbon, com agendamento via Fresha.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
