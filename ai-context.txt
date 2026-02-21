@@ -1,3 +1,91 @@
+# AI Context Export
+
+Gerado em: 2026-02-21T14:43:45.100Z
+Projeto: bless-nails-lisbon
+Arquivos incluídos: 9
+
+---
+
+## FILE: index.html
+```
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Google AI Studio App</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
+
+```
+
+## FILE: package.json
+```
+{
+  "name": "react-example",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port=3000 --host=0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview",
+    "clean": "rm -rf dist",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@google/genai": "^1.29.0",
+    "@tailwindcss/vite": "^4.1.14",
+    "@vitejs/plugin-react": "^5.0.4",
+    "lucide-react": "^0.546.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "vite": "^6.2.0",
+    "express": "^4.21.2",
+    "dotenv": "^17.2.3",
+    "better-sqlite3": "^12.4.1",
+    "motion": "^12.23.24"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "autoprefixer": "^10.4.21",
+    "tailwindcss": "^4.1.14",
+    "tsx": "^4.21.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0",
+    "@types/express": "^4.17.21"
+  }
+}
+
+```
+
+## FILE: README.md
+```
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
+
+# Bless Nails Lisbon — setup e deploy na Netlify
+
+Este projeto é uma landing page em React + Vite pronta para deploy estático.
+
+## 1) Rodar localmente
+
+**Pré-requisito:** Node.js 20+.
+
+1. Instale dependências:
+   ```bash
+   npm install
+
+```
+
+## FILE: src/App.tsx
+```
 import { motion, AnimatePresence } from "motion/react";
 import { 
   Instagram, 
@@ -187,7 +275,7 @@ const Hero = ({ lang }: { lang: Language }) => {
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0">
         <img 
-          src="/hero-bg.png" 
+          src="https://picsum.photos/seed/nailsalon/1920/1080?blur=2" 
           alt="Bless Nails Interior" 
           className="w-full h-full object-cover opacity-40"
           referrerPolicy="no-referrer"
@@ -254,7 +342,7 @@ const About = ({ lang }: { lang: Language }) => {
         >
           <div className="aspect-[4/5] rounded-t-full overflow-hidden border-8 border-brand-cream">
             <img 
-              src="/sobre-principal.png" 
+              src="https://picsum.photos/seed/manicure/800/1000" 
               alt="Manicure at Bless Nails" 
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
@@ -262,7 +350,7 @@ const About = ({ lang }: { lang: Language }) => {
           </div>
           <div className="absolute -bottom-8 -right-8 w-48 h-48 rounded-full overflow-hidden border-8 border-white hidden lg:block">
             <img 
-              src="/sobre-detalhe.png" 
+              src="https://picsum.photos/seed/spa-detail/400/400" 
               alt="Detail" 
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
@@ -542,3 +630,340 @@ export default function App() {
     </div>
   );
 }
+
+```
+
+## FILE: src/constants.ts
+```
+export type Language = "pt" | "en" | "es";
+
+export const UI_STRINGS = {
+  pt: {
+    about: "Sobre",
+    services: "Serviços",
+    reviews: "Avaliações",
+    location: "Localização",
+    bookNow: "Agendar Agora",
+    bookTreatment: "Agendar Tratamento",
+    viewServices: "Ver Serviços",
+    ourEssence: "A nossa essência",
+    luxuryMeetsRelaxation: "Onde o luxo encontra o relaxamento",
+    ourServices: "Nossos Serviços",
+    servicesSubtitle: "Tratamentos exclusivos pensados para realçar a sua beleza natural com os melhores produtos do mercado.",
+    duration: "Duração",
+    price: "Preço",
+    viewFullMenu: "Ver Menu Completo",
+    realExperiences: "Experiências Reais",
+    whatClientsSay: "O que dizem nossas clientes",
+    visitUs: "Visite-nos",
+    openingHours: "Horário de Funcionamento",
+    seeOnGoogleMaps: "Ver no Google Maps",
+    followUs: "Siga-nos",
+    quickLinks: "Links Rápidos",
+    privacy: "Privacidade",
+    terms: "Termos",
+    allRightsReserved: "Todos os direitos reservados.",
+    tagline: "O seu refúgio de beleza no coração de Lisboa.",
+    footerDescription: "O seu refúgio de beleza no coração de Lisboa. Especialistas em cuidados de unhas de luxo e experiências de bem-estar.",
+    scroll: "Scroll",
+    closed: "Fechado"
+  },
+  en: {
+    about: "About",
+    services: "Services",
+    reviews: "Reviews",
+    location: "Location",
+    bookNow: "Book Now",
+    bookTreatment: "Book Treatment",
+    viewServices: "View Services",
+    ourEssence: "Our Essence",
+    luxuryMeetsRelaxation: "Where luxury meets relaxation",
+    ourServices: "Our Services",
+    servicesSubtitle: "Exclusive treatments designed to enhance your natural beauty with the best products on the market.",
+    duration: "Duration",
+    price: "Price",
+    viewFullMenu: "View Full Menu",
+    realExperiences: "Real Experiences",
+    whatClientsSay: "What our clients say",
+    visitUs: "Visit Us",
+    openingHours: "Opening Hours",
+    seeOnGoogleMaps: "See on Google Maps",
+    followUs: "Follow Us",
+    quickLinks: "Quick Links",
+    privacy: "Privacy",
+    terms: "Terms",
+    allRightsReserved: "All rights reserved.",
+    tagline: "Your beauty sanctuary in the heart of Lisbon.",
+    footerDescription: "Your beauty sanctuary in the heart of Lisbon. Specialists in luxury nail care and wellness experiences.",
+    scroll: "Scroll",
+    closed: "Closed"
+  },
+  es: {
+    about: "Sobre",
+    services: "Servicios",
+    reviews: "Reseñas",
+    location: "Ubicación",
+    bookNow: "Reservar Ahora",
+    bookTreatment: "Reservar Tratamiento",
+    viewServices: "Ver Servicios",
+    ourEssence: "Nuestra esencia",
+    luxuryMeetsRelaxation: "Donde el lujo se encuentra con la relajación",
+    ourServices: "Nuestros Servicios",
+    servicesSubtitle: "Tratamientos exclusivos diseñados para realzar tu belleza natural con los mejores productos del mercado.",
+    duration: "Duración",
+    price: "Precio",
+    viewFullMenu: "Ver Menú Completo",
+    realExperiences: "Experiencias Reales",
+    whatClientsSay: "Lo que dicen nuestras clientes",
+    visitUs: "Visítanos",
+    openingHours: "Horario de Funcionamiento",
+    seeOnGoogleMaps: "Ver en Google Maps",
+    followUs: "Síguenos",
+    quickLinks: "Enlaces Rápidos",
+    privacy: "Privacidad",
+    terms: "Términos",
+    allRightsReserved: "Todos los derechos reservados.",
+    tagline: "Tu santuario de belleza en el corazón de Lisboa.",
+    footerDescription: "Tu santuario de belleza en el corazón de Lisboa. Especialistas en el cuidado de uñas de lujo y experiencias de bienestar.",
+    scroll: "Scroll",
+    closed: "Cerrado"
+  }
+};
+
+export const SALON_DATA = {
+  name: "Bless Nails Lisbon",
+  tagline: {
+    pt: "O seu destino de eleição para tratamentos de unhas de luxo no centro de Lisboa.",
+    en: "Your premier destination for luxury nail treatments in the center of Lisbon.",
+    es: "Tu destino preferido para tratamientos de uñas de lujo en el centro de Lisboa."
+  },
+  description: {
+    pt: "Entre na Bless Nails, o seu destino de eleição para tratamentos de unhas de luxo no centro de Lisboa. Desfrute de um ambiente sereno e sofisticado onde os nossos técnicos especializados proporcionam manicures, pedicures e nail art personalizada impecáveis. Utilizando apenas os melhores produtos, garantimos uma experiência de mimo que a deixa rejuvenescida e glamorosa.",
+    en: "Step into Bless Nails, your premier destination for luxury nail treatments in the center of Lisbon. Indulge in a serene and sophisticated environment where our expert technicians provide impeccable manicures, pedicures, and bespoke nail art. Using only the finest products, we ensure a pampering experience that leaves you feeling rejuvenated and glamorous.",
+    es: "Entra en Bless Nails, tu destino preferido para tratamientos de uñas de lujo en el centro de Lisboa. Disfruta de un ambiente sereno y sofisticado donde nuestros técnicos expertos ofrecen manicuras, pedicuras y nail art personalizado impecables. Utilizando solo los mejores productos, garantizamos una experiencia de mimo que te dejará rejuvenecida y glamurosa."
+  },
+  address: "Rua de O Século 154, 154, Príncipe Real, Lisboa",
+  googleMapsUrl: "https://maps.google.com/?daddr=Rua%20de%20O%20S%C3%A9culo%20154%2C%20154%2C%20Lisboa%2C%201200-437",
+  bookingUrl: "https://www.fresha.com/pt/a/bless-nails-lisbon-lisboa-rua-de-o-seculo-154-xcgfypxc/all-offer?venue=true",
+  services: [
+    {
+      name: {
+        pt: "Manicure Verniz Gel | Gel Polish",
+        en: "Gel Polish Manicure",
+        es: "Manicura Esmalte Gel"
+      },
+      price: "25",
+      duration: "1h",
+      description: {
+        pt: "Verniz gel de longa duração com acabamento impecável.",
+        en: "Long-lasting gel polish with an impeccable finish.",
+        es: "Esmalte en gel de larga duración con un acabado impecable."
+      }
+    },
+    {
+      name: {
+        pt: "Manicure Clássica | The Manicure Classic",
+        en: "Classic Manicure",
+        es: "Manicura Clásica"
+      },
+      price: "15",
+      duration: "1h",
+      description: {
+        pt: "Tratamento tradicional para mãos elegantes e cuidadas.",
+        en: "Traditional treatment for elegant and well-cared hands.",
+        es: "Tratamiento tradicional para manos elegantes y cuidadas."
+      }
+    },
+    {
+      name: {
+        pt: "Pedicure Verniz Gel | Shellac Pedicure",
+        en: "Gel Polish Pedicure",
+        es: "Pedicura Esmalte Gel"
+      },
+      price: "35",
+      duration: "1h",
+      description: {
+        pt: "Cuidado completo para pés com verniz gel duradouro.",
+        en: "Complete foot care with long-lasting gel polish.",
+        es: "Cuidado completo de pies con esmalte en gel duradero."
+      }
+    },
+    {
+      name: {
+        pt: "Pedicure Clássico | Classic Pedicure",
+        en: "Classic Pedicure",
+        es: "Pedicura Clásica"
+      },
+      price: "25",
+      duration: "1h",
+      description: {
+        pt: "O essencial para pés relaxados e unhas perfeitas.",
+        en: "The essential for relaxed feet and perfect nails.",
+        es: "Lo esencial para pies relajados y uñas perfectas."
+      }
+    }
+  ],
+  hours: [
+    { day: { pt: "Segunda-feira", en: "Monday", es: "Lunes" }, time: "10:00 - 19:00" },
+    { day: { pt: "Terça-feira", en: "Tuesday", es: "Martes" }, time: "10:00 - 19:00" },
+    { day: { pt: "Quarta-feira", en: "Wednesday", es: "Miércoles" }, time: "10:00 - 19:00" },
+    { day: { pt: "Quinta-feira", en: "Thursday", es: "Jueves" }, time: "10:00 - 19:00" },
+    { day: { pt: "Sexta-feira", en: "Friday", es: "Viernes" }, time: "10:00 - 19:00" },
+    { day: { pt: "Sábado", en: "Saturday", es: "Sábado" }, time: "10:00 - 19:00" },
+    { day: { pt: "Domingo", en: "Sunday", es: "Domingo" }, time: "Fechado" }
+  ],
+  features: {
+    pt: ["Produtos Veganos", "Pet Friendly", "Adequado para Crianças", "Acessível", "Empreendedorismo Feminino", "LGBTQ+ Friendly"],
+    en: ["Vegan Products", "Pet Friendly", "Kid Friendly", "Accessible", "Female Entrepreneurship", "LGBTQ+ Friendly"],
+    es: ["Productos Veganos", "Pet Friendly", "Apto para Niños", "Accesible", "Emprendimiento Femenino", "LGBTQ+ Friendly"]
+  },
+  reviews: [
+    {
+      author: "Raquel B",
+      text: {
+        pt: "Maravilhoso, como sempre",
+        en: "Wonderful, as ever",
+        es: "Maravilloso, como siempre"
+      },
+      rating: 5
+    },
+    {
+      author: "Olann",
+      text: {
+        pt: "Absolutamente amei este salão. O serviço foi impecável, a atenção aos detalhes excepcional.",
+        en: "Absolutely loved this salon. The service was impeccable, the attention to detail outstanding.",
+        es: "Absolutamente me encantó este salón. El servicio fue impecable, la atención al detalle excepcional."
+      },
+      rating: 5
+    },
+    {
+      author: "Isabella L",
+      text: {
+        pt: "O atendimento é ótimo, a Stefanie é super delicada e detalhista. As unhas ficaram incríveis!",
+        en: "The service is great, Stefanie is super delicate and detailed. The nails looked incredible!",
+        es: "¡La atención es excelente, Stefanie es súper delicada y detallista. ¡Las uñas quedaron increíbles!"
+      },
+      rating: 5
+    }
+  ]
+};
+
+```
+
+## FILE: src/index.css
+```
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@100..900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "Inter", sans-serif;
+  
+  --color-brand-cream: #f5f2ed;
+  --color-brand-gold: #c5a059;
+  --color-brand-dark: #1a1a1a;
+  --color-brand-olive: #5a5a40;
+}
+
+@layer base {
+  body {
+    @apply bg-brand-cream text-brand-dark font-sans antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+}
+
+.glass {
+  @apply bg-white/70 backdrop-blur-md border border-white/20;
+}
+
+.section-padding {
+  @apply py-20 px-6 md:px-12 lg:px-24;
+}
+
+.btn-primary {
+  @apply bg-brand-olive text-white px-8 py-3 rounded-full font-medium transition-all hover:bg-brand-olive/90 hover:scale-105 active:scale-95;
+}
+
+.btn-outline {
+  @apply border border-brand-olive text-brand-olive px-8 py-3 rounded-full font-medium transition-all hover:bg-brand-olive hover:text-white;
+}
+
+```
+
+## FILE: src/main.tsx
+```
+import {StrictMode} from 'react';
+import {createRoot} from 'react-dom/client';
+import App from './App.tsx';
+import './index.css';
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+);
+
+```
+
+## FILE: tsconfig.json
+```
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    "module": "ESNext",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    },
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  }
+}
+
+```
+
+## FILE: vite.config.ts
+```
+import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
+import {defineConfig, loadEnv} from 'vite';
+
+export default defineConfig(({mode}) => {
+  const env = loadEnv(mode, '.', '');
+  return {
+    plugins: [react(), tailwindcss()],
+    define: {
+      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+    },
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, '.'),
+      },
+    },
+    server: {
+      // HMR is disabled in AI Studio via DISABLE_HMR env var.
+      // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
+      hmr: process.env.DISABLE_HMR !== 'true',
+    },
+  };
+});
+
+```
