@@ -12,11 +12,17 @@ export const Hero = ({ lang }: { lang: Language }) => {
           alt="Bless Nails Interior" 
           className="w-full h-full object-cover opacity-40"
         />
+        {/* Corrigido para bg-linear-to-b conforme sugestão do sistema */}
         <div className="absolute inset-0 bg-linear-to-b from-brand-cream/20 via-transparent to-brand-cream"></div>
       </div>
 
-      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+      {/* Adicionei pt-20 (padding-top) para afastar o texto do menu fixo */}
+      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto pt-20">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
           <span className="text-brand-gold uppercase tracking-[0.3em] text-sm font-semibold mb-4 block">
             Príncipe Real, Lisboa
           </span>
@@ -43,6 +49,8 @@ export const Hero = ({ lang }: { lang: Language }) => {
           </div>
         </motion.div>
       </div>
+
+      {/* Removi o bloco do "SCROLL" que aparecia aqui embaixo */}
     </section>
   );
 };
