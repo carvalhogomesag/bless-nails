@@ -1,36 +1,43 @@
 // src/components/AdminPanel.tsx
 import { useState } from "react";
 import { motion } from "motion/react";
-import { X, Plus, Trash2, Save, Code, Image as ImageIcon } from "lucide-react";
+import { X, Plus, Trash2, Save, Code, Image as ImageIcon, RotateCcw } from "lucide-react";
 import { useSalon } from "../context/SalonContext";
 
 export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
   const { salonData, updateSalonData } = useSalon();
   
+  // Prepara os dados iniciais garantindo que as novas estruturas existam
   const initialForm = JSON.parse(JSON.stringify(salonData));
   if (!initialForm.socialLinks) initialForm.socialLinks = { instagram: "", facebook: "", tiktok: "" };
-  // Garante que o array da galeria existe (com 10 slots vazios por defeito se for novo)
   if (!initialForm.galleryPhotos) initialForm.galleryPhotos = Array(10).fill("");
   
   const [formData, setFormData] = useState(initialForm);
-  // Adicionada a aba 'galeria'
-  const [activeTab, setActiveTab] = useState<"servicos" | "horarios" | "mapa" | "redes" | "galeria">("servicos");
+  const [activeTab, setActiveTab] = useState<"servicos" | "galeria" | "horarios" | "mapa" | "redes">("servicos");
 
   const handleSave = () => {
     updateSalonData(formData);
     onClose();
-    alert("Alterações guardadas localmente! Para aplicar ao site oficial para sempre, clique em 'Gerar Código (Publicar)'.");
+    // Forçamos um refresh para garantir que o estado global seja reiniciado com os novos dados
+    window.location.reload();
+  };
+
+  const handleReset = () => {
+    if (confirm("Deseja apagar todas as alterações feitas no painel e voltar aos dados originais do código? Isso resolverá problemas de fotos que não carregam.")) {
+      localStorage.removeItem("bless-nails-data");
+      window.location.reload();
+    }
   };
 
   const handleExportCode = () => {
     navigator.clipboard.writeText(JSON.stringify(formData, null, 2));
-    alert("Código copiado! Abra o seu constants.ts e cole-o substituindo a variável SALON_DATA.");
+    alert("Código copiado! Cole-o no seu arquivo constants.ts substituindo o SALON_DATA.");
   };
 
   const addService = () => {
     setFormData({
       ...formData,
-      services:[
+      services: [
         ...formData.services, 
         { name: { pt: "", en: "", es: "" }, price: "", duration: "1h", description: { pt: "", en: "", es: "" } }
       ]
@@ -38,12 +45,12 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
   };
 
   const removeService = (index: number) => {
-    const newServices =[...formData.services];
+    const newServices = [...formData.services];
     newServices.splice(index, 1);
     setFormData({ ...formData, services: newServices });
   };
 
-  // Garante que há sempre 10 slots visíveis no painel para facilitar a gestão
+  // Garante que sempre visualizamos 10 espaços para fotos
   const gallerySlots = Array(10).fill("").map((_, i) => formData.galleryPhotos[i] || "");
 
   return (
@@ -61,10 +68,14 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
           </button>
         </div>
 
-        {/* Tabs - Agora com Galeria */}
+        {/* Tabs */}
         <div className="flex bg-white px-6 gap-6 border-b border-brand-straw/20 overflow-x-auto custom-scrollbar">
           {(["servicos", "galeria", "horarios", "mapa", "redes"] as const).map(tab => (
-            <button key={tab} onClick={() => setActiveTab(tab)} className={`py-4 text-sm font-bold uppercase tracking-widest border-b-2 transition-all whitespace-nowrap ${activeTab === tab ? "border-brand-leaf text-brand-leaf" : "border-transparent text-brand-dark/40 hover:text-brand-leaf"}`}>
+            <button 
+              key={tab} 
+              onClick={() => setActiveTab(tab)} 
+              className={`py-4 text-sm font-bold uppercase tracking-widest border-b-2 transition-all whitespace-nowrap ${activeTab === tab ? "border-brand-leaf text-brand-leaf" : "border-transparent text-brand-dark/40 hover:text-brand-leaf"}`}
+            >
               {tab === "redes" ? "Redes Sociais" : tab}
             </button>
           ))}
@@ -73,7 +84,7 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
         {/* Conteúdo */}
         <div className="flex-1 overflow-y-auto p-8 bg-brand-cream/50">
           
-          {/* TAB SERVIÇOS (Inalterado) */}
+          {/* TAB SERVIÇOS */}
           {activeTab === "servicos" && (
             <div className="space-y-6">
               {formData.services.map((service: any, index: number) => (
@@ -92,7 +103,7 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
                     </div>
                     <div>
                       <label className="text-xs font-bold uppercase text-brand-leaf mb-1 block">Duração</label>
-                      <input type="text" value={service.duration} onChange={(e) => { const newS =[...formData.services]; newS[index].duration = e.target.value; setFormData({...formData, services: newS}) }} className="w-full border p-2 rounded-xl text-sm" />
+                      <input type="text" value={service.duration} onChange={(e) => { const newS = [...formData.services]; newS[index].duration = e.target.value; setFormData({...formData, services: newS}) }} className="w-full border p-2 rounded-xl text-sm" />
                     </div>
                   </div>
                   <div>
@@ -107,23 +118,21 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
             </div>
           )}
 
-          {/* NOVA TAB GALERIA */}
+          {/* TAB GALERIA */}
           {activeTab === "galeria" && (
             <div className="bg-white p-6 rounded-2xl border border-brand-straw/30">
               <div className="flex items-center gap-3 mb-6 pb-4 border-b border-brand-straw/20">
                 <div className="p-3 bg-brand-leaf/10 text-brand-leaf rounded-xl"><ImageIcon size={24} /></div>
                 <div>
-                  <h3 className="font-serif text-xl">Gestão de Fotos (Max: 10)</h3>
-                  <p className="text-xs text-brand-dark/50">Cole os links (URLs) das imagens jpg, png ou webp. Deixe vazio para não mostrar.</p>
+                  <h3 className="font-serif text-xl">Gestão de Galeria</h3>
+                  <p className="text-xs text-brand-dark/50">Insira links diretos (terminados em .jpg ou .png). Remova as etiquetas [img].</p>
                 </div>
               </div>
-
               <div className="grid md:grid-cols-2 gap-x-8 gap-y-4">
                 {gallerySlots.map((url, i) => (
                   <div key={i} className="flex flex-col gap-1">
-                    <label className="text-[10px] font-bold uppercase text-brand-leaf">Foto {i + 1}</label>
+                    <label className="text-[10px] font-bold uppercase text-brand-leaf">Link da Foto {i + 1}</label>
                     <div className="flex items-center gap-3">
-                      {/* Pequena miniatura se tiver link */}
                       {url ? (
                         <img src={url} alt="" className="w-10 h-10 object-cover rounded-lg border shadow-sm shrink-0" onError={(e) => (e.currentTarget.style.display = 'none')} />
                       ) : (
@@ -137,8 +146,8 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
                           newPhotos[i] = e.target.value; 
                           setFormData({...formData, galleryPhotos: newPhotos}) 
                         }} 
-                        className="w-full border p-2 rounded-xl text-xs bg-gray-50 hover:bg-white focus:bg-white transition-colors" 
-                        placeholder="https://exemplo.com/foto.jpg" 
+                        className="w-full border p-2 rounded-xl text-xs bg-gray-50" 
+                        placeholder="https://i.ibb.co/..." 
                       />
                     </div>
                   </div>
@@ -153,7 +162,7 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
               {formData.hours.map((h: any, i: number) => (
                 <div key={i} className="bg-white p-4 rounded-xl border border-brand-straw/30 flex items-center justify-between">
                   <span className="font-medium text-sm w-32">{h.day.pt}</span>
-                  <input type="text" value={h.time} onChange={(e) => { const newH =[...formData.hours]; newH[i].time = e.target.value; setFormData({...formData, hours: newH}) }} className="border p-2 rounded-lg text-sm w-40 text-center" placeholder="10:00 - 19:00 ou Fechado" />
+                  <input type="text" value={h.time} onChange={(e) => { const newH = [...formData.hours]; newH[i].time = e.target.value; setFormData({...formData, hours: newH}) }} className="border p-2 rounded-lg text-sm w-40 text-center" />
                 </div>
               ))}
             </div>
@@ -162,26 +171,25 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
           {/* TAB MAPA */}
           {activeTab === "mapa" && (
             <div className="bg-white p-6 rounded-2xl border border-brand-straw/30">
-              <label className="text-xs font-bold uppercase text-brand-leaf mb-2 block">Link (SRC) de Incorporação do Google Maps</label>
-              <textarea value={formData.mapEmbedUrl} onChange={(e) => setFormData({...formData, mapEmbedUrl: e.target.value})} className="w-full border p-4 rounded-xl text-sm font-mono text-brand-dark/70" rows={6} placeholder="Cole aqui o link do atributo src do iframe do Google Maps" />
+              <label className="text-xs font-bold uppercase text-brand-leaf mb-2 block">Link SRC do Google Maps</label>
+              <textarea value={formData.mapEmbedUrl} onChange={(e) => setFormData({...formData, mapEmbedUrl: e.target.value})} className="w-full border p-4 rounded-xl text-sm font-mono text-brand-dark/70" rows={6} />
             </div>
           )}
 
           {/* TAB REDES SOCIAIS */}
           {activeTab === "redes" && (
             <div className="bg-white p-6 rounded-2xl border border-brand-straw/30 space-y-6">
-              <p className="text-sm text-brand-dark/60 mb-4">Deixe o campo vazio para esconder o respetivo ícone da página inicial.</p>
               <div>
-                <label className="text-xs font-bold uppercase text-brand-leaf mb-2 block">Instagram Link</label>
-                <input type="text" value={formData.socialLinks.instagram} onChange={(e) => setFormData({...formData, socialLinks: {...formData.socialLinks, instagram: e.target.value}})} className="w-full border p-3 rounded-xl text-sm" placeholder="Ex: https://instagram.com/blessnailslisbon" />
+                <label className="text-xs font-bold uppercase text-brand-leaf mb-2 block">Instagram</label>
+                <input type="text" value={formData.socialLinks.instagram} onChange={(e) => setFormData({...formData, socialLinks: {...formData.socialLinks, instagram: e.target.value}})} className="w-full border p-3 rounded-xl text-sm" />
               </div>
               <div>
-                <label className="text-xs font-bold uppercase text-brand-leaf mb-2 block">Facebook Link</label>
-                <input type="text" value={formData.socialLinks.facebook} onChange={(e) => setFormData({...formData, socialLinks: {...formData.socialLinks, facebook: e.target.value}})} className="w-full border p-3 rounded-xl text-sm" placeholder="Ex: https://facebook.com/blessnailslisbon" />
+                <label className="text-xs font-bold uppercase text-brand-leaf mb-2 block">Facebook</label>
+                <input type="text" value={formData.socialLinks.facebook} onChange={(e) => setFormData({...formData, socialLinks: {...formData.socialLinks, facebook: e.target.value}})} className="w-full border p-3 rounded-xl text-sm" />
               </div>
               <div>
-                <label className="text-xs font-bold uppercase text-brand-leaf mb-2 block">TikTok Link</label>
-                <input type="text" value={formData.socialLinks.tiktok} onChange={(e) => setFormData({...formData, socialLinks: {...formData.socialLinks, tiktok: e.target.value}})} className="w-full border p-3 rounded-xl text-sm" placeholder="Ex: https://tiktok.com/@blessnailslisbon" />
+                <label className="text-xs font-bold uppercase text-brand-leaf mb-2 block">TikTok</label>
+                <input type="text" value={formData.socialLinks.tiktok} onChange={(e) => setFormData({...formData, socialLinks: {...formData.socialLinks, tiktok: e.target.value}})} className="w-full border p-3 rounded-xl text-sm" />
               </div>
             </div>
           )}
@@ -189,13 +197,18 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
         </div>
 
         {/* Footer */}
-        <div className="bg-white p-6 border-t border-brand-straw/30 flex justify-between">
-          <button onClick={handleExportCode} className="flex items-center gap-2 text-brand-dark/50 hover:text-brand-dark font-medium text-sm transition-colors">
-            <Code size={18} /> Gerar Código (Publicar)
-          </button>
+        <div className="bg-white p-6 border-t border-brand-straw/30 flex justify-between items-center">
+          <div className="flex gap-6">
+            <button onClick={handleReset} className="flex items-center gap-2 text-red-500/60 hover:text-red-500 font-medium text-xs transition-colors">
+              <RotateCcw size={16} /> Restaurar Padrão
+            </button>
+            <button onClick={handleExportCode} className="flex items-center gap-2 text-brand-dark/50 hover:text-brand-dark font-medium text-xs transition-colors">
+              <Code size={18} /> Gerar Código
+            </button>
+          </div>
           <div className="flex gap-4">
-            <button onClick={onClose} className="btn-outline py-2 px-6">Cancelar</button>
-            <button onClick={handleSave} className="btn-primary py-2 px-6 flex items-center gap-2">
+            <button onClick={onClose} className="btn-outline py-2 px-6 text-xs uppercase tracking-widest">Cancelar</button>
+            <button onClick={handleSave} className="btn-primary py-2 px-6 flex items-center gap-2 text-xs uppercase tracking-widest">
               <Save size={16} /> Guardar Live
             </button>
           </div>
