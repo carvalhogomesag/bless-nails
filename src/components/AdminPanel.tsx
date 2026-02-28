@@ -6,18 +6,26 @@ import { useSalon } from "../context/SalonContext";
 
 export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
   const { salonData, updateSalonData } = useSalon();
-  const [formData, setFormData] = useState(JSON.parse(JSON.stringify(salonData))); // Deep copy
-  const[activeTab, setActiveTab] = useState<"servicos" | "horarios" | "mapa">("servicos");
+  
+  // Assegura que o formData tem a estrutura socialLinks caso seja a primeira vez a abrir o painel após o update
+  const initialForm = JSON.parse(JSON.stringify(salonData));
+  if (!initialForm.socialLinks) {
+    initialForm.socialLinks = { instagram: "", facebook: "", tiktok: "" };
+  }
+  
+  const [formData, setFormData] = useState(initialForm);
+  // Adicionámos o separador "redes" aqui em baixo
+  const [activeTab, setActiveTab] = useState<"servicos" | "horarios" | "mapa" | "redes">("servicos");
 
   const handleSave = () => {
     updateSalonData(formData);
     onClose();
-    alert("Alterações guardadas localmente! Para aplicar ao site oficial, clique em 'Gerar Código'.");
+    alert("Alterações guardadas localmente! Para aplicar ao site oficial para sempre, clique em 'Gerar Código (Publicar)'.");
   };
 
   const handleExportCode = () => {
     navigator.clipboard.writeText(JSON.stringify(formData, null, 2));
-    alert("Código copiado! Cole-o na variável SALON_DATA no seu ficheiro constants.ts");
+    alert("Código copiado! Abra o seu constants.ts e cole-o substituindo a variável SALON_DATA.");
   };
 
   const addService = () => {
@@ -51,11 +59,11 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
           </button>
         </div>
 
-        {/* Tabs */}
-        <div className="flex bg-white px-6 gap-6 border-b border-brand-straw/20">
-          {(["servicos", "horarios", "mapa"] as const).map(tab => (
-            <button key={tab} onClick={() => setActiveTab(tab)} className={`py-4 text-sm font-bold uppercase tracking-widest border-b-2 transition-all ${activeTab === tab ? "border-brand-leaf text-brand-leaf" : "border-transparent text-brand-dark/40"}`}>
-              {tab}
+        {/* Tabs - Agora tem 4 opções */}
+        <div className="flex bg-white px-6 gap-6 border-b border-brand-straw/20 overflow-x-auto">
+          {(["servicos", "horarios", "mapa", "redes"] as const).map(tab => (
+            <button key={tab} onClick={() => setActiveTab(tab)} className={`py-4 text-sm font-bold uppercase tracking-widest border-b-2 transition-all whitespace-nowrap ${activeTab === tab ? "border-brand-leaf text-brand-leaf" : "border-transparent text-brand-dark/40"}`}>
+              {tab === "redes" ? "Redes Sociais" : tab}
             </button>
           ))}
         </div>
@@ -82,7 +90,7 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
                     </div>
                     <div>
                       <label className="text-xs font-bold uppercase text-brand-leaf mb-1 block">Duração</label>
-                      <input type="text" value={service.duration} onChange={(e) => { const newS = [...formData.services]; newS[index].duration = e.target.value; setFormData({...formData, services: newS}) }} className="w-full border p-2 rounded-xl text-sm" />
+                      <input type="text" value={service.duration} onChange={(e) => { const newS =[...formData.services]; newS[index].duration = e.target.value; setFormData({...formData, services: newS}) }} className="w-full border p-2 rounded-xl text-sm" />
                     </div>
                   </div>
                   <div>
@@ -115,6 +123,28 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
               <label className="text-xs font-bold uppercase text-brand-leaf mb-2 block">Link (SRC) de Incorporação do Google Maps</label>
               <textarea value={formData.mapEmbedUrl} onChange={(e) => setFormData({...formData, mapEmbedUrl: e.target.value})} className="w-full border p-4 rounded-xl text-sm font-mono text-brand-dark/70" rows={6} placeholder="Cole aqui o link do atributo src do iframe do Google Maps" />
               <p className="text-xs text-brand-dark/50 mt-2">Vá ao Google Maps &gt; Partilhar &gt; Incorporar Mapa &gt; Copie apenas o link que está dentro das aspas do src="...".</p>
+            </div>
+          )}
+
+          {/* TAB REDES SOCIAIS (NOVA) */}
+          {activeTab === "redes" && (
+            <div className="bg-white p-6 rounded-2xl border border-brand-straw/30 space-y-6">
+              <p className="text-sm text-brand-dark/60 mb-4">Deixe o campo vazio para esconder o respetivo ícone da página inicial.</p>
+              
+              <div>
+                <label className="text-xs font-bold uppercase text-brand-leaf mb-2 block">Instagram Link</label>
+                <input type="text" value={formData.socialLinks.instagram} onChange={(e) => setFormData({...formData, socialLinks: {...formData.socialLinks, instagram: e.target.value}})} className="w-full border p-3 rounded-xl text-sm" placeholder="Ex: https://instagram.com/blessnailslisbon" />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold uppercase text-brand-leaf mb-2 block">Facebook Link</label>
+                <input type="text" value={formData.socialLinks.facebook} onChange={(e) => setFormData({...formData, socialLinks: {...formData.socialLinks, facebook: e.target.value}})} className="w-full border p-3 rounded-xl text-sm" placeholder="Ex: https://facebook.com/blessnailslisbon" />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold uppercase text-brand-leaf mb-2 block">TikTok Link</label>
+                <input type="text" value={formData.socialLinks.tiktok} onChange={(e) => setFormData({...formData, socialLinks: {...formData.socialLinks, tiktok: e.target.value}})} className="w-full border p-3 rounded-xl text-sm" placeholder="Ex: https://tiktok.com/@blessnailslisbon" />
+              </div>
             </div>
           )}
 
