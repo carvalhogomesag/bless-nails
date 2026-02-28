@@ -5,20 +5,20 @@ import { Navbar } from "./components/Navbar";
 import { Hero } from "./components/Hero";
 import { About } from "./components/About";
 import { Services } from "./components/Services";
+import { Gallery } from "./components/Gallery"; // <-- NOVA IMPORTAÇÃO
 import { Reviews } from "./components/Reviews";
 import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
 import { CookieBanner } from "./components/CookieBanner";
-import { AdminPanel } from "./components/AdminPanel"; // Importamos o Painel
+import { AdminPanel } from "./components/AdminPanel";
 import { SALON_DATA, UI_STRINGS, Language } from "./constants";
 
 export default function App() {
   const [lang, setLang] = useState<Language>("pt");
-  const [showAdmin, setShowAdmin] = useState(false); // Estado do Painel Secreto
+  const [showAdmin, setShowAdmin] = useState(false);
   const t = UI_STRINGS[lang];
 
   useEffect(() => {
-    // Fica à escuta do evento lançado pelos 5 cliques no Footer
     const openAdmin = () => setShowAdmin(true);
     window.addEventListener("open-admin", openAdmin);
     return () => window.removeEventListener("open-admin", openAdmin);
@@ -31,13 +31,16 @@ export default function App() {
         <Hero lang={lang} />
         <About lang={lang} />
         <Services lang={lang} />
+        
+        {/* A NOSSA NOVA GALERIA ELEGANTE */}
+        <Gallery lang={lang} />
+        
         <Reviews lang={lang} />
         <Contact lang={lang} />
       </main>
       <Footer lang={lang} />
       <CookieBanner />
 
-      {/* Rendeiza o Painel Secreto quando ativado */}
       {showAdmin && <AdminPanel onClose={() => setShowAdmin(false)} />}
 
       <div className="fixed bottom-6 left-6 right-6 z-40 md:hidden">

@@ -6,6 +6,8 @@ export const UI_STRINGS = {
   pt: {
     about: "Sobre",
     services: "Serviços",
+    gallery: "Galeria",
+    gallerySubtitle: "Inspire-se com a nossa arte e espaço.",
     reviews: "Avaliações",
     location: "Localização",
     bookNow: "Agendar Agora",
@@ -36,6 +38,8 @@ export const UI_STRINGS = {
   en: {
     about: "About",
     services: "Services",
+    gallery: "Gallery",
+    gallerySubtitle: "Get inspired by our art and space.",
     reviews: "Reviews",
     location: "Location",
     bookNow: "Book Now",
@@ -66,6 +70,8 @@ export const UI_STRINGS = {
   es: {
     about: "Sobre",
     services: "Servicios",
+    gallery: "Galería",
+    gallerySubtitle: "Inspírate con nuestro arte y espacio.",
     reviews: "Reseñas",
     location: "Ubicación",
     bookNow: "Reservar Ahora",
@@ -111,201 +117,86 @@ export const SALON_DATA = {
   googleMapsUrl: "https://maps.google.com/?daddr=Rua%20de%20O%20S%C3%A9culo%20154%2C%20154%2C%20Lisboa%2C%201200-437",
   bookingUrl: "https://www.fresha.com/pt/a/bless-nails-lisbon-lisboa-rua-de-o-seculo-154-xcgfypxc/all-offer?venue=true",
   
-  // AQUI ESTÁ A PROPRIEDADE PARA O EASTER EGG (MAPA)
   mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3113.123456789!2d-9.148!3d38.716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd19337f7f7f7f7f%3A0x7f7f7f7f7f7f7f7f!2sRua%20de%20O%20S%C3%A9culo%20154%2C%201200-437%20Lisboa!5e0!3m2!1spt!2spt!4v1234567890",
   
-  // AQUI ESTÃO AS PROPRIEDADES PARA AS REDES SOCIAIS
   socialLinks: {
     instagram: "",
     facebook: "",
     tiktok: ""
   },
+
+  // NOVA SECÇÃO: GALERIA DE FOTOS (Exemplos premium elegantes)
+  galleryPhotos:[
+    "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=800",
+    "https://images.unsplash.com/photo-1519014816548-bf5fe059e98b?auto=format&fit=crop&q=80&w=800",
+    "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&q=80&w=800",
+    "https://images.unsplash.com/photo-1516975080661-46bce0a66d41?auto=format&fit=crop&q=80&w=800",
+    "https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&q=80&w=800",
+  ],
   
   services:[
     {
-      name: {
-        pt: "Manicure Verniz Gel | Gel Polish",
-        en: "Gel Polish Manicure",
-        es: "Manicura Esmalte Gel"
-      },
+      name: { pt: "Manicure Verniz Gel | Gel Polish", en: "Gel Polish Manicure", es: "Manicura Esmalte Gel" },
       price: "25",
       duration: "1h",
-      description: {
-        pt: "Verniz gel de longa duração com acabamento impecável.",
-        en: "Long-lasting gel polish with an impeccable finish.",
-        es: "Esmalte en gel de larga duración con un acabado impecable."
-      }
+      description: { pt: "Verniz gel de longa duração com acabamento impecável.", en: "Long-lasting gel polish with an impeccable finish.", es: "Esmalte en gel de larga duración con un acabado impecable." }
     },
     {
-      name: {
-        pt: "Manicure Clássica | The Manicure Classic",
-        en: "Classic Manicure",
-        es: "Manicura Clásica"
-      },
+      name: { pt: "Manicure Clássica | The Manicure Classic", en: "Classic Manicure", es: "Manicura Clásica" },
       price: "15",
       duration: "1h",
-      description: {
-        pt: "Tratamento tradicional para mãos elegantes e cuidadas.",
-        en: "Traditional treatment for elegant and well-cared hands.",
-        es: "Tratamiento tradicional para manos elegantes y cuidadas."
-      }
+      description: { pt: "Tratamento tradicional para mãos elegantes e cuidadas.", en: "Traditional treatment for elegant and well-cared hands.", es: "Tratamiento tradicional para manos elegantes y cuidadas." }
     },
     {
-      name: {
-        pt: "Pedicure Verniz Gel | Shellac Pedicure",
-        en: "Gel Polish Pedicure",
-        es: "Pedicura Esmalte Gel"
-      },
+      name: { pt: "Pedicure Verniz Gel | Shellac Pedicure", en: "Gel Polish Pedicure", es: "Pedicura Esmalte Gel" },
       price: "35",
       duration: "1h",
-      description: {
-        pt: "Cuidado completo para pés com verniz gel duradouro.",
-        en: "Complete foot care with long-lasting gel polish.",
-        es: "Cuidado completo de pies con esmalte en gel duradero."
-      }
+      description: { pt: "Cuidado completo para pés com verniz gel duradouro.", en: "Complete foot care with long-lasting gel polish.", es: "Cuidado completo de pies con esmalte en gel duradero." }
     },
     {
-      name: {
-        pt: "Pedicure Clássico | Classic Pedicure",
-        en: "Classic Pedicure",
-        es: "Pedicura Clásica"
-      },
+      name: { pt: "Pedicure Clássico | Classic Pedicure", en: "Classic Pedicure", es: "Pedicura Clásica" },
       price: "25",
       duration: "1h",
-      description: {
-        pt: "O essencial para pés relaxados e unhas perfeitas.",
-        en: "The essential for relaxed feet and perfect nails.",
-        es: "Lo esencial para pies relajados y uñas perfectas."
-      }
+      description: { pt: "O essencial para pés relaxados e unhas perfeitas.", en: "The essential for relaxed feet and perfect nails.", es: "Lo esencial para pies relajados y uñas perfectas." }
     },
     {
-      name: {
-        pt: "Serviço de Teste",
-        en: "",
-        es: ""
-      },
+      name: { pt: "Serviço de Teste", en: "", es: "" },
       price: "18",
       duration: "1h",
-      description: {
-        pt: "Serviço de teste",
-        en: "",
-        es: ""
-      }
+      description: { pt: "Serviço de teste", en: "", es: "" }
     }
   ],
   
   hours:[
-    {
-      day: {
-        pt: "Segunda-feira",
-        en: "Monday",
-        es: "Lunes"
-      },
-      time: "10:00 - 19:00"
-    },
-    {
-      day: {
-        pt: "Terça-feira",
-        en: "Tuesday",
-        es: "Martes"
-      },
-      time: "10:00 - 19:00"
-    },
-    {
-      day: {
-        pt: "Quarta-feira",
-        en: "Wednesday",
-        es: "Miércoles"
-      },
-      time: "10:00 - 19:00"
-    },
-    {
-      day: {
-        pt: "Quinta-feira",
-        en: "Thursday",
-        es: "Jueves"
-      },
-      time: "10:00 - 19:00"
-    },
-    {
-      day: {
-        pt: "Sexta-feira",
-        en: "Friday",
-        es: "Viernes"
-      },
-      time: "10:00 - 19:00"
-    },
-    {
-      day: {
-        pt: "Sábado",
-        en: "Saturday",
-        es: "Sábado"
-      },
-      time: "10:00 - 19:00"
-    },
-    {
-      day: {
-        pt: "Domingo",
-        en: "Sunday",
-        es: "Domingo"
-      },
-      time: "Fechado"
-    }
+    { day: { pt: "Segunda-feira", en: "Monday", es: "Lunes" }, time: "10:00 - 19:00" },
+    { day: { pt: "Terça-feira", en: "Tuesday", es: "Martes" }, time: "10:00 - 19:00" },
+    { day: { pt: "Quarta-feira", en: "Wednesday", es: "Miércoles" }, time: "10:00 - 19:00" },
+    { day: { pt: "Quinta-feira", en: "Thursday", es: "Jueves" }, time: "10:00 - 19:00" },
+    { day: { pt: "Sexta-feira", en: "Friday", es: "Viernes" }, time: "10:00 - 19:00" },
+    { day: { pt: "Sábado", en: "Saturday", es: "Sábado" }, time: "10:00 - 19:00" },
+    { day: { pt: "Domingo", en: "Sunday", es: "Domingo" }, time: "Fechado" }
   ],
   
   features: {
-    pt:[
-      "Produtos Veganos",
-      "Pet Friendly",
-      "Adequado para Crianças",
-      "Acessível",
-      "Empreendedorismo Feminino",
-      "LGBTQ+ Friendly"
-    ],
-    en:[
-      "Vegan Products",
-      "Pet Friendly",
-      "Kid Friendly",
-      "Accessible",
-      "Female Entrepreneurship",
-      "LGBTQ+ Friendly"
-    ],
-    es:[
-      "Productos Veganos",
-      "Pet Friendly",
-      "Apto para Niños",
-      "Accesible",
-      "Emprendimiento Femenino",
-      "LGBTQ+ Friendly"
-    ]
+    pt:["Produtos Veganos", "Pet Friendly", "Adequado para Crianças", "Acessível", "Empreendedorismo Feminino", "LGBTQ+ Friendly"],
+    en:["Vegan Products", "Pet Friendly", "Kid Friendly", "Accessible", "Female Entrepreneurship", "LGBTQ+ Friendly"],
+    es:["Productos Veganos", "Pet Friendly", "Apto para Niños", "Accesible", "Emprendimiento Femenino", "LGBTQ+ Friendly"]
   },
   
   reviews:[
     {
       author: "Raquel B",
-      text: {
-        pt: "Maravilhoso, como sempre",
-        en: "Wonderful, as ever",
-        es: "Maravilloso, como siempre"
-      },
+      text: { pt: "Maravilhoso, como sempre", en: "Wonderful, as ever", es: "Maravilloso, como siempre" },
       rating: 5
     },
     {
       author: "Olann",
-      text: {
-        pt: "Absolutamente amei este salão. O serviço foi impecável, a atenção aos detalhes excepcional.",
-        en: "Absolutely loved this salon. The service was impeccable, the attention to detail outstanding.",
-        es: "Absolutamente me encantó este salón. El servicio fue impecable, la atención al detalle excepcional."
-      },
+      text: { pt: "Absolutamente amei este salão. O serviço foi impecável, a atenção aos detalhes excepcional.", en: "Absolutely loved this salon. The service was impeccable, the attention to detail outstanding.", es: "Absolutamente me encantó este salón. El servicio fue impecable, la atención al detalle excepcional." },
       rating: 5
     },
     {
       author: "Isabella L",
-      text: {
-        pt: "O atendimento é ótimo, a Stefanie é super delicada e detalhista. As unhas ficaram incríveis!",
-        en: "The service is great, Stefanie is super delicate and detailed. The nails looked incredible!",
-        es: "¡La atención es excelente, Stefanie es súper delicada y detallista. ¡Las uñas quedaron increíbles!"
-      },
+      text: { pt: "O atendimento é ótimo, a Stefanie é super delicada e detalhista. As unhas ficaram incríveis!", en: "The service is great, Stefanie is super delicate and detailed. The nails looked incredible!", es: "¡La atención es excelente, Stefanie es súper delicada y detallista. ¡Las uñas quedaron increíbles!" },
       rating: 5
     }
   ]

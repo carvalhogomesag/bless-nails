@@ -12,7 +12,7 @@ interface NavbarProps {
 export const Navbar = ({ lang, setLang }: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const[isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
+  const[isLangMenuOpen, setIsLangMenuOpen] = useState(false);
 
   const t = UI_STRINGS[lang];
 
@@ -25,6 +25,7 @@ export const Navbar = ({ lang, setLang }: NavbarProps) => {
   const navLinks =[
     { name: t.about, href: "#sobre" },
     { name: t.services, href: "#servicos" },
+    { name: t.gallery, href: "#galeria" }, // ADICIONADO AQUI
     { name: t.reviews, href: "#avaliacoes" },
     { name: t.location, href: "#contato" },
   ];
@@ -40,7 +41,7 @@ export const Navbar = ({ lang, setLang }: NavbarProps) => {
           Bless Nails <span className="text-brand-leaf italic font-light">Lisbon</span>
         </a>
 
-        <div className="hidden md:flex items-center space-x-10">
+        <div className="hidden lg:flex items-center space-x-10">
           {navLinks.map((link) => (
             <a key={link.name} href={link.href} className="text-[11px] uppercase tracking-[0.15em] font-medium text-brand-dark/80 hover:text-brand-leaf transition-colors">
               {link.name}
@@ -69,7 +70,7 @@ export const Navbar = ({ lang, setLang }: NavbarProps) => {
           </a>
         </div>
 
-        <div className="flex items-center gap-5 md:hidden">
+        <div className="flex items-center gap-5 lg:hidden">
           <button className="text-brand-dark" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
             {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
