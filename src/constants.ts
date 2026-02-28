@@ -1,3 +1,5 @@
+// src/constants.ts
+
 export type Language = "pt" | "en" | "es";
 
 export const UI_STRINGS = {
@@ -108,7 +110,11 @@ export const SALON_DATA = {
   address: "Rua de O Século 154, 154, Príncipe Real, Lisboa",
   googleMapsUrl: "https://maps.google.com/?daddr=Rua%20de%20O%20S%C3%A9culo%20154%2C%20154%2C%20Lisboa%2C%201200-437",
   bookingUrl: "https://www.fresha.com/pt/a/bless-nails-lisbon-lisboa-rua-de-o-seculo-154-xcgfypxc/all-offer?venue=true",
-  services: [
+  
+  // AQUI ESTÁ A NOVA PROPRIEDADE PARA O EASTER EGG (MAPA)
+  mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3113.123456789!2d-9.148!3d38.716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd19337f7f7f7f7f%3A0x7f7f7f7f7f7f7f7f!2sRua%20de%20O%20S%C3%A9culo%20154%2C%201200-437%20Lisboa!5e0!3m2!1spt!2spt!4v1234567890",
+  
+  services:[
     {
       name: {
         pt: "Manicure Verniz Gel | Gel Polish",
@@ -166,7 +172,7 @@ export const SALON_DATA = {
       }
     }
   ],
-  hours: [
+  hours:[
     { day: { pt: "Segunda-feira", en: "Monday", es: "Lunes" }, time: "10:00 - 19:00" },
     { day: { pt: "Terça-feira", en: "Tuesday", es: "Martes" }, time: "10:00 - 19:00" },
     { day: { pt: "Quarta-feira", en: "Wednesday", es: "Miércoles" }, time: "10:00 - 19:00" },
@@ -176,11 +182,11 @@ export const SALON_DATA = {
     { day: { pt: "Domingo", en: "Sunday", es: "Domingo" }, time: "Fechado" }
   ],
   features: {
-    pt: ["Produtos Veganos", "Pet Friendly", "Adequado para Crianças", "Acessível", "Empreendedorismo Feminino", "LGBTQ+ Friendly"],
-    en: ["Vegan Products", "Pet Friendly", "Kid Friendly", "Accessible", "Female Entrepreneurship", "LGBTQ+ Friendly"],
-    es: ["Productos Veganos", "Pet Friendly", "Apto para Niños", "Accesible", "Emprendimiento Femenino", "LGBTQ+ Friendly"]
+    pt:["Produtos Veganos", "Pet Friendly", "Adequado para Crianças", "Acessível", "Empreendedorismo Feminino", "LGBTQ+ Friendly"],
+    en:["Vegan Products", "Pet Friendly", "Kid Friendly", "Accessible", "Female Entrepreneurship", "LGBTQ+ Friendly"],
+    es:["Productos Veganos", "Pet Friendly", "Apto para Niños", "Accesible", "Emprendimiento Femenino", "LGBTQ+ Friendly"]
   },
-  reviews: [
+  reviews:[
     {
       author: "Raquel B",
       text: {

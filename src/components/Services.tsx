@@ -1,10 +1,13 @@
 // src/components/Services.tsx
 import { motion } from "motion/react";
 import { Sparkles, Clock } from "lucide-react";
-import { SALON_DATA, UI_STRINGS, Language } from "../constants";
+import { UI_STRINGS, Language } from "../constants";
+import { useSalon } from "../context/SalonContext"; // <-- Importamos o contexto mágico
 
 export const Services = ({ lang }: { lang: Language }) => {
   const t = UI_STRINGS[lang];
+  const { salonData } = useSalon(); // <-- Usamos os dados dinâmicos do contexto
+
   return (
     <section id="servicos" className="section-padding bg-white">
       <div className="max-w-7xl mx-auto">
@@ -15,7 +18,7 @@ export const Services = ({ lang }: { lang: Language }) => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {SALON_DATA.services.map((service, i) => (
+          {salonData.services.map((service, i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.6 }} 
               className="bg-brand-cream/30 p-8 rounded-[2rem] hover:bg-white hover:shadow-[0_20px_40px_rgb(91,122,97,0.08)] transition-all duration-500 group border border-brand-straw/20 hover:-translate-y-2 flex flex-col h-full"
             >
