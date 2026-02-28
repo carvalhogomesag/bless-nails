@@ -125,13 +125,17 @@ export const SALON_DATA = {
     tiktok: ""
   },
 
-  // NOVA SECÇÃO: GALERIA DE FOTOS (Exemplos premium elegantes)
   galleryPhotos:[
-    "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=800",
-    "https://images.unsplash.com/photo-1519014816548-bf5fe059e98b?auto=format&fit=crop&q=80&w=800",
-    "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&q=80&w=800",
-    "https://images.unsplash.com/photo-1516975080661-46bce0a66d41?auto=format&fit=crop&q=80&w=800",
-    "https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&q=80&w=800",
+    "https://ibb.co/k2B3mh2C",
+    "https://ibb.co/Zp90nfxL",
+    "https://ibb.co/G61VDZp",
+    "https://ibb.co/C547TDK3",
+    "https://ibb.co/k2qfNP3S",
+    "",
+    "",
+    "",
+    "",
+    ""
   ],
   
   services:[
