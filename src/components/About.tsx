@@ -8,7 +8,7 @@ export const About = ({ lang }: { lang: Language }) => {
   return (
     <section id="sobre" className="section-padding bg-brand-cream">
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
-        <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-100px" }} className="relative">
+        <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative">
           {/* Efeito UAU de forma orgânica lembrando uma folha */}
           <div className="aspect-[4/5] rounded-tl-[8rem] rounded-br-[8rem] rounded-tr-3xl rounded-bl-3xl overflow-hidden shadow-2xl shadow-brand-leaf/10 relative">
             <div className="absolute inset-0 bg-brand-leaf/10 mix-blend-overlay z-10"></div>
@@ -19,7 +19,7 @@ export const About = ({ lang }: { lang: Language }) => {
           </div>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-100px" }}>
+        <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
           <span className="text-brand-leaf uppercase tracking-[0.2em] text-xs font-bold mb-4 block">{t.ourEssence}</span>
           <h2 className="text-5xl md:text-6xl mb-8 leading-tight">{t.luxuryMeetsRelaxation}</h2>
           <p className="text-brand-dark/70 leading-relaxed mb-10 text-lg md:text-xl font-light">
