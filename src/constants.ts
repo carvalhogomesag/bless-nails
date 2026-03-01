@@ -166,7 +166,7 @@ export const SALON_DATA = {
   "services": [
     {
       "name": {
-        "pt": "Manicure Verniz Gel | Gel Polish",
+        "pt": "Manicure Verniz Gel",
         "en": "Gel Polish Manicure",
         "es": "Manicura Esmalte Gel"
       },
