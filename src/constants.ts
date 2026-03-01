@@ -127,7 +127,7 @@ export const SALON_DATA = {
   "bookingUrl": "https://www.fresha.com/pt/a/bless-nails-lisbon-lisboa-rua-de-o-seculo-154-xcgfypxc/all-offer?venue=true",
   "mapEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3113.123456789!2d-9.148!3d38.716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd19337f7f7f7f7f%3A0x7f7f7f7f7f7f7f7f!2sRua%20de%20O%20S%C3%A9culo%20154%2C%201200-437%20Lisboa!5e0!3m2!1spt!2spt!4v1234567890",
   "socialLinks": {
-    "instagram": "",
+    "instagram": "https://www.instagram.com/blessnailslisbon/",
     "facebook": "",
     "tiktok": ""
   },
