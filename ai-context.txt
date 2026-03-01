@@ -1,27 +1,48 @@
 # AI Context Export
 
-Gerado em: 2026-02-28T21:05:53.607Z
+Gerado em: 2026-03-01T11:46:04.200Z
 Projeto: bless-nails-lisbon
-Arquivos incluídos: 17
+Arquivos incluídos: 22
 
 ---
 
 ## FILE: index.html
 ```
 <!doctype html>
-<html lang="en">
+<html lang="pt">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
+    
+    <!-- Título da Aba do Navegador -->
+    <title>Bless Nails Lisbon — Elegância em cada detalhe</title>
+    <meta name="description" content="O seu refúgio de beleza no coração de Lisboa. Especialistas em unhas de luxo e bem-estar no Príncipe Real." />
+
+    <!-- Configurações para WhatsApp, Facebook e Instagram (Open Graph) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://blessnailslisbon.netlify.app/" />
+    <meta property="og:title" content="Bless Nails Lisbon — Unhas de Luxo" />
+    <meta property="og:description" content="Elegância e cuidado em cada detalhe. Reserve o seu tratamento de manicure e pedicure no coração de Lisboa." />
+    
+    <!-- FOTO DE CAPA: Substitua o link abaixo pela foto que deseja mostrar no WhatsApp -->
+    <meta property="og:image" content="https://i.ibb.co/99SZskLY/Captura-de-ecr-2026-02-28-220502.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Configurações para Twitter/X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Bless Nails Lisbon" />
+    <meta name="twitter:description" content="O seu refúgio de beleza no coração de Lisboa." />
+    <meta name="twitter:image" content="https://i.ibb.co/99SZskLY/Captura-de-ecr-2026-02-28-220502.png" />
+
+    <!-- Favicon (Ícone pequeno da aba) -->
+    <link rel="icon" type="image/svg+xml" href="/src/assets/logo.svg" />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-
-
 ```
 
 ## FILE: package.json
@@ -86,66 +107,93 @@ Este projeto é uma landing page em React + Vite pronta para deploy estático.
 
 ## FILE: src/App.tsx
 ```
-import { useState } from "react";
-import { Calendar } from "lucide-react";
-
-// Importando os componentes que organizamos na pasta components
+// src/App.tsx
+import { useState, useEffect } from "react";
+import { Calendar, MessageCircle, Phone } from "lucide-react"; 
 import { Navbar } from "./components/Navbar";
 import { Hero } from "./components/Hero";
 import { About } from "./components/About";
 import { Services } from "./components/Services";
+import { Gallery } from "./components/Gallery";
+import { Team } from "./components/Team";
 import { Reviews } from "./components/Reviews";
 import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
-import { CookieBanner } from "./components/CookieBanner"; // Novo componente legal
-
-// Importando as configurações e tipos
-import { SALON_DATA, UI_STRINGS, Language } from "./constants";
+import { CookieBanner } from "./components/CookieBanner";
+import { AdminPanel } from "./components/AdminPanel";
+import { FloatingContact } from "./components/FloatingContact"; // Importação do novo componente
+import { UI_STRINGS, Language } from "./constants";
+import { useSalon } from "./context/SalonContext"; 
 
 export default function App() {
   const [lang, setLang] = useState<Language>("pt");
+  const [showAdmin, setShowAdmin] = useState(false);
+  const { salonData } = useSalon(); 
   const t = UI_STRINGS[lang];
+
+  // Preparação segura do número de telefone
+  const rawPhone = salonData.phoneNumber || "+351937832777";
+  const cleanPhone = rawPhone.replace(/\s/g, "");
+  const waNumber = cleanPhone.replace("+", "");
+
+  useEffect(() => {
+    const openAdmin = () => setShowAdmin(true);
+    window.addEventListener("open-admin", openAdmin);
+    return () => window.removeEventListener("open-admin", openAdmin);
+  }, []);
 
   return (
     <div className="min-h-screen">
-      {/* 1. Menu de Navegação fixo no topo */}
       <Navbar lang={lang} setLang={setLang} />
       
-      {/* Conteúdo Principal do Site */}
       <main>
-        {/* 2. Banner de Entrada (Hero) */}
         <Hero lang={lang} />
-        
-        {/* 3. Seção Sobre a essência do salão */}
         <About lang={lang} />
-        
-        {/* 4. Lista de Serviços e Preços */}
         <Services lang={lang} />
-        
-        {/* 5. Prova Social: O que as clientes dizem */}
+        <Gallery lang={lang} />
+        <Team lang={lang} />
         <Reviews lang={lang} />
-        
-        {/* 6. Informações de Localização, Horários e Mapa */}
         <Contact lang={lang} />
       </main>
 
-      {/* 7. Rodapé com links legais (NIF, Livro de Reclamações, etc) */}
       <Footer lang={lang} />
-      
-      {/* 8. Aviso de Privacidade e Cookies (Efeito UAU) */}
       <CookieBanner />
+      
+      {/* Botões flutuantes para Desktop */}
+      <FloatingContact />
 
-      {/* Botão flutuante para agendamento - Visível apenas no Celular */}
-      <div className="fixed bottom-6 left-6 right-6 z-40 md:hidden">
-        <a 
-          href={SALON_DATA.bookingUrl} 
-          target="_blank" 
-          rel="noreferrer" 
-          className="btn-primary w-full flex items-center justify-center gap-2 shadow-2xl"
-        >
-          <Calendar size={18} />
-          {t.bookNow}
-        </a>
+      {/* Painel Administrativo */}
+      {showAdmin && <AdminPanel onClose={() => setShowAdmin(false)} />}
+
+      {/* BARRA MOBILE FIRST */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 p-4 md:hidden bg-linear-to-t from-brand-cream via-brand-cream/95 to-transparent">
+        <div className="flex gap-2 max-w-md mx-auto">
+          <a 
+            href={`tel:${cleanPhone}`}
+            className="flex-1 bg-white text-brand-leaf border border-brand-leaf/20 h-14 rounded-2xl flex items-center justify-center shadow-xl active:scale-95 transition-transform"
+          >
+            <Phone size={20} strokeWidth={1.5} />
+          </a>
+          
+          <a 
+            href={`https://wa.me/${waNumber}`} 
+            target="_blank" 
+            rel="noreferrer"
+            className="flex-1 bg-white text-brand-leaf border border-brand-leaf/20 h-14 rounded-2xl flex items-center justify-center shadow-xl active:scale-95 transition-transform"
+          >
+            <MessageCircle size={20} strokeWidth={1.5} />
+          </a>
+          
+          <a 
+            href={salonData.bookingUrl} 
+            target="_blank" 
+            rel="noreferrer" 
+            className="flex-[3] bg-brand-leaf text-white h-14 rounded-2xl flex items-center justify-center gap-2 shadow-xl shadow-brand-leaf/20 active:scale-95 transition-transform font-bold text-[10px] uppercase tracking-[0.2em]"
+          >
+            <Calendar size={18} />
+            {t.bookNow}
+          </a>
+        </div>
       </div>
     </div>
   );
@@ -154,36 +202,83 @@ export default function App() {
 
 ## FILE: src/components/About.tsx
 ```
+// src/components/About.tsx
 import { motion } from "motion/react";
-import { CheckCircle2 } from "lucide-react";
-import { SALON_DATA, UI_STRINGS, Language } from "../constants";
+import { UI_STRINGS, Language } from "../constants";
+import { useSalon } from "../context/SalonContext";
 
 export const About = ({ lang }: { lang: Language }) => {
   const t = UI_STRINGS[lang];
+  const { salonData } = useSalon();
+
   return (
-    <section id="sobre" className="section-padding bg-white">
-      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-        <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative">
-          <div className="aspect-4/5 rounded-t-full overflow-hidden border-8 border-brand-cream">
-            <img src="/sobre-principal.png" alt="Manicure" className="w-full h-full object-cover" />
+    /* Mudança para Fundo Verde Leaf e Texto Geral em Creme */
+    <section id="sobre" className="section-padding bg-brand-leaf text-brand-cream overflow-hidden">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 md:gap-24 items-center">
+        
+        {/* LADO DA IMAGEM */}
+        <motion.div 
+          initial={{ opacity: 0, x: -30 }} 
+          whileInView={{ opacity: 1, x: 0 }} 
+          viewport={{ once: true }} 
+          transition={{ duration: 1 }}
+          className="relative px-4 md:px-0"
+        >
+          {/* A moldura da imagem agora usa um leve brilho creme para destacar no fundo escuro */}
+          <div className="aspect-[4/5] rounded-tl-[6rem] rounded-br-[6rem] md:rounded-tl-[10rem] md:rounded-br-[10rem] rounded-tr-3xl rounded-bl-3xl overflow-hidden shadow-2xl shadow-black/20 relative border border-brand-cream/10">
+            <div className="absolute inset-0 bg-brand-leaf/10 mix-blend-overlay z-10"></div>
+            <img 
+              src="/sobre-principal.png" 
+              alt="Manicure Premium" 
+              className="w-full h-full object-cover scale-105" 
+              loading="lazy"
+            />
           </div>
-          <div className="absolute -bottom-8 -right-8 w-48 h-48 rounded-full overflow-hidden border-8 border-white hidden lg:block">
-            <img src="/sobre-detalhe.png" alt="Detail" className="w-full h-full object-cover" />
+          
+          {/* O detalhe circular agora tem a borda na cor do fundo (Leaf) para parecer flutuar sobre a foto */}
+          <div className="absolute -bottom-10 -right-10 w-56 h-56 rounded-full overflow-hidden border-[12px] border-brand-leaf shadow-2xl hidden lg:block">
+            <img src="/sobre-detalhe.png" alt="Detail" className="w-full h-full object-cover" loading="lazy" />
           </div>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-          <span className="text-brand-gold font-serif italic text-xl mb-2 block">{t.ourEssence}</span>
-          <h2 className="text-4xl md:text-5xl mb-8">{t.luxuryMeetsRelaxation}</h2>
-          <p className="text-brand-dark/70 leading-relaxed mb-8 text-lg">
-            {SALON_DATA.description[lang]}
+        {/* LADO DO TEXTO */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} 
+          whileInView={{ opacity: 1, y: 0 }} 
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          {/* Subtítulo em cor Palha (Straw) para brilhar no fundo verde */}
+          <span className="text-brand-straw uppercase tracking-[0.3em] text-[10px] md:text-xs font-bold mb-6 block">
+            {t.ourEssence}
+          </span>
+          
+          <h2 className="text-5xl md:text-7xl mb-8 leading-[1.1] text-white font-serif italic font-light">
+            {t.luxuryMeetsRelaxation}
+          </h2>
+          
+          <p className="text-lg md:text-xl text-brand-cream/80 leading-relaxed mb-12 font-light">
+            {salonData.description[lang]}
           </p>
-          <div className="grid grid-cols-2 gap-6">
-            {SALON_DATA.features[lang].map((feature, i) => (
-              <div key={i} className="flex items-center gap-3">
-                <CheckCircle2 size={18} className="text-brand-gold" />
-                <span className="text-sm font-medium opacity-80">{feature}</span>
-              </div>
+          
+          {/* GRELHA DE ATRIBUTOS (Versão Editorial Clara) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 border-t border-brand-cream/20 pt-8">
+            {salonData.features[lang].map((feature, i) => (
+              <motion.div 
+                key={i} 
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 + (i * 0.1) }}
+                className="flex items-center gap-4 py-4 border-b border-brand-cream/10 group"
+              >
+                {/* Marcador agora em cor de Palha */}
+                <div className="w-1.5 h-1.5 rounded-full bg-brand-straw opacity-60 group-hover:scale-150 group-hover:opacity-100 transition-all duration-500"></div>
+                
+                <span className="text-xl md:text-2xl font-serif italic text-brand-cream/90 group-hover:text-brand-straw transition-colors duration-500">
+                  {feature}
+                </span>
+              </motion.div>
             ))}
           </div>
         </motion.div>
@@ -193,53 +288,364 @@ export const About = ({ lang }: { lang: Language }) => {
 };
 ```
 
+## FILE: src/components/AdminPanel.tsx
+```
+// src/components/AdminPanel.tsx
+import { useState } from "react";
+import { motion } from "motion/react";
+import { X, Plus, Trash2, Save, Code, Image as ImageIcon, RotateCcw, Users, Phone } from "lucide-react";
+import { useSalon } from "../context/SalonContext";
+
+export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
+  const { salonData, updateSalonData } = useSalon();
+  
+  // Prepara os dados iniciais garantindo que todas as novas estruturas existam
+  const initialForm = JSON.parse(JSON.stringify(salonData));
+  if (!initialForm.socialLinks) initialForm.socialLinks = { instagram: "", facebook: "", tiktok: "" };
+  if (!initialForm.galleryPhotos) initialForm.galleryPhotos = Array(10).fill("");
+  if (!initialForm.team) initialForm.team = [];
+  if (!initialForm.phoneNumber) initialForm.phoneNumber = ""; // Garante que o campo telefone existe
+  
+  const [formData, setFormData] = useState(initialForm);
+  const [activeTab, setActiveTab] = useState<"servicos" | "equipa" | "galeria" | "horarios" | "mapa" | "redes">("servicos");
+
+  const handleSave = () => {
+    updateSalonData(formData);
+    onClose();
+    // Forçamos um refresh para garantir que o site carregue os dados do localStorage limpos
+    window.location.reload();
+  };
+
+  const handleReset = () => {
+    if (confirm("Deseja apagar todas as alterações feitas e voltar aos dados originais do ficheiro constants.ts?")) {
+      localStorage.removeItem("bless-nails-data");
+      window.location.reload();
+    }
+  };
+
+  const handleExportCode = () => {
+    navigator.clipboard.writeText(JSON.stringify(formData, null, 2));
+    alert("Código copiado! Cole-o no seu arquivo constants.ts substituindo o objeto SALON_DATA.");
+  };
+
+  // Funções para Gerir Serviços
+  const addService = () => {
+    setFormData({
+      ...formData,
+      services: [
+        ...formData.services, 
+        { name: { pt: "", en: "", es: "" }, price: "", duration: "1h", description: { pt: "", en: "", es: "" } }
+      ]
+    });
+  };
+
+  const removeService = (index: number) => {
+    const newServices = [...formData.services];
+    newServices.splice(index, 1);
+    setFormData({ ...formData, services: newServices });
+  };
+
+  // Funções para Gerir Equipa
+  const addTeamMember = () => {
+    setFormData({
+      ...formData,
+      team: [
+        ...formData.team,
+        { name: "", role: { pt: "", en: "", es: "" }, image: "" }
+      ]
+    });
+  };
+
+  const removeTeamMember = (index: number) => {
+    const newTeam = [...formData.team];
+    newTeam.splice(index, 1);
+    setFormData({ ...formData, team: newTeam });
+  };
+
+  const gallerySlots = Array(10).fill("").map((_, i) => formData.galleryPhotos[i] || "");
+
+  return (
+    <div className="fixed inset-0 z-[100] bg-brand-dark/80 backdrop-blur-md flex items-center justify-center p-6">
+      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-brand-cream w-full max-w-5xl h-[85vh] rounded-[2rem] shadow-2xl flex flex-col overflow-hidden">
+        
+        {/* Header */}
+        <div className="bg-white p-6 border-b border-brand-straw/30 flex justify-between items-center">
+          <div>
+            <h2 className="text-2xl font-serif text-brand-dark">Modo Gestor Secreto 🤫</h2>
+            <p className="text-xs text-brand-dark/50 uppercase tracking-widest mt-1">Bless Nails Admin</p>
+          </div>
+          <button onClick={onClose} className="p-2 hover:bg-brand-cream rounded-full transition-colors">
+            <X size={24} />
+          </button>
+        </div>
+
+        {/* Tabs Navigation */}
+        <div className="flex bg-white px-6 gap-6 border-b border-brand-straw/20 overflow-x-auto custom-scrollbar">
+          {(["servicos", "equipa", "galeria", "horarios", "mapa", "redes"] as const).map(tab => (
+            <button 
+              key={tab} 
+              onClick={() => setActiveTab(tab)} 
+              className={`py-4 text-sm font-bold uppercase tracking-widest border-b-2 transition-all whitespace-nowrap ${activeTab === tab ? "border-brand-leaf text-brand-leaf" : "border-transparent text-brand-dark/40 hover:text-brand-leaf"}`}
+            >
+              {tab === "servicos" ? "Serviços" : tab === "equipa" ? "Equipa" : tab === "redes" ? "Contactos & Redes" : tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
+          ))}
+        </div>
+
+        {/* Content Area */}
+        <div className="flex-1 overflow-y-auto p-8 bg-brand-cream/50 custom-scrollbar">
+          
+          {/* TAB: SERVIÇOS */}
+          {activeTab === "servicos" && (
+            <div className="space-y-6">
+              {formData.services.map((service: any, index: number) => (
+                <div key={index} className="bg-white p-6 rounded-2xl border border-brand-straw/30 shadow-sm relative">
+                  <button onClick={() => removeService(index)} className="absolute top-4 right-4 text-red-400 hover:text-red-600">
+                    <Trash2 size={20} />
+                  </button>
+                  <div className="grid md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                      <label className="text-[10px] font-bold uppercase text-brand-leaf mb-1 block">Nome (PT)</label>
+                      <input type="text" value={service.name.pt} onChange={(e) => { const newS = [...formData.services]; newS[index].name.pt = e.target.value; setFormData({...formData, services: newS}) }} className="w-full border p-2 rounded-xl text-sm" />
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-bold uppercase text-brand-leaf mb-1 block">Preço (€)</label>
+                      <input type="text" value={service.price} onChange={(e) => { const newS = [...formData.services]; newS[index].price = e.target.value; setFormData({...formData, services: newS}) }} className="w-full border p-2 rounded-xl text-sm" />
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-bold uppercase text-brand-leaf mb-1 block">Duração</label>
+                      <input type="text" value={service.duration} onChange={(e) => { const newS = [...formData.services]; newS[index].duration = e.target.value; setFormData({...formData, services: newS}) }} className="w-full border p-2 rounded-xl text-sm" />
+                    </div>
+                  </div>
+                  <label className="text-[10px] font-bold uppercase text-brand-leaf mb-1 block">Descrição (PT)</label>
+                  <textarea value={service.description.pt} onChange={(e) => { const newS = [...formData.services]; newS[index].description.pt = e.target.value; setFormData({...formData, services: newS}) }} className="w-full border p-2 rounded-xl text-sm" rows={2} />
+                </div>
+              ))}
+              <button onClick={addService} className="flex items-center gap-2 text-brand-leaf font-bold hover:underline">
+                <Plus size={18} /> Adicionar Novo Serviço
+              </button>
+            </div>
+          )}
+
+          {/* TAB: EQUIPA */}
+          {activeTab === "equipa" && (
+            <div className="space-y-6">
+              <div className="flex items-center gap-3 mb-6 pb-4 border-b border-brand-straw/20">
+                <div className="p-3 bg-brand-leaf/10 text-brand-leaf rounded-xl"><Users size={24} /></div>
+                <div>
+                  <h3 className="font-serif text-xl">Gestão de Profissionais</h3>
+                  <p className="text-xs text-brand-dark/50">Adicione as caras que fazem a Bless Nails brilhar.</p>
+                </div>
+              </div>
+              {formData.team.map((member: any, index: number) => (
+                <div key={index} className="bg-white p-6 rounded-2xl border border-brand-straw/30 relative shadow-sm">
+                  <button onClick={() => removeTeamMember(index)} className="absolute top-4 right-4 text-red-400 hover:text-red-600">
+                    <Trash2 size={20} />
+                  </button>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-[10px] font-bold uppercase text-brand-leaf mb-1 block">Nome Completo</label>
+                      <input type="text" value={member.name} onChange={(e) => { const newT = [...formData.team]; newT[index].name = e.target.value; setFormData({...formData, team: newT}) }} className="w-full border p-2 rounded-xl text-sm" placeholder="Ex: Stefanie" />
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-bold uppercase text-brand-leaf mb-1 block">Cargo (PT)</label>
+                      <input type="text" value={member.role.pt} onChange={(e) => { const newT = [...formData.team]; newT[index].role.pt = e.target.value; setFormData({...formData, team: newT}) }} className="w-full border p-2 rounded-xl text-sm" placeholder="Ex: Master Stylist" />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="text-[10px] font-bold uppercase text-brand-leaf mb-1 block">Link da Foto</label>
+                      <input type="text" value={member.image} onChange={(e) => { const newT = [...formData.team]; newT[index].image = e.target.value; setFormData({...formData, team: newT}) }} className="w-full border p-2 rounded-xl text-sm" placeholder="https://i.ibb.co/..." />
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <button onClick={addTeamMember} className="flex items-center gap-2 text-brand-leaf font-bold hover:underline">
+                <Plus size={18} /> Adicionar Novo Profissional
+              </button>
+            </div>
+          )}
+
+          {/* TAB: GALERIA */}
+          {activeTab === "galeria" && (
+            <div className="bg-white p-6 rounded-2xl border border-brand-straw/30">
+              <div className="flex items-center gap-3 mb-6 pb-4 border-b border-brand-straw/20">
+                <div className="p-3 bg-brand-leaf/10 text-brand-leaf rounded-xl"><ImageIcon size={24} /></div>
+                <div>
+                  <h3 className="font-serif text-xl">Galeria de Inspiração</h3>
+                  <p className="text-xs text-brand-dark/50">Máximo 10 fotos. Use links diretos do ImgBB.</p>
+                </div>
+              </div>
+              <div className="grid md:grid-cols-2 gap-x-8 gap-y-4">
+                {gallerySlots.map((url, i) => (
+                  <div key={i} className="flex flex-col gap-1">
+                    <label className="text-[10px] font-bold uppercase text-brand-leaf">Foto {i + 1}</label>
+                    <input 
+                      type="text" 
+                      value={url} 
+                      onChange={(e) => { 
+                        const newPhotos = [...gallerySlots]; 
+                        newPhotos[i] = e.target.value; 
+                        setFormData({...formData, galleryPhotos: newPhotos}) 
+                      }} 
+                      className="w-full border p-2 rounded-xl text-xs bg-gray-50" 
+                      placeholder="https://i.ibb.co/..." 
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB: REDES SOCIAIS E CONTACTOS */}
+          {activeTab === "redes" && (
+            <div className="bg-white p-6 rounded-2xl border border-brand-straw/30 space-y-8">
+              <div>
+                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-brand-straw/20">
+                  <div className="p-3 bg-brand-leaf/10 text-brand-leaf rounded-xl"><Phone size={24} /></div>
+                  <div>
+                    <h3 className="font-serif text-xl">Contactos Diretos</h3>
+                    <p className="text-xs text-brand-dark/50">Configura o número para chamadas e WhatsApp.</p>
+                  </div>
+                </div>
+                <label className="text-[10px] font-bold uppercase text-brand-leaf mb-2 block">Número de Telefone (com indicativo)</label>
+                <input 
+                  type="text" 
+                  value={formData.phoneNumber} 
+                  onChange={(e) => setFormData({...formData, phoneNumber: e.target.value})} 
+                  className="w-full border p-3 rounded-xl text-sm font-mono" 
+                  placeholder="Ex: +351937832777"
+                />
+                <p className="text-[9px] text-brand-dark/40 mt-2 italic">Este número será usado nos botões flutuantes e na barra mobile.</p>
+              </div>
+
+              <div className="space-y-4">
+                <h4 className="text-xs font-bold uppercase tracking-widest text-brand-dark/40">Redes Sociais</h4>
+                <div>
+                  <label className="text-[10px] font-bold uppercase text-brand-leaf mb-2 block">Instagram</label>
+                  <input type="text" value={formData.socialLinks.instagram} onChange={(e) => setFormData({...formData, socialLinks: {...formData.socialLinks, instagram: e.target.value}})} className="w-full border p-3 rounded-xl text-sm" />
+                </div>
+                <div>
+                  <label className="text-[10px] font-bold uppercase text-brand-leaf mb-2 block">Facebook</label>
+                  <input type="text" value={formData.socialLinks.facebook} onChange={(e) => setFormData({...formData, socialLinks: {...formData.socialLinks, facebook: e.target.value}})} className="w-full border p-3 rounded-xl text-sm" />
+                </div>
+                <div>
+                  <label className="text-[10px] font-bold uppercase text-brand-leaf mb-2 block">TikTok</label>
+                  <input type="text" value={formData.socialLinks.tiktok} onChange={(e) => setFormData({...formData, socialLinks: {...formData.socialLinks, tiktok: e.target.value}})} className="w-full border p-3 rounded-xl text-sm" />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB: HORÁRIOS */}
+          {activeTab === "horarios" && (
+            <div className="grid md:grid-cols-2 gap-4">
+              {formData.hours.map((h: any, i: number) => (
+                <div key={i} className="bg-white p-4 rounded-xl border border-brand-straw/30 flex items-center justify-between">
+                  <span className="font-medium text-sm w-32">{h.day.pt}</span>
+                  <input type="text" value={h.time} onChange={(e) => { const newH = [...formData.hours]; newH[i].time = e.target.value; setFormData({...formData, hours: newH}) }} className="border p-2 rounded-lg text-sm w-40 text-center" />
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* TAB: MAPA */}
+          {activeTab === "mapa" && (
+            <div className="bg-white p-6 rounded-2xl border border-brand-straw/30">
+              <label className="text-xs font-bold uppercase text-brand-leaf mb-2 block">Link SRC de Incorporação do Google Maps</label>
+              <textarea value={formData.mapEmbedUrl} onChange={(e) => setFormData({...formData, mapEmbedUrl: e.target.value})} className="w-full border p-4 rounded-xl text-sm font-mono text-brand-dark/70" rows={6} />
+            </div>
+          )}
+
+        </div>
+
+        {/* Footer Buttons */}
+        <div className="bg-white p-6 border-t border-brand-straw/30 flex justify-between items-center">
+          <div className="flex gap-6">
+            <button onClick={handleReset} className="flex items-center gap-2 text-red-500/60 hover:text-red-500 font-medium text-xs transition-colors">
+              <RotateCcw size={16} /> Restaurar Padrão
+            </button>
+            <button onClick={handleExportCode} className="flex items-center gap-2 text-brand-dark/50 hover:text-brand-dark font-medium text-xs transition-colors">
+              <Code size={18} /> Gerar Código
+            </button>
+          </div>
+          <div className="flex gap-4">
+            <button onClick={onClose} className="btn-outline py-2 px-6 text-xs uppercase tracking-widest">Cancelar</button>
+            <button onClick={handleSave} className="btn-primary py-2 px-6 flex items-center gap-2 text-xs uppercase tracking-widest">
+              <Save size={16} /> Guardar Live
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+```
+
 ## FILE: src/components/Contact.tsx
 ```
+// src/components/Contact.tsx
 import { motion } from "motion/react";
 import { MapPin, Clock, ChevronRight } from "lucide-react";
-import { SALON_DATA, UI_STRINGS, Language } from "../constants";
+import { UI_STRINGS, Language } from "../constants";
+import { useSalon } from "../context/SalonContext";
 
 export const Contact = ({ lang }: { lang: Language }) => {
   const t = UI_STRINGS[lang];
+  const { salonData } = useSalon();
+
   return (
-    <section id="contato" className="section-padding">
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16">
+    <section id="contato" className="section-padding bg-brand-cream overflow-hidden">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 md:gap-16 items-center">
+        
+        {/* INFORMAÇÕES DE CONTACTO */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.8 }}
         >
-          <h2 className="text-4xl md:text-5xl mb-8">{t.visitUs}</h2>
-          <div className="space-y-8">
-            <div className="flex gap-4">
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm shrink-0">
-                <MapPin className="text-brand-gold" />
+          <span className="text-brand-leaf uppercase tracking-[0.2em] text-[10px] md:text-xs font-bold mb-4 block">
+            {t.visitUs}
+          </span>
+          <h2 className="text-4xl md:text-6xl mb-10 md:mb-12 leading-tight">
+            {t.location}
+          </h2>
+          
+          <div className="space-y-8 md:space-y-10">
+            {/* Bloco: Morada */}
+            <div className="flex gap-5 md:gap-6">
+              <div className="w-12 h-12 md:w-14 md:h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm shrink-0 border border-brand-straw/20">
+                <MapPin className="text-brand-leaf" size={20} md:size={24} strokeWidth={1.5} />
               </div>
               <div>
-                <h4 className="font-bold mb-1">{t.location}</h4>
-                <p className="text-brand-dark/70 mb-2">{SALON_DATA.address}</p>
+                <h4 className="text-lg md:text-xl mb-1 md:mb-2 font-serif">{t.location}</h4>
+                <p className="text-sm md:text-lg text-brand-dark/60 mb-3 font-light leading-relaxed">
+                  {salonData.address}
+                </p>
                 <a 
-                  href={SALON_DATA.googleMapsUrl} 
+                  href={salonData.googleMapsUrl} 
                   target="_blank" 
                   rel="noreferrer"
-                  className="text-brand-gold font-medium flex items-center gap-1 hover:underline"
+                  className="text-brand-leaf font-bold flex items-center gap-1 hover:gap-2 transition-all duration-300 uppercase tracking-widest text-[9px] md:text-[10px]"
                 >
                   {t.seeOnGoogleMaps} <ChevronRight size={14} />
                 </a>
               </div>
             </div>
 
-            <div className="flex gap-4">
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm shrink-0">
-                <Clock className="text-brand-gold" />
+            {/* Bloco: Horários */}
+            <div className="flex gap-5 md:gap-6">
+              <div className="w-12 h-12 md:w-14 md:h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm shrink-0 border border-brand-straw/20">
+                <Clock className="text-brand-leaf" size={20} md:size={24} strokeWidth={1.5} />
               </div>
               <div className="w-full">
-                <h4 className="font-bold mb-4">{t.openingHours}</h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2">
-                  {SALON_DATA.hours.map((h, i) => (
-                    <div key={i} className="flex justify-between border-b border-brand-cream pb-1">
-                      <span className="text-sm opacity-60">{h.day[lang]}</span>
-                      <span className="text-sm font-medium">{h.time === "Fechado" ? t.closed : h.time}</span>
+                <h4 className="text-lg md:text-xl mb-4 font-serif">{t.openingHours}</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-2 md:gap-y-3">
+                  {salonData.hours.map((h, i) => (
+                    <div key={i} className="flex justify-between border-b border-brand-straw/20 pb-2">
+                      <span className="text-xs md:text-sm text-brand-dark/60 font-light">{h.day[lang]}</span>
+                      <span className="text-xs md:text-sm font-medium text-brand-dark/80">
+                        {h.time === "Fechado" ? t.closed : h.time}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -248,21 +654,30 @@ export const Contact = ({ lang }: { lang: Language }) => {
           </div>
         </motion.div>
 
+        {/* MAPA INTERATIVO: Mobile First */}
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          /* Aqui corrigimos de h-[400px] para h-100 para remover o aviso amarelo */
-          className="rounded-3xl overflow-hidden shadow-2xl h-100 lg:h-auto border-8 border-white"
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 1 }}
+          /* 
+             No mobile, reduzimos a altura para 350px para não dominar o ecrã todo.
+             A moldura orgânica escala proporcionalmente.
+          */
+          className="relative overflow-hidden shadow-2xl shadow-brand-leaf/10 h-[350px] md:h-[500px] rounded-tl-[4rem] rounded-br-[4rem] md:rounded-tl-[6rem] md:rounded-br-[6rem] rounded-tr-2xl rounded-bl-2xl border-4 md:border-8 border-white"
         >
+          {/* Overlay de ajuda para scroll no mobile (evita que o utilizador fique "preso" no mapa ao fazer scroll) */}
+          <div className="absolute inset-0 pointer-events-none bg-brand-dark/5 z-10 md:hidden"></div>
+          
           <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3113.123456789!2d-9.148!3d38.716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd19337f7f7f7f7f%3A0x7f7f7f7f7f7f7f7f!2sRua%20de%20O%20S%C3%A9culo%20154%2C%201200-437%20Lisboa!5e0!3m2!1spt!2spt!4v1234567890" 
+            src={salonData.mapEmbedUrl}
             width="100%" 
             height="100%" 
             style={{ border: 0 }} 
             allowFullScreen 
             loading="lazy" 
             referrerPolicy="no-referrer-when-downgrade"
+            className="filter contrast-100 saturate-[0.7] sepia-[0.2]" 
           ></iframe>
         </motion.div>
       </div>
@@ -273,6 +688,7 @@ export const Contact = ({ lang }: { lang: Language }) => {
 
 ## FILE: src/components/CookieBanner.tsx
 ```
+// src/components/CookieBanner.tsx
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ShieldCheck } from "lucide-react";
@@ -281,12 +697,11 @@ export const CookieBanner = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Verifica se a cliente já aceitou os cookies antes
     const consent = localStorage.getItem("cookie-consent");
     if (!consent) {
-      setTimeout(() => setIsVisible(true), 2000); // Aparece após 2 segundos
+      setTimeout(() => setIsVisible(true), 2000);
     }
-  }, []);
+  },[]);
 
   const acceptCookies = () => {
     localStorage.setItem("cookie-consent", "true");
@@ -297,30 +712,30 @@ export const CookieBanner = () => {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ y: 100, opacity: 0 }}
+          initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
-          className="fixed bottom-6 left-6 right-6 md:left-auto md:right-10 md:w-96 z-50 bg-white shadow-2xl rounded-2xl p-6 border border-brand-cream"
+          exit={{ y: 50, opacity: 0, scale: 0.95 }}
+          className="fixed bottom-6 left-6 right-6 md:left-auto md:right-10 md:w-[400px] z-50 bg-white/80 backdrop-blur-xl shadow-2xl shadow-brand-leaf/10 rounded-3xl p-6 border border-brand-straw/30"
         >
-          <div className="flex items-start gap-4">
-            <div className="bg-brand-cream p-2 rounded-lg text-brand-gold">
-              <ShieldCheck size={24} />
+          <div className="flex items-start gap-5">
+            <div className="bg-brand-leaf/10 p-3 rounded-2xl text-brand-leaf shrink-0">
+              <ShieldCheck size={24} strokeWidth={1.5} />
             </div>
             <div>
-              <h4 className="font-serif font-bold text-lg mb-2 text-brand-dark">Privacidade & Cookies</h4>
-              <p className="text-sm text-brand-dark/70 mb-4 leading-relaxed">
-                Utilizamos cookies para melhorar a sua experiência e garantir a segurança dos seus agendamentos. Ao continuar, você aceita nossa política.
+              <h4 className="font-serif text-xl mb-1 text-brand-dark">Privacidade & Cookies</h4>
+              <p className="text-sm text-brand-dark/60 mb-6 font-light leading-relaxed">
+                Utilizamos cookies para personalizar a sua experiência e garantir a segurança dos agendamentos. Ao continuar, aceita a nossa política.
               </p>
-              <div className="flex gap-3">
+              <div className="flex gap-4 items-center">
                 <button 
                   onClick={acceptCookies}
-                  className="bg-brand-olive text-white px-5 py-2 rounded-full text-sm font-bold hover:bg-brand-olive/90 transition-all w-full"
+                  className="bg-brand-leaf text-white px-6 py-2.5 rounded-full text-[10px] tracking-widest uppercase font-bold hover:bg-brand-dark hover:-translate-y-0.5 transition-all duration-300 w-full shadow-lg shadow-brand-leaf/20"
                 >
                   Aceitar Tudo
                 </button>
                 <button 
                   onClick={() => setIsVisible(false)}
-                  className="text-brand-dark/50 text-sm hover:text-brand-dark transition-all"
+                  className="text-brand-dark/40 text-[10px] tracking-widest uppercase font-bold hover:text-brand-dark transition-all duration-300"
                 >
                   Fechar
                 </button>
@@ -334,56 +749,168 @@ export const CookieBanner = () => {
 };
 ```
 
+## FILE: src/components/FloatingContact.tsx
+```
+// src/components/FloatingContact.tsx
+import { motion } from "motion/react";
+import { MessageCircle, Phone } from "lucide-react";
+import { useSalon } from "../context/SalonContext";
+
+// Certifique-se de que a linha abaixo começa com "export const"
+export const FloatingContact = () => {
+  const { salonData } = useSalon();
+
+  // Limpeza do número para os links
+  const cleanPhone = salonData.phoneNumber?.replace(/\s/g, "");
+  const waNumber = cleanPhone?.replace("+", "");
+
+  return (
+    <div className="fixed bottom-10 right-10 z-40 hidden md:flex flex-col gap-4">
+      {/* Botão: Chamada */}
+      <motion.a
+        href={`tel:${cleanPhone}`}
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        whileHover={{ scale: 1.1, y: -2 }}
+        className="w-14 h-14 bg-white text-brand-leaf rounded-full shadow-2xl flex items-center justify-center border border-brand-straw/30 hover:bg-brand-leaf hover:text-white transition-all duration-500 group"
+        title="Ligar para o Salão"
+      >
+        <Phone size={22} strokeWidth={1.5} className="group-hover:rotate-12 transition-transform duration-300" />
+      </motion.a>
+
+      {/* Botão: WhatsApp */}
+      <motion.a
+        href={`https://wa.me/${waNumber}?text=Olá! Gostaria de obter informações sobre os serviços da Bless Nails.`}
+        target="_blank"
+        rel="noreferrer"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.1 }}
+        whileHover={{ scale: 1.1, y: -2 }}
+        className="w-14 h-14 bg-[#25D366] text-white rounded-full shadow-2xl flex items-center justify-center hover:shadow-[0_10px_30px_rgba(37,211,102,0.4)] transition-all duration-500 group"
+        title="Enviar WhatsApp"
+      >
+        <MessageCircle size={26} fill="currentColor" className="text-white transition-transform duration-300 group-hover:-rotate-12" />
+      </motion.a>
+    </div>
+  );
+};
+```
+
 ## FILE: src/components/Footer.tsx
 ```
-import { Instagram, Heart } from "lucide-react";
-import { SALON_DATA, UI_STRINGS, Language } from "../constants";
+// src/components/Footer.tsx
+import { useState } from "react";
+import { Instagram, Facebook } from "lucide-react";
+import { UI_STRINGS, Language } from "../constants";
+import { useSalon } from "../context/SalonContext";
+
+const TikTokIcon = ({ size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
+  </svg>
+);
 
 export const Footer = ({ lang }: { lang: Language }) => {
   const t = UI_STRINGS[lang];
+  const { salonData } = useSalon();
+  const [clickCount, setClickCount] = useState(0);
+
+  const handleSecretClick = () => {
+    if (clickCount >= 4) {
+      window.dispatchEvent(new Event("open-admin"));
+      setClickCount(0);
+    } else {
+      setClickCount(prev => prev + 1);
+    }
+  };
+
+  const socials = salonData.socialLinks || { instagram: "", facebook: "", tiktok: "" };
+
+  // --- LÓGICA DE LINKS DINÂMICOS (Igual à Navbar) ---
+  const footerLinks = [
+    { name: t.about, href: "#sobre" },
+    { name: t.services, href: "#servicos" },
+    { name: t.gallery, href: "#galeria" },
+  ];
+
+  if (salonData.team && salonData.team.length > 0) {
+    footerLinks.push({ name: t.team, href: "#equipa" });
+  }
+
+  footerLinks.push(
+    { name: t.reviews, href: "#avaliacoes" },
+    { name: t.location, href: "#contato" }
+  );
+
   return (
-    <footer className="bg-brand-dark text-white pt-20 pb-10 px-6">
+    <footer className="bg-brand-dark text-brand-cream pt-24 pb-12 px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-4 gap-12 mb-16">
+        <div className="grid md:grid-cols-4 gap-12 mb-20">
           <div className="col-span-2">
-            <h2 className="text-3xl font-serif mb-4">Bless Nails <span className="text-brand-gold italic">Lisbon</span></h2>
-            <p className="text-white/50 max-w-md leading-relaxed mb-6">
+            <h2 className="text-4xl font-serif mb-6">Bless Nails <span className="text-brand-straw italic font-light">Lisbon</span></h2>
+            <p className="text-brand-cream/60 max-w-md leading-relaxed mb-8 font-light text-lg">
               {t.footerDescription}
             </p>
-            {/* Informação do NIF - Essencial em Portugal */}
-            <p className="text-xs text-white/30 uppercase tracking-widest">
+            <p className="text-[10px] text-brand-cream/30 uppercase tracking-[0.2em]">
               NIF: 123 456 789 — Bless Nails Lisbon Unipessoal Lda
             </p>
           </div>
           
+          {/* COLUNA DE LINKS DINÂMICOS */}
           <div>
-            <h4 className="font-bold mb-6 uppercase tracking-widest text-xs">{t.quickLinks}</h4>
-            <ul className="space-y-4 text-white/60 text-sm">
-              <li><a href="#sobre" className="hover:text-brand-gold transition-colors">{t.about}</a></li>
-              <li><a href="#servicos" className="hover:text-brand-gold transition-colors">{t.services}</a></li>
-              <li><a href="https://www.livroreclamacoes.pt" target="_blank" rel="noreferrer" className="hover:text-brand-gold transition-colors">Livro de Reclamações</a></li>
-              <li><a href="#" className="hover:text-brand-gold transition-colors">Resolução de Litígios</a></li>
+            <h4 className="text-brand-straw uppercase tracking-[0.2em] text-[10px] font-bold mb-6">{t.quickLinks}</h4>
+            <ul className="space-y-4 text-brand-cream/70 text-sm font-light">
+              {footerLinks.map((link) => (
+                <li key={link.name}>
+                  <a href={link.href} className="hover:text-brand-straw hover:translate-x-1 inline-block transition-all duration-300">
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+              {/* Links Legais Obrigatórios em Portugal */}
+              <li className="pt-2 border-t border-brand-cream/10">
+                <a href="https://www.livroreclamacoes.pt" target="_blank" rel="noreferrer" className="text-[10px] uppercase tracking-widest opacity-50 hover:opacity-100 hover:text-brand-straw transition-all">
+                  Livro de Reclamações
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-[10px] uppercase tracking-widest opacity-50 hover:opacity-100 hover:text-brand-straw transition-all">
+                  Resolução de Litígios
+                </a>
+              </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-bold mb-6 uppercase tracking-widest text-xs">{t.followUs}</h4>
+            <h4 className="text-brand-straw uppercase tracking-[0.2em] text-[10px] font-bold mb-6">{t.followUs}</h4>
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-brand-gold hover:border-brand-gold transition-all">
-                <Instagram size={18} />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-brand-gold hover:border-brand-gold transition-all">
-                <Heart size={18} />
-              </a>
+              {socials.instagram && (
+                <a href={socials.instagram} target="_blank" rel="noreferrer" className="w-12 h-12 rounded-full border border-brand-cream/20 flex items-center justify-center hover:bg-brand-straw hover:border-brand-straw hover:text-brand-dark transition-all duration-500">
+                  <Instagram size={20} strokeWidth={1.5} />
+                </a>
+              )}
+              {socials.facebook && (
+                <a href={socials.facebook} target="_blank" rel="noreferrer" className="w-12 h-12 rounded-full border border-brand-cream/20 flex items-center justify-center hover:bg-brand-straw hover:border-brand-straw hover:text-brand-dark transition-all duration-500">
+                  <Facebook size={20} strokeWidth={1.5} />
+                </a>
+              )}
+              {socials.tiktok && (
+                <a href={socials.tiktok} target="_blank" rel="noreferrer" className="w-12 h-12 rounded-full border border-brand-cream/20 flex items-center justify-center hover:bg-brand-straw hover:border-brand-straw hover:text-brand-dark transition-all duration-500">
+                  <TikTokIcon size={20} />
+                </a>
+              )}
             </div>
           </div>
         </div>
         
-        <div className="pt-10 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-white/40 text-sm">
-          <p>© {new Date().getFullYear()} Bless Nails Lisbon. {t.allRightsReserved}</p>
+        <div className="pt-8 border-t border-brand-cream/10 flex flex-col md:flex-row justify-between items-center gap-6 text-brand-cream/40 text-xs font-light tracking-wide">
+          <p onClick={handleSecretClick} className="select-none cursor-default">
+            © {new Date().getFullYear()} Bless Nails Lisbon. {t.allRightsReserved}
+          </p>
           <div className="flex gap-8">
-            <button className="hover:text-white transition-colors">{t.privacy}</button>
-            <button className="hover:text-white transition-colors">{t.terms}</button>
+            <button className="hover:text-brand-straw transition-colors">{t.privacy}</button>
+            <button className="hover:text-brand-straw transition-colors">{t.terms}</button>
           </div>
         </div>
       </div>
@@ -392,61 +919,193 @@ export const Footer = ({ lang }: { lang: Language }) => {
 };
 ```
 
+## FILE: src/components/Gallery.tsx
+```
+// src/components/Gallery.tsx
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { X, ZoomIn } from "lucide-react";
+import { UI_STRINGS, Language } from "../constants";
+import { useSalon } from "../context/SalonContext";
+
+export const Gallery = ({ lang }: { lang: Language }) => {
+  const t = UI_STRINGS[lang];
+  const { salonData } = useSalon();
+  const [selectedImg, setSelectedImg] = useState<string | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const rawPhotos = salonData.galleryPhotos?.filter(url => url && url.trim() !== "") || [];
+  
+  // EFEITO CIRCULAR: Triplicamos a lista para permitir scroll infinito visual para ambos os lados
+  const displayPhotos = rawPhotos.length > 0 
+    ? [...rawPhotos, ...rawPhotos, ...rawPhotos] 
+    : [];
+
+  // Posiciona o scroll no "meio" da lista triplicada ao carregar
+  useEffect(() => {
+    if (scrollRef.current && rawPhotos.length > 0) {
+      const container = scrollRef.current;
+      const cardWidth = container.querySelector('div')?.offsetWidth || 0;
+      const gap = 24; // correspondente a gap-6 (1.5rem = 24px)
+      
+      // Calculamos o ponto exato para começar na primeira foto do segundo bloco (o bloco do meio)
+      const scrollTo = (cardWidth + gap) * rawPhotos.length;
+      container.scrollLeft = scrollTo;
+    }
+  }, [rawPhotos.length]);
+
+  if (displayPhotos.length === 0) return null;
+
+  return (
+    <section id="galeria" className="py-24 bg-brand-leaf text-brand-cream relative overflow-hidden">
+      {/* Luz ambiente de luxo */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px]"></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 text-center mb-16 relative z-10">
+        <motion.span 
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-brand-straw uppercase tracking-[0.3em] text-[10px] md:text-xs font-bold mb-4 block"
+        >
+          {t.gallerySubtitle}
+        </motion.span>
+        <h2 className="text-5xl md:text-7xl font-serif italic font-light text-white leading-tight">
+          {t.gallery}
+        </h2>
+        <div className="w-24 h-1 bg-brand-straw/30 mx-auto mt-6 rounded-full"></div>
+      </div>
+
+      {/* --- CATÁLOGO CIRCULAR (FLUXO INFINITO VISUAL) --- */}
+      <div className="relative">
+        <div 
+          ref={scrollRef}
+          className="flex overflow-x-auto gap-6 pb-20 no-scrollbar snap-x snap-mandatory"
+          style={{ 
+            scrollbarWidth: 'none', 
+            msOverflowStyle: 'none',
+            // O padding lateral cria o efeito "peeking" (fotos das pontas visíveis)
+            paddingLeft: '15%', 
+            paddingRight: '15%' 
+          }}
+        >
+          {displayPhotos.map((photo, i) => (
+            <motion.div 
+              key={i} 
+              initial={{ opacity: 0.5, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: false, amount: 0.5 }}
+              /* 
+                 Tamanhos optimizados para Mobile e Desktop:
+                 - Mobile: w-[70vw] (permite ver 15% de cada lado)
+                 - Desktop: w-[400px]
+              */
+              className="relative flex-none w-[70vw] md:w-[400px] aspect-[3/4] rounded-[3rem] overflow-hidden snap-center cursor-pointer bg-brand-dark/20 border border-white/10 group shadow-2xl transition-all duration-500"
+              onClick={() => setSelectedImg(photo)}
+            >
+              <img 
+                src={photo} 
+                alt="" 
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
+                loading="lazy"
+              />
+              
+              {/* Overlay minimalista */}
+              <div className="absolute inset-0 bg-brand-dark/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center backdrop-blur-[2px]">
+                <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white border border-white/20">
+                  <ZoomIn size={28} strokeWidth={1} />
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Lightbox / Modal */}
+      <AnimatePresence>
+        {selectedImg && (
+          <motion.div 
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} 
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-12 bg-brand-dark/98 backdrop-blur-2xl"
+            onClick={() => setSelectedImg(null)}
+          >
+            <button className="absolute top-6 right-6 md:top-10 md:right-10 text-white/50 hover:text-white"><X size={40} /></button>
+            <motion.img 
+              initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}
+              src={selectedImg} 
+              className="max-w-full max-h-full rounded-3xl shadow-2xl object-contain border border-white/10" 
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </section>
+  );
+};
+```
+
 ## FILE: src/components/Hero.tsx
 ```
+// src/components/Hero.tsx
 import { motion } from "motion/react";
-import { Calendar } from "lucide-react";
-import { SALON_DATA, UI_STRINGS, Language } from "../constants";
+import { UI_STRINGS, Language } from "../constants";
+import { useSalon } from "../context/SalonContext"; // Importamos o contexto dinâmico
 
 export const Hero = ({ lang }: { lang: Language }) => {
   const t = UI_STRINGS[lang];
+  const { salonData } = useSalon(); // Acedemos aos dados em tempo real
+
   return (
-    <section className="relative h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-brand-cream">
+      {/* Background Otimizado */}
       <div className="absolute inset-0 z-0">
         <img 
           src="/hero-bg.png" 
           alt="Bless Nails Interior" 
-          className="w-full h-full object-cover opacity-40"
+          className="w-full h-full object-cover opacity-25 mix-blend-multiply" 
+          loading="eager" // Mobile First: Imagem de topo carrega imediatamente
         />
-        {/* Corrigido para bg-linear-to-b conforme sugestão do sistema */}
-        <div className="absolute inset-0 bg-linear-to-b from-brand-cream/20 via-transparent to-brand-cream"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-brand-cream/60 via-brand-cream/20 to-brand-cream"></div>
       </div>
 
-      {/* Adicionei pt-20 (padding-top) para afastar o texto do menu fixo */}
-      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto pt-20">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+      {/* Conteúdo Central */}
+      <div className="relative z-10 text-center px-6 max-w-5xl mx-auto pt-24 md:pt-32">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
         >
-          <span className="text-brand-gold uppercase tracking-[0.3em] text-sm font-semibold mb-4 block">
+          <span className="text-brand-leaf uppercase tracking-[0.3em] text-[9px] md:text-xs font-bold mb-6 block">
             Príncipe Real, Lisboa
           </span>
-          <h1 className="text-6xl md:text-8xl font-serif mb-6 leading-tight">
+          
+          {/* Tipografia Responsiva: Menor no telemóvel para não forçar scroll excessivo */}
+          <h1 className="text-5xl md:text-8xl lg:text-9xl font-serif mb-8 leading-[1.1] md:leading-[0.9] text-brand-dark">
             {lang === "pt" ? (
-              <>Elegância em cada <br /><span className="italic text-brand-olive">detalhe.</span></>
+              <>Elegância em <br className="hidden md:block" /><span className="italic text-brand-leaf font-light">cada detalhe.</span></>
             ) : lang === "en" ? (
-              <>Elegance in every <br /><span className="italic text-brand-olive">detail.</span></>
+              <>Elegance in <br className="hidden md:block" /><span className="italic text-brand-leaf font-light">every detail.</span></>
             ) : (
-              <>Elegancia en cada <br /><span className="italic text-brand-olive">detalle.</span></>
+              <>Elegancia en <br className="hidden md:block" /><span className="italic text-brand-leaf font-light">cada detalle.</span></>
             )}
           </h1>
-          <p className="text-lg md:text-xl text-brand-dark/70 mb-10 max-w-2xl mx-auto font-light leading-relaxed">
-            {SALON_DATA.tagline[lang]}
+
+          <p className="text-base md:text-2xl text-brand-dark/60 mb-12 max-w-2xl mx-auto font-light leading-relaxed px-2 md:px-0">
+            {salonData.tagline[lang]}
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href={SALON_DATA.bookingUrl} target="_blank" rel="noreferrer" className="btn-primary flex items-center gap-2">
-              <Calendar size={18} />
+
+          {/* Botões: Largura total no telemóvel para facilitar o toque (Thumb Zone) */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
+            <a href={salonData.bookingUrl} target="_blank" rel="noreferrer" className="btn-primary w-full sm:w-auto">
               {t.bookTreatment}
             </a>
-            <a href="#servicos" className="btn-outline">
+            <a href="#servicos" className="btn-outline w-full sm:w-auto">
               {t.viewServices}
             </a>
           </div>
         </motion.div>
       </div>
-
-      {/* Removi o bloco do "SCROLL" que aparecia aqui embaixo */}
     </section>
   );
 };
@@ -454,10 +1113,12 @@ export const Hero = ({ lang }: { lang: Language }) => {
 
 ## FILE: src/components/Navbar.tsx
 ```
+// src/components/Navbar.tsx
 import { motion, AnimatePresence } from "motion/react";
-import { Globe, Menu, X } from "lucide-react";
+import { Globe, Menu, X, ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
-import { SALON_DATA, UI_STRINGS, Language } from "../constants";
+import { UI_STRINGS, Language } from "../constants";
+import { useSalon } from "../context/SalonContext";
 
 interface NavbarProps {
   lang: Language;
@@ -465,6 +1126,7 @@ interface NavbarProps {
 }
 
 export const Navbar = ({ lang, setLang }: NavbarProps) => {
+  const { salonData } = useSalon();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
@@ -472,7 +1134,7 @@ export const Navbar = ({ lang, setLang }: NavbarProps) => {
   const t = UI_STRINGS[lang];
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -480,9 +1142,17 @@ export const Navbar = ({ lang, setLang }: NavbarProps) => {
   const navLinks = [
     { name: t.about, href: "#sobre" },
     { name: t.services, href: "#servicos" },
-    { name: t.reviews, href: "#avaliacoes" },
-    { name: t.location, href: "#contato" },
+    { name: t.gallery, href: "#galeria" },
   ];
+
+  if (salonData.team && salonData.team.length > 0) {
+    navLinks.push({ name: t.team, href: "#equipa" });
+  }
+
+  navLinks.push(
+    { name: t.reviews, href: "#avaliacoes" },
+    { name: t.location, href: "#contato" }
+  );
 
   const languages: { code: Language; label: string }[] = [
     { code: "pt", label: "Português" },
@@ -491,29 +1161,29 @@ export const Navbar = ({ lang, setLang }: NavbarProps) => {
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "glass py-4 shadow-sm" : "bg-transparent py-6"}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? "glass py-4" : "bg-transparent py-8"}`}>
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         <a href="#" className="text-2xl font-serif font-bold tracking-tight text-brand-dark">
-          Bless Nails <span className="text-brand-gold italic">Lisbon</span>
+          Bless Nails <span className="text-brand-leaf italic font-light">Lisbon</span>
         </a>
 
-        <div className="hidden md:flex items-center space-x-8">
+        {/* --- MENU DESKTOP --- */}
+        <div className="hidden lg:flex items-center space-x-8">
           {navLinks.map((link) => (
-            <a key={link.name} href={link.href} className="text-sm uppercase tracking-widest font-medium hover:text-brand-gold transition-colors">
+            <a key={link.name} href={link.href} className="text-[11px] uppercase tracking-[0.15em] font-medium text-brand-dark/80 hover:text-brand-leaf transition-colors">
               {link.name}
             </a>
           ))}
           
           <div className="relative">
-            <button onClick={() => setIsLangMenuOpen(!isLangMenuOpen)} className="flex items-center gap-2 text-sm font-medium uppercase tracking-widest hover:text-brand-gold transition-colors">
-              <Globe size={16} />
-              {lang}
+            <button onClick={() => setIsLangMenuOpen(!isLangMenuOpen)} className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.15em] hover:text-brand-leaf transition-colors">
+              <Globe size={14} /> {lang}
             </button>
             <AnimatePresence>
               {isLangMenuOpen && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} className="absolute right-0 mt-2 w-32 bg-white shadow-xl rounded-xl overflow-hidden border border-brand-cream">
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} className="absolute right-0 mt-4 w-32 bg-white/90 backdrop-blur-md shadow-2xl rounded-2xl overflow-hidden border border-brand-straw/30 p-2">
                   {languages.map((l) => (
-                    <button key={l.code} onClick={() => { setLang(l.code); setIsLangMenuOpen(false); }} className={`w-full text-left px-4 py-2 text-sm hover:bg-brand-cream transition-colors ${lang === l.code ? "text-brand-gold font-bold" : "text-brand-dark"}`}>
+                    <button key={l.code} onClick={() => { setLang(l.code); setIsLangMenuOpen(false); }} className={`w-full text-left px-4 py-2 text-sm rounded-xl hover:bg-brand-cream transition-colors ${lang === l.code ? "text-brand-leaf font-bold bg-brand-cream/50" : "text-brand-dark/70"}`}>
                       {l.label}
                     </button>
                   ))}
@@ -522,31 +1192,83 @@ export const Navbar = ({ lang, setLang }: NavbarProps) => {
             </AnimatePresence>
           </div>
 
-          <a href={SALON_DATA.bookingUrl} target="_blank" rel="noreferrer" className="btn-primary py-2 text-sm">
+          <a href={salonData.bookingUrl} target="_blank" rel="noreferrer" className="btn-primary">
             {t.bookNow}
           </a>
         </div>
 
-        <div className="flex items-center gap-4 md:hidden">
-          <button onClick={() => setIsLangMenuOpen(!isLangMenuOpen)} className="flex items-center gap-1 text-xs font-bold uppercase tracking-widest">
-            <Globe size={14} />
-            {lang}
-          </button>
-          <button className="text-brand-dark" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-            {isMobileMenuOpen ? <X /> : <Menu />}
+        {/* --- CABEÇALHO MOBILE (Visível apenas em telemóveis) --- */}
+        <div className="flex items-center gap-3 lg:hidden">
+          
+          {/* SELETOR DE IDIOMAS MOBILE (Ao lado do hambúrguer) */}
+          <div className="relative">
+            <button 
+              onClick={() => {
+                setIsLangMenuOpen(!isLangMenuOpen);
+                if (isMobileMenuOpen) setIsMobileMenuOpen(false); // Fecha o menu principal se o de idioma abrir
+              }} 
+              className="flex items-center gap-1 px-3 py-2 bg-white/50 backdrop-blur-sm border border-brand-straw/20 rounded-xl text-[10px] font-bold text-brand-leaf uppercase tracking-widest"
+            >
+              <Globe size={12} />
+              {lang}
+              <ChevronDown size={10} className={`transition-transform duration-300 ${isLangMenuOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            <AnimatePresence>
+              {isLangMenuOpen && (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.9, y: 5 }} 
+                  animate={{ opacity: 1, scale: 1, y: 0 }} 
+                  exit={{ opacity: 0, scale: 0.9, y: 5 }} 
+                  className="absolute right-0 mt-2 w-32 bg-white shadow-2xl rounded-2xl overflow-hidden border border-brand-straw/30 p-1 z-[60]"
+                >
+                  {languages.map((l) => (
+                    <button 
+                      key={l.code} 
+                      onClick={() => { setLang(l.code); setIsLangMenuOpen(false); }} 
+                      className={`w-full text-left px-4 py-3 text-xs rounded-xl transition-colors ${lang === l.code ? "bg-brand-leaf text-white font-bold" : "text-brand-dark/60 active:bg-brand-cream"}`}
+                    >
+                      {l.label}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* BOTÃO HAMBÚRGUER */}
+          <button 
+            className="w-10 h-10 flex items-center justify-center text-brand-dark active:scale-90 transition-transform" 
+            onClick={() => {
+              setIsMobileMenuOpen(!isMobileMenuOpen);
+              if (isLangMenuOpen) setIsLangMenuOpen(false); // Fecha o menu de idiomas se o hambúrguer abrir
+            }}
+          >
+            {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
       </div>
 
+      {/* --- MENU MOBILE EXPANDIDO --- */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="absolute top-full left-0 right-0 bg-white shadow-xl p-6 flex flex-col space-y-4 md:hidden">
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            exit={{ opacity: 0, y: -20 }} 
+            className="absolute top-full left-0 right-0 bg-white shadow-2xl border-t border-brand-straw/20 p-8 flex flex-col gap-6 lg:hidden"
+          >
             {navLinks.map((link) => (
-              <a key={link.name} href={link.href} onClick={() => setIsMobileMenuOpen(false)} className="text-lg font-serif border-b border-brand-cream pb-2">
+              <a 
+                key={link.name} 
+                href={link.href} 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-2xl font-serif text-brand-dark border-b border-brand-straw/10 pb-2"
+              >
                 {link.name}
               </a>
             ))}
-            <a href={SALON_DATA.bookingUrl} target="_blank" rel="noreferrer" className="btn-primary text-center">
+            <a href={salonData.bookingUrl} target="_blank" rel="noreferrer" className="btn-primary text-center py-4">
               {t.bookNow}
             </a>
           </motion.div>
@@ -559,52 +1281,77 @@ export const Navbar = ({ lang, setLang }: NavbarProps) => {
 
 ## FILE: src/components/Reviews.tsx
 ```
+// src/components/Reviews.tsx
 import { motion } from "motion/react";
 import { Star } from "lucide-react";
-import { SALON_DATA, UI_STRINGS, Language } from "../constants";
+import { UI_STRINGS, Language } from "../constants";
+import { useSalon } from "../context/SalonContext"; // Importamos o contexto dinâmico
 
 export const Reviews = ({ lang }: { lang: Language }) => {
   const t = UI_STRINGS[lang];
+  const { salonData } = useSalon(); // Acedemos às reviews reais em tempo real
+
   return (
-    <section id="avaliacoes" className="section-padding bg-brand-olive text-white overflow-hidden relative">
-      <div className="absolute top-0 right-0 p-12 opacity-10">
-        <Star size={200} />
-      </div>
+    <section id="avaliacoes" className="section-padding bg-brand-leaf text-brand-cream relative overflow-hidden">
+      {/* Elementos decorativos de fundo - Otimizados para não causar scroll horizontal no mobile */}
+      <div className="absolute top-[-5%] right-[-10%] w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-[-5%] left-[-10%] w-[200px] h-[200px] md:w-[300px] md:h-[300px] bg-brand-dark/10 rounded-full blur-3xl pointer-events-none"></div>
       
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
-          <div>
-            <span className="text-brand-gold font-serif italic text-xl mb-2 block">{t.realExperiences}</span>
-            <h2 className="text-4xl md:text-5xl">{t.whatClientsSay}</h2>
+        {/* HEADER: Mobile First (Stack vertical no mobile, horizontal no desktop) */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-16 gap-6 md:gap-8">
+          <div className="max-w-xl">
+            <span className="text-brand-straw uppercase tracking-[0.2em] text-[10px] md:text-xs font-bold mb-3 md:mb-4 block">
+              {t.realExperiences}
+            </span>
+            <h2 className="text-4xl md:text-6xl font-serif leading-tight">
+              {t.whatClientsSay}
+            </h2>
           </div>
-          <div className="flex items-center gap-4 bg-white/10 px-6 py-3 rounded-full backdrop-blur-sm">
-            <div className="flex text-brand-gold">
-              {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="currentColor" />)}
+
+          {/* Badge de Rating: Ajustado para mobile */}
+          <div className="flex items-center gap-3 bg-white/10 px-6 py-3 md:px-8 md:py-4 rounded-full backdrop-blur-md border border-white/10 shrink-0">
+            <div className="flex text-brand-straw">
+              {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" className="md:w-[18px] md:h-[18px]" />)}
             </div>
-            <span className="font-medium">4.9/5 (336 {t.reviews.toLowerCase()})</span>
+            <span className="font-medium tracking-wide text-sm md:text-base">
+              4.9/5 <span className="opacity-60 font-light text-xs ml-1">(336 {t.reviews.toLowerCase()})</span>
+            </span>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {SALON_DATA.reviews.map((review, i) => (
+        {/* GRID DE REVIEWS: Mobile First (1 coluna telemóvel, 3 colunas desktop) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          {salonData.reviews.map((review, i) => (
             <motion.div 
-              key={i}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="bg-white/5 p-8 rounded-3xl border border-white/10 backdrop-blur-sm"
+              key={i} 
+              initial={{ opacity: 0, y: 20 }} 
+              whileInView={{ opacity: 1, y: 0 }} 
+              viewport={{ once: true, margin: "-50px" }} 
+              transition={{ delay: i * 0.1, duration: 0.8 }}
+              className="bg-white/5 p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-white/10 backdrop-blur-lg hover:bg-white/10 transition-all duration-500 flex flex-col"
             >
-              <div className="flex gap-1 text-brand-gold mb-4">
-                {[...Array(review.rating)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
+              {/* Estrelas da Review */}
+              <div className="flex gap-1 text-brand-straw mb-5 md:mb-6">
+                {[...Array(review.rating)].map((_, idx) => <Star key={idx} size={14} fill="currentColor" />)}
               </div>
-              <p className="text-lg italic font-serif mb-6 leading-relaxed">
+
+              {/* Texto da Review: Ajustado para não ser demasiado longo no mobile */}
+              <p className="text-lg md:text-xl italic font-serif mb-6 md:mb-8 leading-relaxed font-light text-brand-cream/90 flex-grow">
                 "{review.text[lang]}"
               </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-brand-gold rounded-full flex items-center justify-center text-brand-olive font-bold">
+
+              {/* Autor */}
+              <div className="flex items-center gap-4 pt-4 border-t border-white/5">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-brand-straw rounded-full flex items-center justify-center text-brand-leaf font-bold text-base md:text-lg">
                   {review.author[0]}
                 </div>
-                <span className="font-medium uppercase tracking-widest text-xs">{review.author}</span>
+                <div className="flex flex-col">
+                  <span className="font-semibold uppercase tracking-widest text-[10px] md:text-xs">
+                    {review.author}
+                  </span>
+                  <span className="text-[9px] uppercase tracking-widest opacity-40">Cliente Verificada</span>
+                </div>
               </div>
             </motion.div>
           ))}
@@ -617,39 +1364,182 @@ export const Reviews = ({ lang }: { lang: Language }) => {
 
 ## FILE: src/components/Services.tsx
 ```
+// src/components/Services.tsx
 import { motion } from "motion/react";
-import { Sparkles, Clock, ChevronRight } from "lucide-react";
-import { SALON_DATA, UI_STRINGS, Language } from "../constants";
+import { Sparkles, Clock, CalendarCheck } from "lucide-react";
+import { UI_STRINGS, Language } from "../constants";
+import { useSalon } from "../context/SalonContext";
 
 export const Services = ({ lang }: { lang: Language }) => {
   const t = UI_STRINGS[lang];
+  const { salonData } = useSalon();
+
   return (
-    <section id="servicos" className="section-padding">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl mb-4">{t.ourServices}</h2>
-          <div className="w-24 h-px bg-brand-gold mx-auto mb-6"></div>
-          <p className="text-brand-dark/60 max-w-xl mx-auto">{t.servicesSubtitle}</p>
+    /* Mudamos o fundo da secção para criar contraste com o card branco */
+    <section id="servicos" className="section-padding bg-brand-cream/50 relative overflow-hidden">
+      {/* Luz ambiente de fundo */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-leaf/5 rounded-full blur-[120px] pointer-events-none"></div>
+      
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div className="text-center mb-20">
+          <motion.span 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-brand-leaf uppercase tracking-[0.3em] text-[10px] md:text-xs font-bold mb-4 block"
+          >
+            {t.luxuryMeetsRelaxation}
+          </motion.span>
+          <h2 className="text-5xl md:text-7xl mb-6 text-brand-dark">{t.ourServices}</h2>
+          <div className="w-24 h-1 bg-brand-leaf mx-auto mb-6 rounded-full"></div>
+          <p className="text-brand-dark/60 max-w-xl mx-auto text-lg font-light leading-relaxed px-4">
+            {t.servicesSubtitle}
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {SALON_DATA.services.map((service, i) => (
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all group border border-brand-cream">
-              <div className="w-12 h-12 bg-brand-cream rounded-full flex items-center justify-center mb-6 group-hover:bg-brand-olive group-hover:text-white transition-colors">
-                <Sparkles size={20} />
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6 lg:gap-8">
+          {salonData.services.map((service, i) => (
+            <motion.div 
+              key={i} 
+              initial={{ opacity: 0, y: 40 }} 
+              whileInView={{ opacity: 1, y: 0 }} 
+              viewport={{ once: true }} 
+              transition={{ delay: i * 0.1, duration: 0.7 }} 
+              /* 
+                 EFEITO PROFUNDIDADE:
+                 - bg-white puro
+                 - border-2 para destacar
+                 - shadow-xl base para tirar do fundo
+                 - hover:shadow-2xl com cor Leaf para o efeito UAU
+              */
+              className="bg-white p-8 rounded-[3rem] transition-all duration-500 group border-2 border-brand-straw/40 hover:border-brand-leaf/40 flex flex-col h-full relative shadow-[0_15px_40px_-12px_rgba(0,0,0,0.08)] hover:shadow-[0_30px_60px_-12px_rgba(91,122,97,0.25)] hover:-translate-y-4"
+            >
+              {/* Overlay interno de brilho */}
+              <div className="absolute inset-0 rounded-[3rem] bg-linear-to-tr from-brand-straw/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+
+              {/* Ícone com destaque elevado */}
+              <div className="w-16 h-16 bg-brand-cream rounded-2xl shadow-inner flex items-center justify-center mb-8 group-hover:bg-brand-leaf group-hover:text-white group-hover:rotate-6 transition-all duration-500 text-brand-leaf relative border border-brand-straw/20">
+                <Sparkles size={28} strokeWidth={1.5} />
               </div>
-              <h3 className="text-xl mb-2 min-h-14">{service.name[lang]}</h3>
-              <p className="text-sm text-brand-dark/60 mb-6 line-clamp-2">{service.description[lang]}</p>
-              <div className="flex justify-between items-end">
-                <div>
-                  <span className="text-xs uppercase tracking-widest opacity-50 block mb-1">{t.duration}</span>
-                  <span className="font-medium flex items-center gap-1"><Clock size={14} /> {service.duration}</span>
-                </div>
-                <div className="text-right">
-                  <span className="text-xs uppercase tracking-widest opacity-50 block mb-1">{t.price}</span>
-                  <span className="text-2xl font-serif text-brand-gold">€{service.price}</span>
+
+              <h3 className="text-2xl mb-4 leading-tight text-brand-dark font-serif font-bold group-hover:text-brand-leaf transition-colors duration-300">
+                {service.name[lang]}
+              </h3>
+              
+              <p className="text-sm text-brand-dark/60 mb-10 flex-grow font-light leading-relaxed">
+                {service.description[lang]}
+              </p>
+              
+              {/* Rodapé do Card com fundo sutil para separar as informações */}
+              <div className="bg-brand-cream/30 -mx-8 px-8 py-6 mb-8 border-t border-b border-brand-straw/20">
+                <div className="flex justify-between items-end">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-[9px] uppercase tracking-[0.2em] text-brand-dark/40 font-bold">{t.duration}</span>
+                    <span className="text-sm font-semibold flex items-center gap-1.5 text-brand-dark/80">
+                      <Clock size={14} className="text-brand-leaf" /> {service.duration}
+                    </span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[9px] uppercase tracking-[0.2em] text-brand-dark/40 font-bold block mb-1">{t.price}</span>
+                    <div className="flex items-start justify-end">
+                      <span className="text-sm text-brand-straw font-bold mt-1">€</span>
+                      <span className="text-4xl font-serif text-brand-leaf italic leading-none ml-0.5">{service.price}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
+
+              {/* BOTÃO COM PROFUNDIDADE (SOMBRA PRÓPRIA) */}
+              <a 
+                href={salonData.bookingUrl} 
+                target="_blank" 
+                rel="noreferrer"
+                className="w-full py-4 bg-brand-dark text-white rounded-2xl text-[10px] uppercase tracking-[0.3em] font-bold transition-all duration-500 flex items-center justify-center gap-2 shadow-lg shadow-brand-dark/20 hover:bg-brand-leaf hover:shadow-brand-leaf/40 hover:scale-[1.05] active:scale-95"
+              >
+                <CalendarCheck size={16} strokeWidth={2} />
+                {t.bookNow}
+              </a>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+```
+
+## FILE: src/components/Team.tsx
+```
+// src/components/Team.tsx
+import { motion } from "motion/react";
+import { UI_STRINGS, Language } from "../constants";
+import { useSalon } from "../context/SalonContext";
+
+export const Team = ({ lang }: { lang: Language }) => {
+  const t = UI_STRINGS[lang];
+  const { salonData } = useSalon();
+
+  // Se não houver ninguém na equipa, a secção não aparece
+  if (!salonData.team || salonData.team.length === 0) return null;
+
+  return (
+    /* Fundo Creme para contrastar com o Verde da Galeria acima */
+    <section id="equipa" className="section-padding bg-brand-cream overflow-hidden">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-20">
+          <motion.span 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-brand-leaf uppercase tracking-[0.2em] text-[10px] md:text-xs font-bold mb-4 block"
+          >
+            {t.teamSubtitle}
+          </motion.span>
+          
+          <h2 className="text-5xl md:text-7xl mb-6 font-serif italic font-light text-brand-dark">
+            {t.team}
+          </h2>
+          
+          {/* A linha horizontal moderna e grossa que define a nossa assinatura visual */}
+          <div className="w-24 h-1 bg-brand-leaf mx-auto mb-6 rounded-full"></div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16 md:gap-24">
+          {salonData.team.map((member: any, i: number) => (
+            <motion.div 
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1, duration: 0.8 }}
+              className="text-center group"
+            >
+              {/* Foto com moldura orgânica de luxo (Cápsula) */}
+              <div className="relative mb-10 mx-auto w-64 h-80 md:w-80 md:h-[420px]">
+                {/* Fundo decorativo que se move no hover */}
+                <div className="absolute inset-0 bg-brand-straw/30 rounded-t-[12rem] rounded-b-[3rem] transition-all duration-700 group-hover:scale-105 group-hover:-rotate-2"></div>
+                
+                {/* Contentor da Imagem (Suporta jpg, png, webp) */}
+                <div className="absolute inset-3 overflow-hidden rounded-t-[12rem] rounded-b-[3rem] shadow-2xl bg-white border border-brand-straw/20">
+                  <img 
+                    src={member.image || "https://images.unsplash.com/photo-1595152772835-219674b2a8a6?q=80&w=800&auto=format&fit=crop"} 
+                    alt={member.name} 
+                    className="w-full h-full object-cover grayscale-[0.4] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" 
+                    loading="lazy"
+                    onError={(e) => {
+                       e.currentTarget.src = "https://via.placeholder.com/400x600?text=Bless+Nails+Staff";
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Tipografia refinada para o nome e cargo */}
+              <h3 className="text-3xl md:text-4xl font-serif text-brand-dark mb-2 tracking-tight">
+                {member.name}
+              </h3>
+              <p className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-brand-leaf font-bold">
+                {member.role[lang] || member.role.pt}
+              </p>
             </motion.div>
           ))}
         </div>
@@ -661,12 +1551,16 @@ export const Services = ({ lang }: { lang: Language }) => {
 
 ## FILE: src/constants.ts
 ```
+// src/constants.ts
+
 export type Language = "pt" | "en" | "es";
 
 export const UI_STRINGS = {
   pt: {
     about: "Sobre",
     services: "Serviços",
+    gallery: "Galeria",
+    gallerySubtitle: "Inspire-se com a nossa arte e espaço.",
     reviews: "Avaliações",
     location: "Localização",
     bookNow: "Agendar Agora",
@@ -692,11 +1586,15 @@ export const UI_STRINGS = {
     tagline: "O seu refúgio de beleza no coração de Lisboa.",
     footerDescription: "O seu refúgio de beleza no coração de Lisboa. Especialistas em cuidados de unhas de luxo e experiências de bem-estar.",
     scroll: "Scroll",
-    closed: "Fechado"
+    closed: "Fechado",
+    team: "Nossa Equipa",
+    teamSubtitle: "Especialistas dedicadas a realçar a sua melhor versão."
   },
   en: {
     about: "About",
     services: "Services",
+    gallery: "Gallery",
+    gallerySubtitle: "Get inspired by our art and space.",
     reviews: "Reviews",
     location: "Location",
     bookNow: "Book Now",
@@ -722,11 +1620,15 @@ export const UI_STRINGS = {
     tagline: "Your beauty sanctuary in the heart of Lisbon.",
     footerDescription: "Your beauty sanctuary in the heart of Lisbon. Specialists in luxury nail care and wellness experiences.",
     scroll: "Scroll",
-    closed: "Closed"
+    closed: "Closed",
+    team: "Our Team",
+    teamSubtitle: "Specialists dedicated to enhancing your best version."
   },
   es: {
     about: "Sobre",
     services: "Servicios",
+    gallery: "Galería",
+    gallerySubtitle: "Inspírate con nuestro arte e espacio.",
     reviews: "Reseñas",
     location: "Ubicación",
     bookNow: "Reservar Ahora",
@@ -735,7 +1637,7 @@ export const UI_STRINGS = {
     ourEssence: "Nuestra esencia",
     luxuryMeetsRelaxation: "Donde el lujo se encuentra con la relajación",
     ourServices: "Nuestros Servicios",
-    servicesSubtitle: "Tratamientos exclusivos diseñados para realzar tu belleza natural con los mejores productos del mercado.",
+    servicesSubtitle: "Tratamientos exclusivos diseñados para realzar tu beleza natural con los mejores produtos del mercado.",
     duration: "Duración",
     price: "Precio",
     viewFullMenu: "Ver Menú Completo",
@@ -749,135 +1651,316 @@ export const UI_STRINGS = {
     privacy: "Privacidad",
     terms: "Términos",
     allRightsReserved: "Todos los derechos reservados.",
-    tagline: "Tu santuario de belleza en el corazón de Lisboa.",
-    footerDescription: "Tu santuario de belleza en el corazón de Lisboa. Especialistas en el cuidado de uñas de lujo y experiencias de bienestar.",
+    tagline: "Tu santuario de beleza en el corazón de Lisboa.",
+    footerDescription: "Tu santuario de beleza en el corazón de Lisboa. Especialistas en el cuidado de uñas de lujo y experiencias de bienestar.",
     scroll: "Scroll",
-    closed: "Cerrado"
+    closed: "Cerrado",
+    team: "Nuestro Equipo",
+    teamSubtitle: "Especialistas dedicadas a realzar tu mejor versión."
   }
 };
 
 export const SALON_DATA = {
-  name: "Bless Nails Lisbon",
-  tagline: {
-    pt: "O seu destino de eleição para tratamentos de unhas de luxo no centro de Lisboa.",
-    en: "Your premier destination for luxury nail treatments in the center of Lisbon.",
-    es: "Tu destino preferido para tratamientos de uñas de lujo en el centro de Lisboa."
+  "name": "Bless Nails Lisbon",
+  "tagline": {
+    "pt": "O seu destino de eleição para tratamentos de unhas de luxo no centro de Lisboa.",
+    "en": "Your premier destination for luxury nail treatments in the center of Lisbon.",
+    "es": "Tu destino preferido para tratamientos de uñas de lujo en el centro de Lisboa."
   },
-  description: {
-    pt: "Entre na Bless Nails, o seu destino de eleição para tratamentos de unhas de luxo no centro de Lisboa. Desfrute de um ambiente sereno e sofisticado onde os nossos técnicos especializados proporcionam manicures, pedicures e nail art personalizada impecáveis. Utilizando apenas os melhores produtos, garantimos uma experiência de mimo que a deixa rejuvenescida e glamorosa.",
-    en: "Step into Bless Nails, your premier destination for luxury nail treatments in the center of Lisbon. Indulge in a serene and sophisticated environment where our expert technicians provide impeccable manicures, pedicures, and bespoke nail art. Using only the finest products, we ensure a pampering experience that leaves you feeling rejuvenated and glamorous.",
-    es: "Entra en Bless Nails, tu destino preferido para tratamientos de uñas de lujo en el centro de Lisboa. Disfruta de un ambiente sereno y sofisticado donde nuestros técnicos expertos ofrecen manicuras, pedicuras y nail art personalizado impecables. Utilizando solo los mejores productos, garantizamos una experiencia de mimo que te dejará rejuvenecida y glamurosa."
+  "description": {
+    "pt": "Entre na Bless Nails, o seu destino de eleição para tratamentos de unhas de luxo no centro de Lisboa. Desfrute de um ambiente sereno e sofisticado onde os nossos técnicos especializados proporcionam manicures, pedicures e nail art personalizada impecáveis. Utilizando apenas os melhores produtos, garantimos uma experiência de mimo que a deixa rejuvenescida e glamorosa.",
+    "en": "Step into Bless Nails, your premier destination for luxury nail treatments in the center of Lisbon. Indulge in a serene and sophisticated environment where our expert technicians provide impeccable manicures, pedicures, and bespoke nail art. Using only the finest products, we ensure a pampering experience that leaves you feeling rejuvenated and glamorous.",
+    "es": "Entra en Bless Nails, tu destino preferido para tratamientos de uñas de lujo en el centro de Lisboa. Disfruta de un ambiente sereno e sofisticado onde nuestros técnicos expertos ofrecen manicuras, pedicuras y nail art personalizado impecables. Utilizando solo los mejores produtos, garantizamos una experiencia de mimo que te dejará rejuvenecida e glamurosa."
   },
-  address: "Rua de O Século 154, 154, Príncipe Real, Lisboa",
-  googleMapsUrl: "https://maps.google.com/?daddr=Rua%20de%20O%20S%C3%A9culo%20154%2C%20154%2C%20Lisboa%2C%201200-437",
-  bookingUrl: "https://www.fresha.com/pt/a/bless-nails-lisbon-lisboa-rua-de-o-seculo-154-xcgfypxc/all-offer?venue=true",
-  services: [
+  "address": "Rua de O Século 154, 154, Príncipe Real, Lisboa",
+  "phoneNumber": "+351937832777",
+  "googleMapsUrl": "https://maps.google.com/?daddr=Rua%20de%20O%20S%C3%A9culo%20154%2C%20154%2C%20Lisboa%2C%201200-437",
+  "bookingUrl": "https://www.fresha.com/pt/a/bless-nails-lisbon-lisboa-rua-de-o-seculo-154-xcgfypxc/all-offer?venue=true",
+  "mapEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3113.123456789!2d-9.148!3d38.716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd19337f7f7f7f7f%3A0x7f7f7f7f7f7f7f7f!2sRua%20de%20O%20S%C3%A9culo%20154%2C%201200-437%20Lisboa!5e0!3m2!1spt!2spt!4v1234567890",
+  "socialLinks": {
+    "instagram": "https://www.instagram.com/blessnailslisbon/",
+    "facebook": "",
+    "tiktok": ""
+  },
+  "galleryPhotos": [
+    "https://i.ibb.co/99SZskLY/Captura-de-ecr-2026-02-28-220502.png",
+    "https://i.ibb.co/3mGvP98B/Captura-de-ecr-2026-02-28-220245.png",
+    "https://i.ibb.co/NdDp9vRJ/Captura-de-ecr-2026-02-28-220234.png",
+    "https://i.ibb.co/LzH9y7q4/Captura-de-ecr-2026-02-28-220221.png",
+    "https://i.ibb.co/xS4qmFwj/Captura-de-ecr-2026-02-28-220206.png",
+    "https://i.ibb.co/v4L29Z0C/Captura-de-ecr-2026-02-28-220148.png",
+    "https://i.ibb.co/p6sXL1dQ/Captura-de-ecr-2026-02-28-220133.png",
+    "",
+    "",
+    ""
+  ],
+  "team": [
     {
-      name: {
-        pt: "Manicure Verniz Gel | Gel Polish",
-        en: "Gel Polish Manicure",
-        es: "Manicura Esmalte Gel"
+      "name": "Stefanie",
+      "role": {
+        "pt": "Nail Designer",
+        "en": "Master Stylist",
+        "es": "Master Stylist"
       },
-      price: "25",
-      duration: "1h",
-      description: {
-        pt: "Verniz gel de longa duração com acabamento impecável.",
-        en: "Long-lasting gel polish with an impeccable finish.",
-        es: "Esmalte en gel de larga duración con un acabado impecable."
+      "image": "https://i.ibb.co/B5dryZzg/Captura-de-ecr-2026-03-01-111655.png"
+    },
+    {
+      "name": "Stacy",
+      "role": {
+        "pt": "Nail Artist",
+        "en": "",
+        "es": ""
+      },
+      "image": "https://i.ibb.co/0ydrZJsV/Captura-de-ecr-2026-03-01-111635.png"
+    },
+    {
+      "name": "Andreza",
+      "role": {
+        "pt": "Nail Artist",
+        "en": "",
+        "es": ""
+      },
+      "image": "https://i.ibb.co/Xr3H5KMZ/Captura-de-ecr-2026-03-01-111713.png"
+    }
+  ],
+  "services": [
+    {
+      "name": {
+        "pt": "Manicure Verniz Gel",
+        "en": "Gel Polish Manicure",
+        "es": "Manicura Esmalte Gel"
+      },
+      "price": "25",
+      "duration": "1h",
+      "description": {
+        "pt": "Verniz gel de longa duração com acabamento impecável.",
+        "en": "Long-lasting gel polish with an impeccable finish.",
+        "es": "Esmalte en gel de larga duración com un acabado impecable."
       }
     },
     {
-      name: {
-        pt: "Manicure Clássica | The Manicure Classic",
-        en: "Classic Manicure",
-        es: "Manicura Clásica"
+      "name": {
+        "pt": "Manicure Clássica ",
+        "en": "Classic Manicure",
+        "es": "Manicura Clásica"
       },
-      price: "15",
-      duration: "1h",
-      description: {
-        pt: "Tratamento tradicional para mãos elegantes e cuidadas.",
-        en: "Traditional treatment for elegant and well-cared hands.",
-        es: "Tratamiento tradicional para manos elegantes y cuidadas."
+      "price": "15",
+      "duration": "1h",
+      "description": {
+        "pt": "Tratamento tradicional para mãos elegantes e cuidadas.",
+        "en": "Traditional treatment for elegant and well-cared hands.",
+        "es": "Tratamiento tradicional para manos elegantes e cuidadas."
       }
     },
     {
-      name: {
-        pt: "Pedicure Verniz Gel | Shellac Pedicure",
-        en: "Gel Polish Pedicure",
-        es: "Pedicura Esmalte Gel"
+      "name": {
+        "pt": "Pedicure Verniz Gel",
+        "en": "Gel Polish Pedicure",
+        "es": "Pedicura Esmalte Gel"
       },
-      price: "35",
-      duration: "1h",
-      description: {
-        pt: "Cuidado completo para pés com verniz gel duradouro.",
-        en: "Complete foot care with long-lasting gel polish.",
-        es: "Cuidado completo de pies con esmalte en gel duradero."
+      "price": "35",
+      "duration": "1h",
+      "description": {
+        "pt": "Cuidado completo para pés com verniz gel duradouro.",
+        "en": "Complete foot care with long-lasting gel polish.",
+        "es": "Cuidado completo de pies con esmalte en gel duradero."
       }
     },
     {
-      name: {
-        pt: "Pedicure Clássico | Classic Pedicure",
-        en: "Classic Pedicure",
-        es: "Pedicura Clásica"
+      "name": {
+        "pt": "Pedicure Clássico ",
+        "en": "Classic Pedicure",
+        "es": "Pedicura Clásica"
       },
-      price: "25",
-      duration: "1h",
-      description: {
-        pt: "O essencial para pés relaxados e unhas perfeitas.",
-        en: "The essential for relaxed feet and perfect nails.",
-        es: "Lo esencial para pies relajados y uñas perfectas."
+      "price": "25",
+      "duration": "1h",
+      "description": {
+        "pt": "O essencial para pés relaxados e unhas perfeitas.",
+        "en": "The essential for relaxed feet and perfect nails.",
+        "es": "Lo esencial para pies relaxados e uñas perfectas."
       }
     }
   ],
-  hours: [
-    { day: { pt: "Segunda-feira", en: "Monday", es: "Lunes" }, time: "10:00 - 19:00" },
-    { day: { pt: "Terça-feira", en: "Tuesday", es: "Martes" }, time: "10:00 - 19:00" },
-    { day: { pt: "Quarta-feira", en: "Wednesday", es: "Miércoles" }, time: "10:00 - 19:00" },
-    { day: { pt: "Quinta-feira", en: "Thursday", es: "Jueves" }, time: "10:00 - 19:00" },
-    { day: { pt: "Sexta-feira", en: "Friday", es: "Viernes" }, time: "10:00 - 19:00" },
-    { day: { pt: "Sábado", en: "Saturday", es: "Sábado" }, time: "10:00 - 19:00" },
-    { day: { pt: "Domingo", en: "Sunday", es: "Domingo" }, time: "Fechado" }
+  "hours": [
+    {
+      "day": {
+        "pt": "Segunda-feira",
+        "en": "Monday",
+        "es": "Lunes"
+      },
+      "time": "10:00 - 19:00"
+    },
+    {
+      "day": {
+        "pt": "Terça-feira",
+        "en": "Tuesday",
+        "es": "Martes"
+      },
+      "time": "10:00 - 19:00"
+    },
+    {
+      "day": {
+        "pt": "Quarta-feira",
+        "en": "Wednesday",
+        "es": "Miércoles"
+      },
+      "time": "10:00 - 19:00"
+    },
+    {
+      "day": {
+        "pt": "Quinta-feira",
+        "en": "Thursday",
+        "es": "Jueves"
+      },
+      "time": "10:00 - 19:00"
+    },
+    {
+      "day": {
+        "pt": "Sexta-feira",
+        "en": "Friday",
+        "es": "Viernes"
+      },
+      "time": "10:00 - 19:00"
+    },
+    {
+      "day": {
+        "pt": "Sábado",
+        "en": "Saturday",
+        "es": "Sábado"
+      },
+      "time": "10:00 - 19:00"
+    },
+    {
+      "day": {
+        "pt": "Domingo",
+        "en": "Sunday",
+        "es": "Domingo"
+      },
+      "time": "Fechado"
+    }
   ],
-  features: {
-    pt: ["Produtos Veganos", "Pet Friendly", "Adequado para Crianças", "Acessível", "Empreendedorismo Feminino", "LGBTQ+ Friendly"],
-    en: ["Vegan Products", "Pet Friendly", "Kid Friendly", "Accessible", "Female Entrepreneurship", "LGBTQ+ Friendly"],
-    es: ["Productos Veganos", "Pet Friendly", "Apto para Niños", "Accesible", "Emprendimiento Femenino", "LGBTQ+ Friendly"]
+  "features": {
+    "pt": [
+      "Produtos Veganos",
+      "Pet Friendly",
+      "Adequado para Crianças",
+      "Acessível",
+      "Empreendedorismo Feminino",
+      "LGBTQ+ Friendly"
+    ],
+    "en": [
+      "Vegan Products",
+      "Pet Friendly",
+      "Kid Friendly",
+      "Accessible",
+      "Female Entrepreneurship",
+      "LGBTQ+ Friendly"
+    ],
+    "es": [
+      "Productos Veganos",
+      "Pet Friendly",
+      "Apto para Niños",
+      "Accesible",
+      "Emprendimiento Femenino",
+      "LGBTQ+ Friendly"
+    ]
   },
-  reviews: [
+  "reviews": [
     {
-      author: "Raquel B",
-      text: {
-        pt: "Maravilhoso, como sempre",
-        en: "Wonderful, as ever",
-        es: "Maravilloso, como siempre"
+      "author": "Raquel B",
+      "text": {
+        "pt": "Maravilhoso, como sempre",
+        "en": "Wonderful, as ever",
+        "es": "Maravilloso, como siempre"
       },
-      rating: 5
+      "rating": 5
     },
     {
-      author: "Olann",
-      text: {
-        pt: "Absolutamente amei este salão. O serviço foi impecável, a atenção aos detalhes excepcional.",
-        en: "Absolutely loved this salon. The service was impeccable, the attention to detail outstanding.",
-        es: "Absolutamente me encantó este salón. El servicio fue impecable, la atención al detalle excepcional."
+      "author": "Olann",
+      "text": {
+        "pt": "Absolutamente amei este salão. O serviço foi impecável, a atenção aos detalhes excepcional.",
+        "en": "Absolutely loved this salon. The service was impeccable, the attention to detail outstanding.",
+        "es": "Absolutamente me encantó este salón. El servicio fue impecable, la atención al detalle excepcional."
       },
-      rating: 5
+      "rating": 5
     },
     {
-      author: "Isabella L",
-      text: {
-        pt: "O atendimento é ótimo, a Stefanie é super delicada e detalhista. As unhas ficaram incríveis!",
-        en: "The service is great, Stefanie is super delicate and detailed. The nails looked incredible!",
-        es: "¡La atención es excelente, Stefanie es súper delicada y detallista. ¡Las uñas quedaron increíbles!"
+      "author": "Isabella L",
+      "text": {
+        "pt": "O atendimento é ótimo, a Stefanie é super delicada e detalhista. As unhas ficaram incríveis!",
+        "en": "The service is great, Stefanie is super delicate and detailed. The nails looked incredible!",
+        "es": "¡La atención é excelente, Stefanie é súper delicada e detalista. ¡Las uñas ficaram incríveis!"
       },
-      rating: 5
+      "rating": 5
     }
   ]
 };
+```
 
+## FILE: src/context/SalonContext.tsx
+```
+// src/context/SalonContext.tsx
+import { createContext, useContext, useState, ReactNode } from "react";
+import { SALON_DATA as INITIAL_DATA } from "../constants";
+
+type SalonContextType = {
+  salonData: typeof INITIAL_DATA;
+  updateSalonData: (newData: typeof INITIAL_DATA) => void;
+};
+
+const SalonContext = createContext<SalonContextType | undefined>(undefined);
+
+export const SalonProvider = ({ children }: { children: ReactNode }) => {
+  const [salonData, setSalonData] = useState<typeof INITIAL_DATA>(() => {
+    const saved = localStorage.getItem("bless-nails-data");
+    
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        
+        // MERGE INTELIGENTE:
+        // Priorizamos o que está no código (INITIAL_DATA) para novas funcionalidades,
+        // mas mantemos as edições do usuário (parsed) para o que já existia.
+        return {
+          ...INITIAL_DATA,
+          ...parsed,
+          // Se o parsed.team for undefined (versão antiga), usamos o do código.
+          // Se o usuário limpou a equipe no painel, ele virá como [] e respeitaremos isso.
+          team: parsed.team || INITIAL_DATA.team,
+          socialLinks: { ...INITIAL_DATA.socialLinks, ...parsed.socialLinks },
+          galleryPhotos: parsed.galleryPhotos || INITIAL_DATA.galleryPhotos
+        };
+      } catch (e) {
+        console.error("Erro ao carregar dados do LocalStorage:", e);
+        return INITIAL_DATA;
+      }
+    }
+    
+    return INITIAL_DATA;
+  });
+
+  const updateSalonData = (newData: typeof INITIAL_DATA) => {
+    setSalonData(newData);
+    localStorage.setItem("bless-nails-data", JSON.stringify(newData));
+  };
+
+  return (
+    <SalonContext.Provider value={{ salonData, updateSalonData }}>
+      {children}
+    </SalonContext.Provider>
+  );
+};
+
+export const useSalon = () => {
+  const context = useContext(SalonContext);
+  if (!context) throw new Error("useSalon must be used within SalonProvider");
+  return context;
+};
 ```
 
 ## FILE: src/index.css
 ```
+/* src/index.css */
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@100..900&display=swap');
 @import "tailwindcss";
 
@@ -885,15 +1968,20 @@ export const SALON_DATA = {
   --font-serif: "Cormorant Garamond", serif;
   --font-sans: "Inter", sans-serif;
   
-  --color-brand-cream: #f5f2ed;
-  --color-brand-gold: #c5a059;
-  --color-brand-dark: #1a1a1a;
-  --color-brand-olive: #5a5a40;
+  /* PALETA DE CORES "UAUU" */
+  --color-brand-cream: #FDFBF7; /* Creme muito claro e luminoso */
+  --color-brand-straw: #E2D3B6; /* Palha elegante */
+  --color-brand-leaf: #5B7A61;  /* Verde folha sofisticado */
+  --color-brand-dark: #2C352D;  /* Cinza escuro esverdeado */
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth; /* Deslize suave entre seções */
+  }
+
   body {
-    @apply bg-brand-cream text-brand-dark font-sans antialiased;
+    @apply bg-brand-cream text-brand-dark font-sans antialiased selection:bg-brand-leaf/20 selection:text-brand-dark;
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -901,37 +1989,61 @@ export const SALON_DATA = {
   }
 }
 
+/* Efeito de Vidro (Glassmorphism) para o Menu */
 .glass {
-  @apply bg-white/70 backdrop-blur-md border border-white/20;
+  @apply bg-white/70 backdrop-blur-xl border-b border-white/40 shadow-sm transition-all duration-500;
 }
 
+/* Espaçamento padrão de luxo (mais ar para os elementos) */
 .section-padding {
-  @apply py-20 px-6 md:px-12 lg:px-24;
+  @apply py-28 px-6 md:px-12 lg:px-24;
 }
 
+/* Botão Principal: Verde Folha */
 .btn-primary {
-  @apply bg-brand-olive text-white px-8 py-3 rounded-full font-medium transition-all hover:bg-brand-olive/90 hover:scale-105 active:scale-95;
+  @apply bg-brand-leaf text-white px-8 py-3.5 rounded-full text-xs tracking-[0.2em] uppercase font-semibold transition-all duration-500 hover:bg-brand-dark hover:-translate-y-1 shadow-lg shadow-brand-leaf/20 hover:shadow-xl active:scale-95;
 }
 
+/* Botão Contorno: Minimalista */
 .btn-outline {
-  @apply border border-brand-olive text-brand-olive px-8 py-3 rounded-full font-medium transition-all hover:bg-brand-olive hover:text-white;
+  @apply border border-brand-leaf text-brand-leaf px-8 py-3.5 rounded-full text-xs tracking-[0.2em] uppercase font-semibold transition-all duration-500 hover:bg-brand-leaf hover:text-white hover:-translate-y-1 active:scale-95;
 }
 
+/* Barra de rolagem elegante para o Painel de Administrador */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-brand-cream;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-brand-leaf/20 rounded-full hover:bg-brand-leaf/40 transition-colors;
+}
+
+/* Ajuste para imagens que falham na galeria */
+img {
+  @apply transition-opacity duration-700;
+}
 ```
 
 ## FILE: src/main.tsx
 ```
-import {StrictMode} from 'react';
-import {createRoot} from 'react-dom/client';
+// src/main.tsx
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
+import { SalonProvider } from './context/SalonContext';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <SalonProvider>
+      <App />
+    </SalonProvider>
   </StrictMode>,
 );
-
 ```
 
 ## FILE: tsconfig.json

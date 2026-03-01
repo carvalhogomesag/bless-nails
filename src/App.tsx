@@ -48,7 +48,7 @@ export default function App() {
       </main>
 
       <Footer lang={lang} />
-      <CookieBanner />
+      <CookieBanner lang={lang} />
       
       {/* Botões flutuantes para Desktop */}
       <FloatingContact />
