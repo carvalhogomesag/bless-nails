@@ -1,7 +1,7 @@
 // src/components/AdminPanel.tsx
 import { useState } from "react";
 import { motion } from "motion/react";
-import { X, Plus, Trash2, Save, Code, Image as ImageIcon, RotateCcw, Users } from "lucide-react";
+import { X, Plus, Trash2, Save, Code, Image as ImageIcon, RotateCcw, Users, Phone } from "lucide-react";
 import { useSalon } from "../context/SalonContext";
 
 export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
@@ -11,7 +11,8 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
   const initialForm = JSON.parse(JSON.stringify(salonData));
   if (!initialForm.socialLinks) initialForm.socialLinks = { instagram: "", facebook: "", tiktok: "" };
   if (!initialForm.galleryPhotos) initialForm.galleryPhotos = Array(10).fill("");
-  if (!initialForm.team) initialForm.team = []; // Garante que a chave da equipa existe
+  if (!initialForm.team) initialForm.team = [];
+  if (!initialForm.phoneNumber) initialForm.phoneNumber = ""; // Garante que o campo telefone existe
   
   const [formData, setFormData] = useState(initialForm);
   const [activeTab, setActiveTab] = useState<"servicos" | "equipa" | "galeria" | "horarios" | "mapa" | "redes">("servicos");
@@ -94,7 +95,7 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
               onClick={() => setActiveTab(tab)} 
               className={`py-4 text-sm font-bold uppercase tracking-widest border-b-2 transition-all whitespace-nowrap ${activeTab === tab ? "border-brand-leaf text-brand-leaf" : "border-transparent text-brand-dark/40 hover:text-brand-leaf"}`}
             >
-              {tab === "servicos" ? "Serviços" : tab === "equipa" ? "Equipa" : tab === "redes" ? "Redes Sociais" : tab.charAt(0).toUpperCase() + tab.slice(1)}
+              {tab === "servicos" ? "Serviços" : tab === "equipa" ? "Equipa" : tab === "redes" ? "Contactos & Redes" : tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>
           ))}
         </div>
@@ -159,9 +160,8 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
                       <input type="text" value={member.role.pt} onChange={(e) => { const newT = [...formData.team]; newT[index].role.pt = e.target.value; setFormData({...formData, team: newT}) }} className="w-full border p-2 rounded-xl text-sm" placeholder="Ex: Master Stylist" />
                     </div>
                     <div className="md:col-span-2">
-                      <label className="text-[10px] font-bold uppercase text-brand-leaf mb-1 block">Link da Foto (jpg, png, webp)</label>
+                      <label className="text-[10px] font-bold uppercase text-brand-leaf mb-1 block">Link da Foto</label>
                       <input type="text" value={member.image} onChange={(e) => { const newT = [...formData.team]; newT[index].image = e.target.value; setFormData({...formData, team: newT}) }} className="w-full border p-2 rounded-xl text-sm" placeholder="https://i.ibb.co/..." />
-                      {member.image && <img src={member.image} alt="Preview" className="mt-2 w-12 h-16 object-cover rounded-lg border shadow-sm" />}
                     </div>
                   </div>
                 </div>
@@ -179,7 +179,7 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
                 <div className="p-3 bg-brand-leaf/10 text-brand-leaf rounded-xl"><ImageIcon size={24} /></div>
                 <div>
                   <h3 className="font-serif text-xl">Galeria de Inspiração</h3>
-                  <p className="text-xs text-brand-dark/50">Máximo 10 fotos. Use links diretos do ImgBB (i.ibb.co).</p>
+                  <p className="text-xs text-brand-dark/50">Máximo 10 fotos. Use links diretos do ImgBB.</p>
                 </div>
               </div>
               <div className="grid md:grid-cols-2 gap-x-8 gap-y-4">
@@ -203,6 +203,46 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
             </div>
           )}
 
+          {/* TAB: REDES SOCIAIS E CONTACTOS */}
+          {activeTab === "redes" && (
+            <div className="bg-white p-6 rounded-2xl border border-brand-straw/30 space-y-8">
+              <div>
+                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-brand-straw/20">
+                  <div className="p-3 bg-brand-leaf/10 text-brand-leaf rounded-xl"><Phone size={24} /></div>
+                  <div>
+                    <h3 className="font-serif text-xl">Contactos Diretos</h3>
+                    <p className="text-xs text-brand-dark/50">Configura o número para chamadas e WhatsApp.</p>
+                  </div>
+                </div>
+                <label className="text-[10px] font-bold uppercase text-brand-leaf mb-2 block">Número de Telefone (com indicativo)</label>
+                <input 
+                  type="text" 
+                  value={formData.phoneNumber} 
+                  onChange={(e) => setFormData({...formData, phoneNumber: e.target.value})} 
+                  className="w-full border p-3 rounded-xl text-sm font-mono" 
+                  placeholder="Ex: +351937832777"
+                />
+                <p className="text-[9px] text-brand-dark/40 mt-2 italic">Este número será usado nos botões flutuantes e na barra mobile.</p>
+              </div>
+
+              <div className="space-y-4">
+                <h4 className="text-xs font-bold uppercase tracking-widest text-brand-dark/40">Redes Sociais</h4>
+                <div>
+                  <label className="text-[10px] font-bold uppercase text-brand-leaf mb-2 block">Instagram</label>
+                  <input type="text" value={formData.socialLinks.instagram} onChange={(e) => setFormData({...formData, socialLinks: {...formData.socialLinks, instagram: e.target.value}})} className="w-full border p-3 rounded-xl text-sm" />
+                </div>
+                <div>
+                  <label className="text-[10px] font-bold uppercase text-brand-leaf mb-2 block">Facebook</label>
+                  <input type="text" value={formData.socialLinks.facebook} onChange={(e) => setFormData({...formData, socialLinks: {...formData.socialLinks, facebook: e.target.value}})} className="w-full border p-3 rounded-xl text-sm" />
+                </div>
+                <div>
+                  <label className="text-[10px] font-bold uppercase text-brand-leaf mb-2 block">TikTok</label>
+                  <input type="text" value={formData.socialLinks.tiktok} onChange={(e) => setFormData({...formData, socialLinks: {...formData.socialLinks, tiktok: e.target.value}})} className="w-full border p-3 rounded-xl text-sm" />
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* TAB: HORÁRIOS */}
           {activeTab === "horarios" && (
             <div className="grid md:grid-cols-2 gap-4">
@@ -220,24 +260,6 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
             <div className="bg-white p-6 rounded-2xl border border-brand-straw/30">
               <label className="text-xs font-bold uppercase text-brand-leaf mb-2 block">Link SRC de Incorporação do Google Maps</label>
               <textarea value={formData.mapEmbedUrl} onChange={(e) => setFormData({...formData, mapEmbedUrl: e.target.value})} className="w-full border p-4 rounded-xl text-sm font-mono text-brand-dark/70" rows={6} />
-            </div>
-          )}
-
-          {/* TAB: REDES SOCIAIS */}
-          {activeTab === "redes" && (
-            <div className="bg-white p-6 rounded-2xl border border-brand-straw/30 space-y-6">
-              <div>
-                <label className="text-xs font-bold uppercase text-brand-leaf mb-2 block">Instagram</label>
-                <input type="text" value={formData.socialLinks.instagram} onChange={(e) => setFormData({...formData, socialLinks: {...formData.socialLinks, instagram: e.target.value}})} className="w-full border p-3 rounded-xl text-sm" />
-              </div>
-              <div>
-                <label className="text-xs font-bold uppercase text-brand-leaf mb-2 block">Facebook</label>
-                <input type="text" value={formData.socialLinks.facebook} onChange={(e) => setFormData({...formData, socialLinks: {...formData.socialLinks, facebook: e.target.value}})} className="w-full border p-3 rounded-xl text-sm" />
-              </div>
-              <div>
-                <label className="text-xs font-bold uppercase text-brand-leaf mb-2 block">TikTok</label>
-                <input type="text" value={formData.socialLinks.tiktok} onChange={(e) => setFormData({...formData, socialLinks: {...formData.socialLinks, tiktok: e.target.value}})} className="w-full border p-3 rounded-xl text-sm" />
-              </div>
             </div>
           )}
 

@@ -34,7 +34,6 @@ export const UI_STRINGS = {
     footerDescription: "O seu refúgio de beleza no coração de Lisboa. Especialistas em cuidados de unhas de luxo e experiências de bem-estar.",
     scroll: "Scroll",
     closed: "Fechado",
-    // Novos campos para a Equipa
     team: "Nossa Equipa",
     teamSubtitle: "Especialistas dedicadas a realçar a sua melhor versão."
   },
@@ -69,7 +68,6 @@ export const UI_STRINGS = {
     footerDescription: "Your beauty sanctuary in the heart of Lisbon. Specialists in luxury nail care and wellness experiences.",
     scroll: "Scroll",
     closed: "Closed",
-    // Novos campos para a Equipa
     team: "Our Team",
     teamSubtitle: "Specialists dedicated to enhancing your best version."
   },
@@ -77,7 +75,7 @@ export const UI_STRINGS = {
     about: "Sobre",
     services: "Servicios",
     gallery: "Galería",
-    gallerySubtitle: "Inspírate con nuestro arte y espacio.",
+    gallerySubtitle: "Inspírate con nuestro arte e espacio.",
     reviews: "Reseñas",
     location: "Ubicación",
     bookNow: "Reservar Ahora",
@@ -104,7 +102,6 @@ export const UI_STRINGS = {
     footerDescription: "Tu santuario de beleza en el corazón de Lisboa. Especialistas en el cuidado de uñas de lujo y experiencias de bienestar.",
     scroll: "Scroll",
     closed: "Cerrado",
-    // Novos campos para a Equipa
     team: "Nuestro Equipo",
     teamSubtitle: "Especialistas dedicadas a realzar tu mejor versión."
   }
@@ -123,6 +120,7 @@ export const SALON_DATA = {
     "es": "Entra en Bless Nails, tu destino preferido para tratamientos de uñas de lujo en el centro de Lisboa. Disfruta de un ambiente sereno e sofisticado onde nuestros técnicos expertos ofrecen manicuras, pedicuras y nail art personalizado impecables. Utilizando solo los mejores produtos, garantizamos una experiencia de mimo que te dejará rejuvenecida e glamurosa."
   },
   "address": "Rua de O Século 154, 154, Príncipe Real, Lisboa",
+  "phoneNumber": "+351937832777", // ADICIONADO AQUI
   "googleMapsUrl": "https://maps.google.com/?daddr=Rua%20de%20O%20S%C3%A9culo%20154%2C%20154%2C%20Lisboa%2C%201200-437",
   "bookingUrl": "https://www.fresha.com/pt/a/bless-nails-lisbon-lisboa-rua-de-o-seculo-154-xcgfypxc/all-offer?venue=true",
   "mapEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3113.123456789!2d-9.148!3d38.716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd19337f7f7f7f7f%3A0x7f7f7f7f7f7f7f7f!2sRua%20de%20O%20S%C3%A9culo%20154%2C%201200-437%20Lisboa!5e0!3m2!1spt!2spt!4v1234567890",
@@ -157,8 +155,8 @@ export const SALON_DATA = {
       "name": "Maria",
       "role": {
         "pt": "Manicure",
-        "en": "",
-        "es": ""
+        "en": "Manicure",
+        "es": "Manicura"
       },
       "image": "https://i.ibb.co/LzH9y7q4/Captura-de-ecr-2026-02-28-220221.png"
     }
