@@ -9,9 +9,10 @@ export const Services = ({ lang }: { lang: Language }) => {
   const { salonData } = useSalon();
 
   return (
-    <section id="servicos" className="section-padding bg-white relative overflow-hidden">
-      {/* Elemento Decorativo de Fundo para dar "Vida" à secção */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-leaf/5 rounded-full blur-3xl pointer-events-none -translate-y-1/2"></div>
+    /* Mudamos o fundo da secção para criar contraste com o card branco */
+    <section id="servicos" className="section-padding bg-brand-cream/50 relative overflow-hidden">
+      {/* Luz ambiente de fundo */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-leaf/5 rounded-full blur-[120px] pointer-events-none"></div>
       
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-20">
@@ -24,62 +25,70 @@ export const Services = ({ lang }: { lang: Language }) => {
             {t.luxuryMeetsRelaxation}
           </motion.span>
           <h2 className="text-5xl md:text-7xl mb-6 text-brand-dark">{t.ourServices}</h2>
-          <div className="w-24 h-1 bg-linear-to-r from-transparent via-brand-leaf to-transparent mx-auto mb-6"></div>
-          <p className="text-brand-dark/60 max-w-xl mx-auto text-lg font-light leading-relaxed">
+          <div className="w-24 h-1 bg-brand-leaf mx-auto mb-6 rounded-full"></div>
+          <p className="text-brand-dark/60 max-w-xl mx-auto text-lg font-light leading-relaxed px-4">
             {t.servicesSubtitle}
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6 lg:gap-8">
           {salonData.services.map((service, i) => (
             <motion.div 
               key={i} 
               initial={{ opacity: 0, y: 40 }} 
               whileInView={{ opacity: 1, y: 0 }} 
               viewport={{ once: true }} 
-              transition={{ delay: i * 0.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }} 
-              className="bg-white p-8 rounded-[2.5rem] hover:bg-brand-cream/40 transition-all duration-500 group border border-brand-straw/30 hover:border-brand-leaf/30 flex flex-col h-full relative shadow-[0_10px_30px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(91,122,97,0.12)] hover:-translate-y-3"
+              transition={{ delay: i * 0.1, duration: 0.7 }} 
+              /* 
+                 EFEITO PROFUNDIDADE:
+                 - bg-white puro
+                 - border-2 para destacar
+                 - shadow-xl base para tirar do fundo
+                 - hover:shadow-2xl com cor Leaf para o efeito UAU
+              */
+              className="bg-white p-8 rounded-[3rem] transition-all duration-500 group border-2 border-brand-straw/40 hover:border-brand-leaf/40 flex flex-col h-full relative shadow-[0_15px_40px_-12px_rgba(0,0,0,0.08)] hover:shadow-[0_30px_60px_-12px_rgba(91,122,97,0.25)] hover:-translate-y-4"
             >
-              {/* Canto Decorativo (Sutil) */}
-              <div className="absolute top-0 right-0 w-24 h-24 bg-brand-straw/5 rounded-bl-full -z-10 group-hover:bg-brand-leaf/10 transition-colors duration-500"></div>
+              {/* Overlay interno de brilho */}
+              <div className="absolute inset-0 rounded-[3rem] bg-linear-to-tr from-brand-straw/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
 
-              {/* Ícone com Aura de Cor */}
-              <div className="w-16 h-16 bg-brand-cream rounded-2xl shadow-sm flex items-center justify-center mb-8 group-hover:bg-brand-leaf group-hover:text-white group-hover:rotate-12 transition-all duration-500 text-brand-leaf relative">
-                <div className="absolute inset-0 bg-brand-leaf/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <Sparkles size={28} strokeWidth={1.5} className="relative z-10" />
+              {/* Ícone com destaque elevado */}
+              <div className="w-16 h-16 bg-brand-cream rounded-2xl shadow-inner flex items-center justify-center mb-8 group-hover:bg-brand-leaf group-hover:text-white group-hover:rotate-6 transition-all duration-500 text-brand-leaf relative border border-brand-straw/20">
+                <Sparkles size={28} strokeWidth={1.5} />
               </div>
 
-              {/* Título e Descrição com melhor contraste */}
-              <h3 className="text-2xl mb-4 leading-tight text-brand-dark font-serif group-hover:text-brand-leaf transition-colors duration-300">
+              <h3 className="text-2xl mb-4 leading-tight text-brand-dark font-serif font-bold group-hover:text-brand-leaf transition-colors duration-300">
                 {service.name[lang]}
               </h3>
-              <p className="text-sm text-brand-dark/60 mb-8 flex-grow font-light leading-relaxed italic">
+              
+              <p className="text-sm text-brand-dark/60 mb-10 flex-grow font-light leading-relaxed">
                 {service.description[lang]}
               </p>
               
-              {/* Zona de Preço e Duração "Viva" */}
-              <div className="flex justify-between items-end mb-8 pt-6 border-t border-brand-straw/40">
-                <div className="flex flex-col gap-1">
-                  <span className="text-[9px] uppercase tracking-[0.2em] text-brand-dark/40 font-bold">{t.duration}</span>
-                  <span className="text-sm font-semibold flex items-center gap-1.5 text-brand-dark/80 bg-brand-straw/10 px-2 py-0.5 rounded-lg">
-                    <Clock size={14} className="text-brand-leaf" /> {service.duration}
-                  </span>
-                </div>
-                <div className="text-right">
-                  <span className="text-[9px] uppercase tracking-[0.2em] text-brand-dark/40 font-bold block mb-1">{t.price}</span>
-                  <span className="text-4xl font-serif text-brand-leaf italic leading-none">
-                    <span className="text-lg text-brand-straw mr-0.5 not-italic">€</span>
-                    {service.price}
-                  </span>
+              {/* Rodapé do Card com fundo sutil para separar as informações */}
+              <div className="bg-brand-cream/30 -mx-8 px-8 py-6 mb-8 border-t border-b border-brand-straw/20">
+                <div className="flex justify-between items-end">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-[9px] uppercase tracking-[0.2em] text-brand-dark/40 font-bold">{t.duration}</span>
+                    <span className="text-sm font-semibold flex items-center gap-1.5 text-brand-dark/80">
+                      <Clock size={14} className="text-brand-leaf" /> {service.duration}
+                    </span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[9px] uppercase tracking-[0.2em] text-brand-dark/40 font-bold block mb-1">{t.price}</span>
+                    <div className="flex items-start justify-end">
+                      <span className="text-sm text-brand-straw font-bold mt-1">€</span>
+                      <span className="text-4xl font-serif text-brand-leaf italic leading-none ml-0.5">{service.price}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* BOTÃO DE AGENDAMENTO COM GRADIENTE AO PASSAR O RATO */}
+              {/* BOTÃO COM PROFUNDIDADE (SOMBRA PRÓPRIA) */}
               <a 
                 href={salonData.bookingUrl} 
                 target="_blank" 
                 rel="noreferrer"
-                className="w-full py-4 bg-brand-dark text-white rounded-2xl text-[10px] uppercase tracking-[0.2em] font-bold transition-all duration-500 flex items-center justify-center gap-2 shadow-lg shadow-brand-dark/10 hover:bg-brand-leaf hover:shadow-brand-leaf/30 hover:scale-[1.02] active:scale-95"
+                className="w-full py-4 bg-brand-dark text-white rounded-2xl text-[10px] uppercase tracking-[0.3em] font-bold transition-all duration-500 flex items-center justify-center gap-2 shadow-lg shadow-brand-dark/20 hover:bg-brand-leaf hover:shadow-brand-leaf/40 hover:scale-[1.05] active:scale-95"
               >
                 <CalendarCheck size={16} strokeWidth={2} />
                 {t.bookNow}
