@@ -7,7 +7,7 @@ export const Team = ({ lang }: { lang: Language }) => {
   const t = UI_STRINGS[lang];
   const { salonData } = useSalon();
 
-  // Se não houver ninguém na equipa, a secção nem aparece para não ficar vazia
+  // Se não houver ninguém na equipa, a secção nem aparece
   if (!salonData.team || salonData.team.length === 0) return null;
 
   return (
@@ -17,8 +17,10 @@ export const Team = ({ lang }: { lang: Language }) => {
           <span className="text-brand-leaf uppercase tracking-[0.2em] text-[10px] md:text-xs font-bold mb-4 block">
             {t.teamSubtitle}
           </span>
-          <h2 className="text-5xl md:text-6xl mb-6">{t.team}</h2>
-          <div className="w-px h-16 bg-brand-leaf mx-auto opacity-20"></div>
+          <h2 className="text-5xl md:text-6xl mb-6 font-serif">{t.team}</h2>
+          
+          {/* SUBSTITUÍDO: Agora uma linha horizontal grossa e elegante */}
+          <div className="w-24 h-1 bg-brand-leaf mx-auto mb-6 rounded-full"></div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16 md:gap-20">
@@ -33,7 +35,7 @@ export const Team = ({ lang }: { lang: Language }) => {
             >
               {/* Foto com moldura orgânica de luxo */}
               <div className="relative mb-8 mx-auto w-64 h-80 md:w-72 md:h-96">
-                {/* Fundo decorativo (Palha) que mexe no hover */}
+                {/* Fundo decorativo (Palha) */}
                 <div className="absolute inset-0 bg-brand-straw/20 rounded-t-[10rem] rounded-b-[2rem] transition-transform duration-700 group-hover:scale-105 group-hover:rotate-2"></div>
                 
                 {/* Contentor da Imagem */}
@@ -44,7 +46,6 @@ export const Team = ({ lang }: { lang: Language }) => {
                     className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110" 
                     loading="lazy"
                     onError={(e) => {
-                       // Se o link da imagem falhar, mostra um fundo cinza elegante
                        e.currentTarget.src = "https://via.placeholder.com/400x500?text=Bless+Nails";
                     }}
                   />
