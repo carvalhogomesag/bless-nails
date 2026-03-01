@@ -1,6 +1,6 @@
 // src/components/Navbar.tsx
 import { motion, AnimatePresence } from "motion/react";
-import { Globe, Menu, X } from "lucide-react";
+import { Globe, Menu, X, ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { UI_STRINGS, Language } from "../constants";
 import { useSalon } from "../context/SalonContext";
@@ -52,7 +52,7 @@ export const Navbar = ({ lang, setLang }: NavbarProps) => {
           Bless Nails <span className="text-brand-leaf italic font-light">Lisbon</span>
         </a>
 
-        {/* MENU DESKTOP */}
+        {/* --- MENU DESKTOP --- */}
         <div className="hidden lg:flex items-center space-x-8">
           {navLinks.map((link) => (
             <a key={link.name} href={link.href} className="text-[11px] uppercase tracking-[0.15em] font-medium text-brand-dark/80 hover:text-brand-leaf transition-colors">
@@ -60,7 +60,6 @@ export const Navbar = ({ lang, setLang }: NavbarProps) => {
             </a>
           ))}
           
-          {/* Seletor de Idiomas Desktop */}
           <div className="relative">
             <button onClick={() => setIsLangMenuOpen(!isLangMenuOpen)} className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.15em] hover:text-brand-leaf transition-colors">
               <Globe size={14} /> {lang}
@@ -83,23 +82,66 @@ export const Navbar = ({ lang, setLang }: NavbarProps) => {
           </a>
         </div>
 
-        {/* CABEÇALHO MOBILE (Barra de cima no telemóvel) */}
-        <div className="flex items-center gap-5 lg:hidden">
-          {/* Removi o botão de idioma aqui para evitar confusão, ele agora está dentro do menu expandido para melhor UX */}
-          <button className="text-brand-dark" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+        {/* --- CABEÇALHO MOBILE (Visível apenas em telemóveis) --- */}
+        <div className="flex items-center gap-3 lg:hidden">
+          
+          {/* SELETOR DE IDIOMAS MOBILE (Ao lado do hambúrguer) */}
+          <div className="relative">
+            <button 
+              onClick={() => {
+                setIsLangMenuOpen(!isLangMenuOpen);
+                if (isMobileMenuOpen) setIsMobileMenuOpen(false); // Fecha o menu principal se o de idioma abrir
+              }} 
+              className="flex items-center gap-1 px-3 py-2 bg-white/50 backdrop-blur-sm border border-brand-straw/20 rounded-xl text-[10px] font-bold text-brand-leaf uppercase tracking-widest"
+            >
+              <Globe size={12} />
+              {lang}
+              <ChevronDown size={10} className={`transition-transform duration-300 ${isLangMenuOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            <AnimatePresence>
+              {isLangMenuOpen && (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.9, y: 5 }} 
+                  animate={{ opacity: 1, scale: 1, y: 0 }} 
+                  exit={{ opacity: 0, scale: 0.9, y: 5 }} 
+                  className="absolute right-0 mt-2 w-32 bg-white shadow-2xl rounded-2xl overflow-hidden border border-brand-straw/30 p-1 z-[60]"
+                >
+                  {languages.map((l) => (
+                    <button 
+                      key={l.code} 
+                      onClick={() => { setLang(l.code); setIsLangMenuOpen(false); }} 
+                      className={`w-full text-left px-4 py-3 text-xs rounded-xl transition-colors ${lang === l.code ? "bg-brand-leaf text-white font-bold" : "text-brand-dark/60 active:bg-brand-cream"}`}
+                    >
+                      {l.label}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* BOTÃO HAMBÚRGUER */}
+          <button 
+            className="w-10 h-10 flex items-center justify-center text-brand-dark active:scale-90 transition-transform" 
+            onClick={() => {
+              setIsMobileMenuOpen(!isMobileMenuOpen);
+              if (isLangMenuOpen) setIsLangMenuOpen(false); // Fecha o menu de idiomas se o hambúrguer abrir
+            }}
+          >
             {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
       </div>
 
-      {/* MENU MOBILE EXPANDIDO */}
+      {/* --- MENU MOBILE EXPANDIDO --- */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div 
             initial={{ opacity: 0, y: -20 }} 
             animate={{ opacity: 1, y: 0 }} 
             exit={{ opacity: 0, y: -20 }} 
-            className="absolute top-full left-0 right-0 bg-white shadow-2xl border-t border-brand-straw/20 p-8 flex flex-col gap-6 lg:hidden max-h-[90vh] overflow-y-auto"
+            className="absolute top-full left-0 right-0 bg-white shadow-2xl border-t border-brand-straw/20 p-8 flex flex-col gap-6 lg:hidden"
           >
             {navLinks.map((link) => (
               <a 
@@ -111,23 +153,6 @@ export const Navbar = ({ lang, setLang }: NavbarProps) => {
                 {link.name}
               </a>
             ))}
-
-            {/* SELETOR DE IDIOMAS MOBILE (In-menu) */}
-            <div className="py-4">
-              <span className="text-[10px] uppercase tracking-widest text-brand-dark/40 font-bold block mb-4">Escolha o Idioma / Language</span>
-              <div className="flex gap-3">
-                {languages.map((l) => (
-                  <button 
-                    key={l.code} 
-                    onClick={() => { setLang(l.code); setIsMobileMenuOpen(false); }}
-                    className={`px-4 py-2 rounded-xl text-sm font-bold border transition-all ${lang === l.code ? "bg-brand-leaf text-white border-brand-leaf" : "bg-brand-cream/30 text-brand-dark/60 border-brand-straw/30"}`}
-                  >
-                    {l.code.toUpperCase()}
-                  </button>
-                ))}
-              </div>
-            </div>
-
             <a href={salonData.bookingUrl} target="_blank" rel="noreferrer" className="btn-primary text-center py-4">
               {t.bookNow}
             </a>
