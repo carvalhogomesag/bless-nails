@@ -111,29 +111,27 @@ export const UI_STRINGS = {
 };
 
 export const SALON_DATA = {
-  name: "Bless Nails Lisbon",
-  tagline: {
-    pt: "O seu destino de eleição para tratamentos de unhas de luxo no centro de Lisboa.",
-    en: "Your premier destination for luxury nail treatments in the center of Lisbon.",
-    es: "Tu destino preferido para tratamientos de uñas de lujo en el centro de Lisboa."
+  "name": "Bless Nails Lisbon",
+  "tagline": {
+    "pt": "O seu destino de eleição para tratamentos de unhas de luxo no centro de Lisboa.",
+    "en": "Your premier destination for luxury nail treatments in the center of Lisbon.",
+    "es": "Tu destino preferido para tratamientos de uñas de lujo en el centro de Lisboa."
   },
-  description: {
-    pt: "Entre na Bless Nails, o seu destino de eleição para tratamentos de unhas de luxo no centro de Lisboa. Desfrute de um ambiente sereno e sofisticado onde os nossos técnicos especializados proporcionam manicures, pedicures e nail art personalizada impecáveis. Utilizando apenas os melhores produtos, garantimos uma experiência de mimo que a deixa rejuvenescida e glamorosa.",
-    en: "Step into Bless Nails, your premier destination for luxury nail treatments in the center of Lisbon. Indulge in a serene and sophisticated environment where our expert technicians provide impeccable manicures, pedicures, and bespoke nail art. Using only the finest products, we ensure a pampering experience that leaves you feeling rejuvenated and glamorous.",
-    es: "Entra en Bless Nails, tu destino preferido para tratamientos de uñas de lujo en el centro de Lisboa. Disfruta de un ambiente sereno e sofisticado onde nuestros técnicos expertos ofrecen manicuras, pedicuras y nail art personalizado impecables. Utilizando solo los mejores produtos, garantizamos una experiencia de mimo que te dejará rejuvenecida e glamurosa."
+  "description": {
+    "pt": "Entre na Bless Nails, o seu destino de eleição para tratamentos de unhas de luxo no centro de Lisboa. Desfrute de um ambiente sereno e sofisticado onde os nossos técnicos especializados proporcionam manicures, pedicures e nail art personalizada impecáveis. Utilizando apenas os melhores produtos, garantimos uma experiência de mimo que a deixa rejuvenescida e glamorosa.",
+    "en": "Step into Bless Nails, your premier destination for luxury nail treatments in the center of Lisbon. Indulge in a serene and sophisticated environment where our expert technicians provide impeccable manicures, pedicures, and bespoke nail art. Using only the finest products, we ensure a pampering experience that leaves you feeling rejuvenated and glamorous.",
+    "es": "Entra en Bless Nails, tu destino preferido para tratamientos de uñas de lujo en el centro de Lisboa. Disfruta de un ambiente sereno e sofisticado onde nuestros técnicos expertos ofrecen manicuras, pedicuras y nail art personalizado impecables. Utilizando solo los mejores produtos, garantizamos una experiencia de mimo que te dejará rejuvenecida e glamurosa."
   },
-  address: "Rua de O Século 154, 154, Príncipe Real, Lisboa",
-  googleMapsUrl: "https://maps.google.com/?daddr=Rua%20de%20O%20S%C3%A9culo%20154%2C%20154%2C%20Lisboa%2C%201200-437",
-  bookingUrl: "https://www.fresha.com/pt/a/bless-nails-lisbon-lisboa-rua-de-o-seculo-154-xcgfypxc/all-offer?venue=true",
-  mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3113.123456789!2d-9.148!3d38.716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd19337f7f7f7f7f%3A0x7f7f7f7f7f7f7f7f!2sRua%20de%20O%20S%C3%A9culo%20154%2C%201200-437%20Lisboa!5e0!3m2!1spt!2spt!4v1234567890",
-  
-  socialLinks: {
-    instagram: "",
-    facebook: "",
-    tiktok: ""
+  "address": "Rua de O Século 154, 154, Príncipe Real, Lisboa",
+  "googleMapsUrl": "https://maps.google.com/?daddr=Rua%20de%20O%20S%C3%A9culo%20154%2C%20154%2C%20Lisboa%2C%201200-437",
+  "bookingUrl": "https://www.fresha.com/pt/a/bless-nails-lisbon-lisboa-rua-de-o-seculo-154-xcgfypxc/all-offer?venue=true",
+  "mapEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3113.123456789!2d-9.148!3d38.716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd19337f7f7f7f7f%3A0x7f7f7f7f7f7f7f7f!2sRua%20de%20O%20S%C3%A9culo%20154%2C%201200-437%20Lisboa!5e0!3m2!1spt!2spt!4v1234567890",
+  "socialLinks": {
+    "instagram": "",
+    "facebook": "",
+    "tiktok": ""
   },
-
-  galleryPhotos: [
+  "galleryPhotos": [
     "https://i.ibb.co/99SZskLY/Captura-de-ecr-2026-02-28-220502.png",
     "https://i.ibb.co/3mGvP98B/Captura-de-ecr-2026-02-28-220245.png",
     "https://i.ibb.co/NdDp9vRJ/Captura-de-ecr-2026-02-28-220234.png",
@@ -141,80 +139,199 @@ export const SALON_DATA = {
     "https://i.ibb.co/xS4qmFwj/Captura-de-ecr-2026-02-28-220206.png",
     "https://i.ibb.co/v4L29Z0C/Captura-de-ecr-2026-02-28-220148.png",
     "https://i.ibb.co/p6sXL1dQ/Captura-de-ecr-2026-02-28-220133.png",
-    "", "", ""
+    "",
+    "",
+    ""
   ],
-
-  // NOVA SECÇÃO: EQUIPA
-  team: [
+  "team": [
     {
-      name: "Stefanie",
-      role: {
-        pt: "Master Stylist",
-        en: "Master Stylist",
-        es: "Master Stylist"
+      "name": "Stefanie",
+      "role": {
+        "pt": "Master Stylist",
+        "en": "Master Stylist",
+        "es": "Master Stylist"
       },
-      image: "https://i.ibb.co/99SZskLY/Captura-de-ecr-2026-02-28-220502.png" // Placeholder com sua imagem
+      "image": "https://i.ibb.co/99SZskLY/Captura-de-ecr-2026-02-28-220502.png"
+    },
+    {
+      "name": "Maria",
+      "role": {
+        "pt": "Manicure",
+        "en": "",
+        "es": ""
+      },
+      "image": "https://i.ibb.co/LzH9y7q4/Captura-de-ecr-2026-02-28-220221.png"
     }
   ],
-  
-  services: [
+  "services": [
     {
-      name: { pt: "Manicure Verniz Gel | Gel Polish", en: "Gel Polish Manicure", es: "Manicura Esmalte Gel" },
-      price: "25",
-      duration: "1h",
-      description: { pt: "Verniz gel de longa duração com acabamento impecável.", en: "Long-lasting gel polish with an impeccable finish.", es: "Esmalte en gel de larga duración com un acabado impecable." }
+      "name": {
+        "pt": "Manicure Verniz Gel | Gel Polish",
+        "en": "Gel Polish Manicure",
+        "es": "Manicura Esmalte Gel"
+      },
+      "price": "25",
+      "duration": "1h",
+      "description": {
+        "pt": "Verniz gel de longa duração com acabamento impecável.",
+        "en": "Long-lasting gel polish with an impeccable finish.",
+        "es": "Esmalte en gel de larga duración com un acabado impecable."
+      }
     },
     {
-      name: { pt: "Manicure Clássica | The Manicure Classic", en: "Classic Manicure", es: "Manicura Clásica" },
-      price: "15",
-      duration: "1h",
-      description: { pt: "Tratamento tradicional para mãos elegantes e cuidadas.", en: "Traditional treatment for elegant and well-cared hands.", es: "Tratamiento tradicional para manos elegantes e cuidadas." }
+      "name": {
+        "pt": "Manicure Clássica ",
+        "en": "Classic Manicure",
+        "es": "Manicura Clásica"
+      },
+      "price": "15",
+      "duration": "1h",
+      "description": {
+        "pt": "Tratamento tradicional para mãos elegantes e cuidadas.",
+        "en": "Traditional treatment for elegant and well-cared hands.",
+        "es": "Tratamiento tradicional para manos elegantes e cuidadas."
+      }
     },
     {
-      name: { pt: "Pedicure Verniz Gel | Shellac Pedicure", en: "Gel Polish Pedicure", es: "Pedicura Esmalte Gel" },
-      price: "35",
-      duration: "1h",
-      description: { pt: "Cuidado completo para pés com verniz gel duradouro.", en: "Complete foot care with long-lasting gel polish.", es: "Cuidado completo de pies con esmalte en gel duradero." }
+      "name": {
+        "pt": "Pedicure Verniz Gel",
+        "en": "Gel Polish Pedicure",
+        "es": "Pedicura Esmalte Gel"
+      },
+      "price": "35",
+      "duration": "1h",
+      "description": {
+        "pt": "Cuidado completo para pés com verniz gel duradouro.",
+        "en": "Complete foot care with long-lasting gel polish.",
+        "es": "Cuidado completo de pies con esmalte en gel duradero."
+      }
     },
     {
-      name: { pt: "Pedicure Clássico | Classic Pedicure", en: "Classic Pedicure", es: "Pedicura Clásica" },
-      price: "25",
-      duration: "1h",
-      description: { pt: "O essencial para pés relaxados e unhas perfeitas.", en: "The essential for relaxed feet and perfect nails.", es: "Lo esencial para pies relaxados e uñas perfectas." }
+      "name": {
+        "pt": "Pedicure Clássico ",
+        "en": "Classic Pedicure",
+        "es": "Pedicura Clásica"
+      },
+      "price": "25",
+      "duration": "1h",
+      "description": {
+        "pt": "O essencial para pés relaxados e unhas perfeitas.",
+        "en": "The essential for relaxed feet and perfect nails.",
+        "es": "Lo esencial para pies relaxados e uñas perfectas."
+      }
     }
   ],
-  
-  hours: [
-    { day: { pt: "Segunda-feira", en: "Monday", es: "Lunes" }, time: "10:00 - 19:00" },
-    { day: { pt: "Terça-feira", en: "Tuesday", es: "Martes" }, time: "10:00 - 19:00" },
-    { day: { pt: "Quarta-feira", en: "Wednesday", es: "Miércoles" }, time: "10:00 - 19:00" },
-    { day: { pt: "Quinta-feira", en: "Thursday", es: "Jueves" }, time: "10:00 - 19:00" },
-    { day: { pt: "Sexta-feira", en: "Friday", es: "Viernes" }, time: "10:00 - 19:00" },
-    { day: { pt: "Sábado", en: "Saturday", es: "Sábado" }, time: "10:00 - 19:00" },
-    { day: { pt: "Domingo", en: "Sunday", es: "Domingo" }, time: "Fechado" }
+  "hours": [
+    {
+      "day": {
+        "pt": "Segunda-feira",
+        "en": "Monday",
+        "es": "Lunes"
+      },
+      "time": "10:00 - 19:00"
+    },
+    {
+      "day": {
+        "pt": "Terça-feira",
+        "en": "Tuesday",
+        "es": "Martes"
+      },
+      "time": "10:00 - 19:00"
+    },
+    {
+      "day": {
+        "pt": "Quarta-feira",
+        "en": "Wednesday",
+        "es": "Miércoles"
+      },
+      "time": "10:00 - 19:00"
+    },
+    {
+      "day": {
+        "pt": "Quinta-feira",
+        "en": "Thursday",
+        "es": "Jueves"
+      },
+      "time": "10:00 - 19:00"
+    },
+    {
+      "day": {
+        "pt": "Sexta-feira",
+        "en": "Friday",
+        "es": "Viernes"
+      },
+      "time": "10:00 - 19:00"
+    },
+    {
+      "day": {
+        "pt": "Sábado",
+        "en": "Saturday",
+        "es": "Sábado"
+      },
+      "time": "10:00 - 19:00"
+    },
+    {
+      "day": {
+        "pt": "Domingo",
+        "en": "Sunday",
+        "es": "Domingo"
+      },
+      "time": "Fechado"
+    }
   ],
-  
-  features: {
-    pt: ["Produtos Veganos", "Pet Friendly", "Adequado para Crianças", "Acessível", "Empreendedorismo Feminino", "LGBTQ+ Friendly"],
-    en: ["Vegan Products", "Pet Friendly", "Kid Friendly", "Accessible", "Female Entrepreneurship", "LGBTQ+ Friendly"],
-    es: ["Productos Veganos", "Pet Friendly", "Apto para Niños", "Accesible", "Emprendimiento Femenino", "LGBTQ+ Friendly"]
+  "features": {
+    "pt": [
+      "Produtos Veganos",
+      "Pet Friendly",
+      "Adequado para Crianças",
+      "Acessível",
+      "Empreendedorismo Feminino",
+      "LGBTQ+ Friendly"
+    ],
+    "en": [
+      "Vegan Products",
+      "Pet Friendly",
+      "Kid Friendly",
+      "Accessible",
+      "Female Entrepreneurship",
+      "LGBTQ+ Friendly"
+    ],
+    "es": [
+      "Productos Veganos",
+      "Pet Friendly",
+      "Apto para Niños",
+      "Accesible",
+      "Emprendimiento Femenino",
+      "LGBTQ+ Friendly"
+    ]
   },
-  
-  reviews: [
+  "reviews": [
     {
-      author: "Raquel B",
-      text: { pt: "Maravilhoso, como sempre", en: "Wonderful, as ever", es: "Maravilloso, como siempre" },
-      rating: 5
+      "author": "Raquel B",
+      "text": {
+        "pt": "Maravilhoso, como sempre",
+        "en": "Wonderful, as ever",
+        "es": "Maravilloso, como siempre"
+      },
+      "rating": 5
     },
     {
-      author: "Olann",
-      text: { pt: "Absolutamente amei este salão. O serviço foi impecável, a atenção aos detalhes excepcional.", en: "Absolutely loved this salon. The service was impeccable, the attention to detail outstanding.", es: "Absolutamente me encantó este salón. El servicio fue impecable, la atención al detalle excepcional." },
-      rating: 5
+      "author": "Olann",
+      "text": {
+        "pt": "Absolutamente amei este salão. O serviço foi impecável, a atenção aos detalhes excepcional.",
+        "en": "Absolutely loved this salon. The service was impeccable, the attention to detail outstanding.",
+        "es": "Absolutamente me encantó este salón. El servicio fue impecable, la atención al detalle excepcional."
+      },
+      "rating": 5
     },
     {
-      author: "Isabella L",
-      text: { pt: "O atendimento é ótimo, a Stefanie é super delicada e detalhista. As unhas ficaram incríveis!", en: "The service is great, Stefanie is super delicate and detailed. The nails looked incredible!", es: "¡La atención é excelente, Stefanie é súper delicada e detalista. ¡Las uñas ficaram incríveis!" },
-      rating: 5
+      "author": "Isabella L",
+      "text": {
+        "pt": "O atendimento é ótimo, a Stefanie é super delicada e detalhista. As unhas ficaram incríveis!",
+        "en": "The service is great, Stefanie is super delicate and detailed. The nails looked incredible!",
+        "es": "¡La atención é excelente, Stefanie é súper delicada e detalista. ¡Las uñas ficaram incríveis!"
+      },
+      "rating": 5
     }
   ]
 };
