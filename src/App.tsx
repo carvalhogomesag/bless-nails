@@ -57,7 +57,7 @@ export default function App() {
       {showAdmin && <AdminPanel onClose={() => setShowAdmin(false)} />}
 
       {/* BARRA MOBILE FIRST */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 p-4 md:hidden bg-gradient-to-t from-brand-cream via-brand-cream/95 to-transparent">
+      <div className="fixed bottom-0 left-0 right-0 z-40 p-4 md:hidden bg-linear-to-t from-brand-cream via-brand-cream/95 to-transparent">
         <div className="flex gap-2 max-w-md mx-auto">
           <a 
             href={`tel:${cleanPhone}`}
