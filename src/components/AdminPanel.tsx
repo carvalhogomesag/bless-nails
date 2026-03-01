@@ -73,8 +73,8 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
   const gallerySlots = Array(10).fill("").map((_, i) => formData.galleryPhotos[i] || "");
 
   return (
-    <div className="fixed inset-0 z-[100] bg-brand-dark/80 backdrop-blur-md flex items-center justify-center p-6">
-      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-brand-cream w-full max-w-5xl h-[85vh] rounded-[2rem] shadow-2xl flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-100 bg-brand-dark/80 backdrop-blur-md flex items-center justify-center p-6">
+      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-brand-cream w-full max-w-5xl h-[85vh] rounded-4xl shadow-2xl flex flex-col overflow-hidden">
         
         {/* Header */}
         <div className="bg-white p-6 border-b border-brand-straw/30 flex justify-between items-center">

@@ -80,7 +80,7 @@ export const Contact = ({ lang }: { lang: Language }) => {
              No mobile, reduzimos a altura para 350px para não dominar o ecrã todo.
              A moldura orgânica escala proporcionalmente.
           */
-          className="relative overflow-hidden shadow-2xl shadow-brand-leaf/10 h-[350px] md:h-[500px] rounded-tl-[4rem] rounded-br-[4rem] md:rounded-tl-[6rem] md:rounded-br-[6rem] rounded-tr-2xl rounded-bl-2xl border-4 md:border-8 border-white"
+          className="relative overflow-hidden shadow-2xl shadow-brand-leaf/10 h-87.5 md:h-125 rounded-tl-[4rem] rounded-br-[4rem] md:rounded-tl-[6rem] md:rounded-br-[6rem] rounded-tr-2xl rounded-bl-2xl border-4 md:border-8 border-white"
         >
           {/* Overlay de ajuda para scroll no mobile (evita que o utilizador fique "preso" no mapa ao fazer scroll) */}
           <div className="absolute inset-0 pointer-events-none bg-brand-dark/5 z-10 md:hidden"></div>

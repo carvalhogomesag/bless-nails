@@ -79,7 +79,7 @@ export default function App() {
             href={salonData.bookingUrl} 
             target="_blank" 
             rel="noreferrer" 
-            className="flex-[3] bg-brand-leaf text-white h-14 rounded-2xl flex items-center justify-center gap-2 shadow-xl shadow-brand-leaf/20 active:scale-95 transition-transform font-bold text-[10px] uppercase tracking-[0.2em]"
+            className="flex-3 bg-brand-leaf text-white h-14 rounded-2xl flex items-center justify-center gap-2 shadow-xl shadow-brand-leaf/20 active:scale-95 transition-transform font-bold text-[10px] uppercase tracking-[0.2em]"
           >
             <Calendar size={18} />
             {t.bookNow}

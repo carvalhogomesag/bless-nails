@@ -21,7 +21,7 @@ export const About = ({ lang }: { lang: Language }) => {
           className="relative px-4 md:px-0"
         >
           {/* A moldura da imagem agora usa um leve brilho creme para destacar no fundo escuro */}
-          <div className="aspect-[4/5] rounded-tl-[6rem] rounded-br-[6rem] md:rounded-tl-[10rem] md:rounded-br-[10rem] rounded-tr-3xl rounded-bl-3xl overflow-hidden shadow-2xl shadow-black/20 relative border border-brand-cream/10">
+          <div className="aspect-4/5 rounded-tl-[6rem] rounded-br-[6rem] md:rounded-tl-[10rem] md:rounded-br-[10rem] rounded-tr-3xl rounded-bl-3xl overflow-hidden shadow-2xl shadow-black/20 relative border border-brand-cream/10">
             <div className="absolute inset-0 bg-brand-leaf/10 mix-blend-overlay z-10"></div>
             <img 
               src="/sobre-principal.png" 
@@ -32,7 +32,7 @@ export const About = ({ lang }: { lang: Language }) => {
           </div>
           
           {/* O detalhe circular agora tem a borda na cor do fundo (Leaf) para parecer flutuar sobre a foto */}
-          <div className="absolute -bottom-10 -right-10 w-56 h-56 rounded-full overflow-hidden border-[12px] border-brand-leaf shadow-2xl hidden lg:block">
+          <div className="absolute -bottom-10 -right-10 w-56 h-56 rounded-full overflow-hidden border-12px border-brand-leaf shadow-2xl hidden lg:block">
             <img src="/sobre-detalhe.png" alt="Detail" className="w-full h-full object-cover" loading="lazy" />
           </div>
         </motion.div>
