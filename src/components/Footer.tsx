@@ -1,10 +1,9 @@
 // src/components/Footer.tsx
 import { useState } from "react";
-import { Instagram, Facebook } from "lucide-react"; // Importamos o Facebook e o Instagram
+import { Instagram, Facebook } from "lucide-react";
 import { UI_STRINGS, Language } from "../constants";
-import { useSalon } from "../context/SalonContext"; // <-- Importamos o contexto
+import { useSalon } from "../context/SalonContext";
 
-// Ícone Customizado para o TikTok (Como não existe no lucide-react, criei este SVG minimalista)
 const TikTokIcon = ({ size = 20 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
@@ -13,10 +12,9 @@ const TikTokIcon = ({ size = 20 }) => (
 
 export const Footer = ({ lang }: { lang: Language }) => {
   const t = UI_STRINGS[lang];
-  const { salonData } = useSalon(); // Buscamos os dados em direto
-  const[clickCount, setClickCount] = useState(0);
+  const { salonData } = useSalon();
+  const [clickCount, setClickCount] = useState(0);
 
-  // O NOSSO EASTER EGG 🤫
   const handleSecretClick = () => {
     if (clickCount >= 4) {
       window.dispatchEvent(new Event("open-admin"));
@@ -26,8 +24,23 @@ export const Footer = ({ lang }: { lang: Language }) => {
     }
   };
 
-  // Previne erros se localStorage antigo não tiver a propriedade socialLinks
   const socials = salonData.socialLinks || { instagram: "", facebook: "", tiktok: "" };
+
+  // --- LÓGICA DE LINKS DINÂMICOS (Igual à Navbar) ---
+  const footerLinks = [
+    { name: t.about, href: "#sobre" },
+    { name: t.services, href: "#servicos" },
+    { name: t.gallery, href: "#galeria" },
+  ];
+
+  if (salonData.team && salonData.team.length > 0) {
+    footerLinks.push({ name: t.team, href: "#equipa" });
+  }
+
+  footerLinks.push(
+    { name: t.reviews, href: "#avaliacoes" },
+    { name: t.location, href: "#contato" }
+  );
 
   return (
     <footer className="bg-brand-dark text-brand-cream pt-24 pb-12 px-6">
@@ -43,40 +56,48 @@ export const Footer = ({ lang }: { lang: Language }) => {
             </p>
           </div>
           
+          {/* COLUNA DE LINKS DINÂMICOS */}
           <div>
             <h4 className="text-brand-straw uppercase tracking-[0.2em] text-[10px] font-bold mb-6">{t.quickLinks}</h4>
             <ul className="space-y-4 text-brand-cream/70 text-sm font-light">
-              <li><a href="#sobre" className="hover:text-brand-straw hover:translate-x-1 inline-block transition-all duration-300">{t.about}</a></li>
-              <li><a href="#servicos" className="hover:text-brand-straw hover:translate-x-1 inline-block transition-all duration-300">{t.services}</a></li>
-              <li><a href="https://www.livroreclamacoes.pt" target="_blank" rel="noreferrer" className="hover:text-brand-straw hover:translate-x-1 inline-block transition-all duration-300">Livro de Reclamações</a></li>
-              <li><a href="#" className="hover:text-brand-straw hover:translate-x-1 inline-block transition-all duration-300">Resolução de Litígios</a></li>
+              {footerLinks.map((link) => (
+                <li key={link.name}>
+                  <a href={link.href} className="hover:text-brand-straw hover:translate-x-1 inline-block transition-all duration-300">
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+              {/* Links Legais Obrigatórios em Portugal */}
+              <li className="pt-2 border-t border-brand-cream/10">
+                <a href="https://www.livroreclamacoes.pt" target="_blank" rel="noreferrer" className="text-[10px] uppercase tracking-widest opacity-50 hover:opacity-100 hover:text-brand-straw transition-all">
+                  Livro de Reclamações
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-[10px] uppercase tracking-widest opacity-50 hover:opacity-100 hover:text-brand-straw transition-all">
+                  Resolução de Litígios
+                </a>
+              </li>
             </ul>
           </div>
 
           <div>
             <h4 className="text-brand-straw uppercase tracking-[0.2em] text-[10px] font-bold mb-6">{t.followUs}</h4>
             <div className="flex gap-4">
-              {/* Só renderiza o Instagram se houver um link */}
               {socials.instagram && (
                 <a href={socials.instagram} target="_blank" rel="noreferrer" className="w-12 h-12 rounded-full border border-brand-cream/20 flex items-center justify-center hover:bg-brand-straw hover:border-brand-straw hover:text-brand-dark transition-all duration-500">
                   <Instagram size={20} strokeWidth={1.5} />
                 </a>
               )}
-              {/* Só renderiza o Facebook se houver um link */}
               {socials.facebook && (
                 <a href={socials.facebook} target="_blank" rel="noreferrer" className="w-12 h-12 rounded-full border border-brand-cream/20 flex items-center justify-center hover:bg-brand-straw hover:border-brand-straw hover:text-brand-dark transition-all duration-500">
                   <Facebook size={20} strokeWidth={1.5} />
                 </a>
               )}
-              {/* Só renderiza o TikTok se houver um link */}
               {socials.tiktok && (
                 <a href={socials.tiktok} target="_blank" rel="noreferrer" className="w-12 h-12 rounded-full border border-brand-cream/20 flex items-center justify-center hover:bg-brand-straw hover:border-brand-straw hover:text-brand-dark transition-all duration-500">
                   <TikTokIcon size={20} />
                 </a>
-              )}
-              {/* Se não houver nada preenchido, deixamos um traço elegante para não ficar vazio */}
-              {!socials.instagram && !socials.facebook && !socials.tiktok && (
-                <span className="text-brand-cream/30 text-sm italic">Links não definidos</span>
               )}
             </div>
           </div>
