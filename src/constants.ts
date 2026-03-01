@@ -120,7 +120,7 @@ export const SALON_DATA = {
     "es": "Entra en Bless Nails, tu destino preferido para tratamientos de uñas de lujo en el centro de Lisboa. Disfruta de un ambiente sereno e sofisticado onde nuestros técnicos expertos ofrecen manicuras, pedicuras y nail art personalizado impecables. Utilizando solo los mejores produtos, garantizamos una experiencia de mimo que te dejará rejuvenecida e glamurosa."
   },
   "address": "Rua de O Século 154, 154, Príncipe Real, Lisboa",
-  "phoneNumber": "+351937832777", // ADICIONADO AQUI
+  "phoneNumber": "+351937832777",
   "googleMapsUrl": "https://maps.google.com/?daddr=Rua%20de%20O%20S%C3%A9culo%20154%2C%20154%2C%20Lisboa%2C%201200-437",
   "bookingUrl": "https://www.fresha.com/pt/a/bless-nails-lisbon-lisboa-rua-de-o-seculo-154-xcgfypxc/all-offer?venue=true",
   "mapEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3113.123456789!2d-9.148!3d38.716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd19337f7f7f7f7f%3A0x7f7f7f7f7f7f7f7f!2sRua%20de%20O%20S%C3%A9culo%20154%2C%201200-437%20Lisboa!5e0!3m2!1spt!2spt!4v1234567890",
@@ -145,20 +145,29 @@ export const SALON_DATA = {
     {
       "name": "Stefanie",
       "role": {
-        "pt": "Master Stylist",
+        "pt": "Nail Designer",
         "en": "Master Stylist",
         "es": "Master Stylist"
       },
-      "image": "https://i.ibb.co/99SZskLY/Captura-de-ecr-2026-02-28-220502.png"
+      "image": "https://i.ibb.co/B5dryZzg/Captura-de-ecr-2026-03-01-111655.png"
     },
     {
-      "name": "Maria",
+      "name": "Stacy",
       "role": {
-        "pt": "Manicure",
-        "en": "Manicure",
-        "es": "Manicura"
+        "pt": "Nail Artist",
+        "en": "",
+        "es": ""
       },
-      "image": "https://i.ibb.co/LzH9y7q4/Captura-de-ecr-2026-02-28-220221.png"
+      "image": "https://i.ibb.co/0ydrZJsV/Captura-de-ecr-2026-03-01-111635.png"
+    },
+    {
+      "name": "Andreza",
+      "role": {
+        "pt": "Nail Artist",
+        "en": "",
+        "es": ""
+      },
+      "image": "https://i.ibb.co/Xr3H5KMZ/Captura-de-ecr-2026-03-01-111713.png"
     }
   ],
   "services": [
