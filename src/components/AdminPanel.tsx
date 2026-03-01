@@ -1,29 +1,30 @@
 // src/components/AdminPanel.tsx
 import { useState } from "react";
 import { motion } from "motion/react";
-import { X, Plus, Trash2, Save, Code, Image as ImageIcon, RotateCcw } from "lucide-react";
+import { X, Plus, Trash2, Save, Code, Image as ImageIcon, RotateCcw, Users } from "lucide-react";
 import { useSalon } from "../context/SalonContext";
 
 export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
   const { salonData, updateSalonData } = useSalon();
   
-  // Prepara os dados iniciais garantindo que as novas estruturas existam
+  // Prepara os dados iniciais garantindo que todas as novas estruturas existam
   const initialForm = JSON.parse(JSON.stringify(salonData));
   if (!initialForm.socialLinks) initialForm.socialLinks = { instagram: "", facebook: "", tiktok: "" };
   if (!initialForm.galleryPhotos) initialForm.galleryPhotos = Array(10).fill("");
+  if (!initialForm.team) initialForm.team = []; // Garante que a chave da equipa existe
   
   const [formData, setFormData] = useState(initialForm);
-  const [activeTab, setActiveTab] = useState<"servicos" | "galeria" | "horarios" | "mapa" | "redes">("servicos");
+  const [activeTab, setActiveTab] = useState<"servicos" | "equipa" | "galeria" | "horarios" | "mapa" | "redes">("servicos");
 
   const handleSave = () => {
     updateSalonData(formData);
     onClose();
-    // Forçamos um refresh para garantir que o estado global seja reiniciado com os novos dados
+    // Forçamos um refresh para garantir que o site carregue os dados do localStorage limpos
     window.location.reload();
   };
 
   const handleReset = () => {
-    if (confirm("Deseja apagar todas as alterações feitas no painel e voltar aos dados originais do código? Isso resolverá problemas de fotos que não carregam.")) {
+    if (confirm("Deseja apagar todas as alterações feitas e voltar aos dados originais do ficheiro constants.ts?")) {
       localStorage.removeItem("bless-nails-data");
       window.location.reload();
     }
@@ -31,9 +32,10 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
 
   const handleExportCode = () => {
     navigator.clipboard.writeText(JSON.stringify(formData, null, 2));
-    alert("Código copiado! Cole-o no seu arquivo constants.ts substituindo o SALON_DATA.");
+    alert("Código copiado! Cole-o no seu arquivo constants.ts substituindo o objeto SALON_DATA.");
   };
 
+  // Funções para Gerir Serviços
   const addService = () => {
     setFormData({
       ...formData,
@@ -50,7 +52,23 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
     setFormData({ ...formData, services: newServices });
   };
 
-  // Garante que sempre visualizamos 10 espaços para fotos
+  // Funções para Gerir Equipa
+  const addTeamMember = () => {
+    setFormData({
+      ...formData,
+      team: [
+        ...formData.team,
+        { name: "", role: { pt: "", en: "", es: "" }, image: "" }
+      ]
+    });
+  };
+
+  const removeTeamMember = (index: number) => {
+    const newTeam = [...formData.team];
+    newTeam.splice(index, 1);
+    setFormData({ ...formData, team: newTeam });
+  };
+
   const gallerySlots = Array(10).fill("").map((_, i) => formData.galleryPhotos[i] || "");
 
   return (
@@ -68,48 +86,46 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
           </button>
         </div>
 
-        {/* Tabs */}
+        {/* Tabs Navigation */}
         <div className="flex bg-white px-6 gap-6 border-b border-brand-straw/20 overflow-x-auto custom-scrollbar">
-          {(["servicos", "galeria", "horarios", "mapa", "redes"] as const).map(tab => (
+          {(["servicos", "equipa", "galeria", "horarios", "mapa", "redes"] as const).map(tab => (
             <button 
               key={tab} 
               onClick={() => setActiveTab(tab)} 
               className={`py-4 text-sm font-bold uppercase tracking-widest border-b-2 transition-all whitespace-nowrap ${activeTab === tab ? "border-brand-leaf text-brand-leaf" : "border-transparent text-brand-dark/40 hover:text-brand-leaf"}`}
             >
-              {tab === "redes" ? "Redes Sociais" : tab}
+              {tab === "servicos" ? "Serviços" : tab === "equipa" ? "Equipa" : tab === "redes" ? "Redes Sociais" : tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>
           ))}
         </div>
 
-        {/* Conteúdo */}
-        <div className="flex-1 overflow-y-auto p-8 bg-brand-cream/50">
+        {/* Content Area */}
+        <div className="flex-1 overflow-y-auto p-8 bg-brand-cream/50 custom-scrollbar">
           
-          {/* TAB SERVIÇOS */}
+          {/* TAB: SERVIÇOS */}
           {activeTab === "servicos" && (
             <div className="space-y-6">
               {formData.services.map((service: any, index: number) => (
-                <div key={index} className="bg-white p-6 rounded-2xl border border-brand-straw/30 shadow-sm relative group">
+                <div key={index} className="bg-white p-6 rounded-2xl border border-brand-straw/30 shadow-sm relative">
                   <button onClick={() => removeService(index)} className="absolute top-4 right-4 text-red-400 hover:text-red-600">
                     <Trash2 size={20} />
                   </button>
                   <div className="grid md:grid-cols-3 gap-4 mb-4">
                     <div>
-                      <label className="text-xs font-bold uppercase text-brand-leaf mb-1 block">Nome (PT)</label>
+                      <label className="text-[10px] font-bold uppercase text-brand-leaf mb-1 block">Nome (PT)</label>
                       <input type="text" value={service.name.pt} onChange={(e) => { const newS = [...formData.services]; newS[index].name.pt = e.target.value; setFormData({...formData, services: newS}) }} className="w-full border p-2 rounded-xl text-sm" />
                     </div>
                     <div>
-                      <label className="text-xs font-bold uppercase text-brand-leaf mb-1 block">Preço (€)</label>
+                      <label className="text-[10px] font-bold uppercase text-brand-leaf mb-1 block">Preço (€)</label>
                       <input type="text" value={service.price} onChange={(e) => { const newS = [...formData.services]; newS[index].price = e.target.value; setFormData({...formData, services: newS}) }} className="w-full border p-2 rounded-xl text-sm" />
                     </div>
                     <div>
-                      <label className="text-xs font-bold uppercase text-brand-leaf mb-1 block">Duração</label>
+                      <label className="text-[10px] font-bold uppercase text-brand-leaf mb-1 block">Duração</label>
                       <input type="text" value={service.duration} onChange={(e) => { const newS = [...formData.services]; newS[index].duration = e.target.value; setFormData({...formData, services: newS}) }} className="w-full border p-2 rounded-xl text-sm" />
                     </div>
                   </div>
-                  <div>
-                    <label className="text-xs font-bold uppercase text-brand-leaf mb-1 block">Descrição (PT)</label>
-                    <textarea value={service.description.pt} onChange={(e) => { const newS = [...formData.services]; newS[index].description.pt = e.target.value; setFormData({...formData, services: newS}) }} className="w-full border p-2 rounded-xl text-sm" rows={2} />
-                  </div>
+                  <label className="text-[10px] font-bold uppercase text-brand-leaf mb-1 block">Descrição (PT)</label>
+                  <textarea value={service.description.pt} onChange={(e) => { const newS = [...formData.services]; newS[index].description.pt = e.target.value; setFormData({...formData, services: newS}) }} className="w-full border p-2 rounded-xl text-sm" rows={2} />
                 </div>
               ))}
               <button onClick={addService} className="flex items-center gap-2 text-brand-leaf font-bold hover:underline">
@@ -118,45 +134,76 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
             </div>
           )}
 
-          {/* TAB GALERIA */}
+          {/* TAB: EQUIPA */}
+          {activeTab === "equipa" && (
+            <div className="space-y-6">
+              <div className="flex items-center gap-3 mb-6 pb-4 border-b border-brand-straw/20">
+                <div className="p-3 bg-brand-leaf/10 text-brand-leaf rounded-xl"><Users size={24} /></div>
+                <div>
+                  <h3 className="font-serif text-xl">Gestão de Profissionais</h3>
+                  <p className="text-xs text-brand-dark/50">Adicione as caras que fazem a Bless Nails brilhar.</p>
+                </div>
+              </div>
+              {formData.team.map((member: any, index: number) => (
+                <div key={index} className="bg-white p-6 rounded-2xl border border-brand-straw/30 relative shadow-sm">
+                  <button onClick={() => removeTeamMember(index)} className="absolute top-4 right-4 text-red-400 hover:text-red-600">
+                    <Trash2 size={20} />
+                  </button>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-[10px] font-bold uppercase text-brand-leaf mb-1 block">Nome Completo</label>
+                      <input type="text" value={member.name} onChange={(e) => { const newT = [...formData.team]; newT[index].name = e.target.value; setFormData({...formData, team: newT}) }} className="w-full border p-2 rounded-xl text-sm" placeholder="Ex: Stefanie" />
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-bold uppercase text-brand-leaf mb-1 block">Cargo (PT)</label>
+                      <input type="text" value={member.role.pt} onChange={(e) => { const newT = [...formData.team]; newT[index].role.pt = e.target.value; setFormData({...formData, team: newT}) }} className="w-full border p-2 rounded-xl text-sm" placeholder="Ex: Master Stylist" />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="text-[10px] font-bold uppercase text-brand-leaf mb-1 block">Link da Foto (jpg, png, webp)</label>
+                      <input type="text" value={member.image} onChange={(e) => { const newT = [...formData.team]; newT[index].image = e.target.value; setFormData({...formData, team: newT}) }} className="w-full border p-2 rounded-xl text-sm" placeholder="https://i.ibb.co/..." />
+                      {member.image && <img src={member.image} alt="Preview" className="mt-2 w-12 h-16 object-cover rounded-lg border shadow-sm" />}
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <button onClick={addTeamMember} className="flex items-center gap-2 text-brand-leaf font-bold hover:underline">
+                <Plus size={18} /> Adicionar Novo Profissional
+              </button>
+            </div>
+          )}
+
+          {/* TAB: GALERIA */}
           {activeTab === "galeria" && (
             <div className="bg-white p-6 rounded-2xl border border-brand-straw/30">
               <div className="flex items-center gap-3 mb-6 pb-4 border-b border-brand-straw/20">
                 <div className="p-3 bg-brand-leaf/10 text-brand-leaf rounded-xl"><ImageIcon size={24} /></div>
                 <div>
-                  <h3 className="font-serif text-xl">Gestão de Galeria</h3>
-                  <p className="text-xs text-brand-dark/50">Insira links diretos (terminados em .jpg ou .png). Remova as etiquetas [img].</p>
+                  <h3 className="font-serif text-xl">Galeria de Inspiração</h3>
+                  <p className="text-xs text-brand-dark/50">Máximo 10 fotos. Use links diretos do ImgBB (i.ibb.co).</p>
                 </div>
               </div>
               <div className="grid md:grid-cols-2 gap-x-8 gap-y-4">
                 {gallerySlots.map((url, i) => (
                   <div key={i} className="flex flex-col gap-1">
-                    <label className="text-[10px] font-bold uppercase text-brand-leaf">Link da Foto {i + 1}</label>
-                    <div className="flex items-center gap-3">
-                      {url ? (
-                        <img src={url} alt="" className="w-10 h-10 object-cover rounded-lg border shadow-sm shrink-0" onError={(e) => (e.currentTarget.style.display = 'none')} />
-                      ) : (
-                        <div className="w-10 h-10 bg-brand-cream rounded-lg border border-dashed flex items-center justify-center shrink-0 text-brand-dark/20 text-xs">Vazio</div>
-                      )}
-                      <input 
-                        type="text" 
-                        value={url} 
-                        onChange={(e) => { 
-                          const newPhotos = [...gallerySlots]; 
-                          newPhotos[i] = e.target.value; 
-                          setFormData({...formData, galleryPhotos: newPhotos}) 
-                        }} 
-                        className="w-full border p-2 rounded-xl text-xs bg-gray-50" 
-                        placeholder="https://i.ibb.co/..." 
-                      />
-                    </div>
+                    <label className="text-[10px] font-bold uppercase text-brand-leaf">Foto {i + 1}</label>
+                    <input 
+                      type="text" 
+                      value={url} 
+                      onChange={(e) => { 
+                        const newPhotos = [...gallerySlots]; 
+                        newPhotos[i] = e.target.value; 
+                        setFormData({...formData, galleryPhotos: newPhotos}) 
+                      }} 
+                      className="w-full border p-2 rounded-xl text-xs bg-gray-50" 
+                      placeholder="https://i.ibb.co/..." 
+                    />
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* TAB HORÁRIOS */}
+          {/* TAB: HORÁRIOS */}
           {activeTab === "horarios" && (
             <div className="grid md:grid-cols-2 gap-4">
               {formData.hours.map((h: any, i: number) => (
@@ -168,15 +215,15 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
             </div>
           )}
 
-          {/* TAB MAPA */}
+          {/* TAB: MAPA */}
           {activeTab === "mapa" && (
             <div className="bg-white p-6 rounded-2xl border border-brand-straw/30">
-              <label className="text-xs font-bold uppercase text-brand-leaf mb-2 block">Link SRC do Google Maps</label>
+              <label className="text-xs font-bold uppercase text-brand-leaf mb-2 block">Link SRC de Incorporação do Google Maps</label>
               <textarea value={formData.mapEmbedUrl} onChange={(e) => setFormData({...formData, mapEmbedUrl: e.target.value})} className="w-full border p-4 rounded-xl text-sm font-mono text-brand-dark/70" rows={6} />
             </div>
           )}
 
-          {/* TAB REDES SOCIAIS */}
+          {/* TAB: REDES SOCIAIS */}
           {activeTab === "redes" && (
             <div className="bg-white p-6 rounded-2xl border border-brand-straw/30 space-y-6">
               <div>
@@ -196,7 +243,7 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
 
         </div>
 
-        {/* Footer */}
+        {/* Footer Buttons */}
         <div className="bg-white p-6 border-t border-brand-straw/30 flex justify-between items-center">
           <div className="flex gap-6">
             <button onClick={handleReset} className="flex items-center gap-2 text-red-500/60 hover:text-red-500 font-medium text-xs transition-colors">

@@ -10,9 +10,23 @@ type SalonContextType = {
 const SalonContext = createContext<SalonContextType | undefined>(undefined);
 
 export const SalonProvider = ({ children }: { children: ReactNode }) => {
-  const[salonData, setSalonData] = useState(() => {
+  const [salonData, setSalonData] = useState<typeof INITIAL_DATA>(() => {
     const saved = localStorage.getItem("bless-nails-data");
-    return saved ? JSON.parse(saved) : INITIAL_DATA;
+    
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        // Lógica de "Verdade Absoluta":
+        // Fundimos o que está no localStorage com os dados iniciais do ficheiro.
+        // Isto garante que se uma nova propriedade (como 'team') for adicionada ao código,
+        // o site não quebra mesmo que o localStorage seja de uma versão antiga.
+        return { ...INITIAL_DATA, ...parsed };
+      } catch (e) {
+        return INITIAL_DATA;
+      }
+    }
+    
+    return INITIAL_DATA;
   });
 
   const updateSalonData = (newData: typeof INITIAL_DATA) => {

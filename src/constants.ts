@@ -33,7 +33,10 @@ export const UI_STRINGS = {
     tagline: "O seu refúgio de beleza no coração de Lisboa.",
     footerDescription: "O seu refúgio de beleza no coração de Lisboa. Especialistas em cuidados de unhas de luxo e experiências de bem-estar.",
     scroll: "Scroll",
-    closed: "Fechado"
+    closed: "Fechado",
+    // Novos campos para a Equipa
+    team: "Nossa Equipa",
+    teamSubtitle: "Especialistas dedicadas a realçar a sua melhor versão."
   },
   en: {
     about: "About",
@@ -65,7 +68,10 @@ export const UI_STRINGS = {
     tagline: "Your beauty sanctuary in the heart of Lisbon.",
     footerDescription: "Your beauty sanctuary in the heart of Lisbon. Specialists in luxury nail care and wellness experiences.",
     scroll: "Scroll",
-    closed: "Closed"
+    closed: "Closed",
+    // Novos campos para a Equipa
+    team: "Our Team",
+    teamSubtitle: "Specialists dedicated to enhancing your best version."
   },
   es: {
     about: "Sobre",
@@ -94,10 +100,13 @@ export const UI_STRINGS = {
     privacy: "Privacidad",
     terms: "Términos",
     allRightsReserved: "Todos los derechos reservados.",
-    tagline: "Tu santuario de belleza en el corazón de Lisboa.",
-    footerDescription: "Tu santuario de belleza en el corazón de Lisboa. Especialistas en el cuidado de uñas de lujo y experiencias de bienestar.",
+    tagline: "Tu santuario de beleza en el corazón de Lisboa.",
+    footerDescription: "Tu santuario de beleza en el corazón de Lisboa. Especialistas en el cuidado de uñas de lujo y experiencias de bienestar.",
     scroll: "Scroll",
-    closed: "Cerrado"
+    closed: "Cerrado",
+    // Novos campos para a Equipa
+    team: "Nuestro Equipo",
+    teamSubtitle: "Especialistas dedicadas a realzar tu mejor versión."
   }
 };
 
@@ -111,7 +120,7 @@ export const SALON_DATA = {
   description: {
     pt: "Entre na Bless Nails, o seu destino de eleição para tratamentos de unhas de luxo no centro de Lisboa. Desfrute de um ambiente sereno e sofisticado onde os nossos técnicos especializados proporcionam manicures, pedicures e nail art personalizada impecáveis. Utilizando apenas os melhores produtos, garantimos uma experiência de mimo que a deixa rejuvenescida e glamorosa.",
     en: "Step into Bless Nails, your premier destination for luxury nail treatments in the center of Lisbon. Indulge in a serene and sophisticated environment where our expert technicians provide impeccable manicures, pedicures, and bespoke nail art. Using only the finest products, we ensure a pampering experience that leaves you feeling rejuvenated and glamorous.",
-    es: "Entra en Bless Nails, tu destino preferido para tratamientos de uñas de lujo en el centro de Lisboa. Disfruta de un ambiente sereno e sofisticado onde nuestros técnicos expertos ofrecen manicuras, pedicuras y nail art personalizado impecables. Utilizando solo los mejores productos, garantizamos una experiencia de mimo que te dejará rejuvenecida e glamurosa."
+    es: "Entra en Bless Nails, tu destino preferido para tratamientos de uñas de lujo en el centro de Lisboa. Disfruta de un ambiente sereno e sofisticado onde nuestros técnicos expertos ofrecen manicuras, pedicuras y nail art personalizado impecables. Utilizando solo los mejores produtos, garantizamos una experiencia de mimo que te dejará rejuvenecida e glamurosa."
   },
   address: "Rua de O Século 154, 154, Príncipe Real, Lisboa",
   googleMapsUrl: "https://maps.google.com/?daddr=Rua%20de%20O%20S%C3%A9culo%20154%2C%20154%2C%20Lisboa%2C%201200-437",
@@ -124,7 +133,6 @@ export const SALON_DATA = {
     tiktok: ""
   },
 
-  // LINKS LIMPOS E PRONTOS PARA USAR
   galleryPhotos: [
     "https://i.ibb.co/99SZskLY/Captura-de-ecr-2026-02-28-220502.png",
     "https://i.ibb.co/3mGvP98B/Captura-de-ecr-2026-02-28-220245.png",
@@ -134,6 +142,19 @@ export const SALON_DATA = {
     "https://i.ibb.co/v4L29Z0C/Captura-de-ecr-2026-02-28-220148.png",
     "https://i.ibb.co/p6sXL1dQ/Captura-de-ecr-2026-02-28-220133.png",
     "", "", ""
+  ],
+
+  // NOVA SECÇÃO: EQUIPA
+  team: [
+    {
+      name: "Stefanie",
+      role: {
+        pt: "Master Stylist",
+        en: "Master Stylist",
+        es: "Master Stylist"
+      },
+      image: "https://i.ibb.co/99SZskLY/Captura-de-ecr-2026-02-28-220502.png" // Placeholder com sua imagem
+    }
   ],
   
   services: [
@@ -192,7 +213,7 @@ export const SALON_DATA = {
     },
     {
       author: "Isabella L",
-      text: { pt: "O atendimento é ótimo, a Stefanie é super delicada e detalhista. As unhas ficaram incríveis!", en: "The service is great, Stefanie is super delicate and detailed. The nails looked incredible!", es: "¡La atención es excelente, Stefanie es súper delicada y detalista. ¡Las uñas quedaron increíbles!" },
+      text: { pt: "O atendimento é ótimo, a Stefanie é super delicada e detalhista. As unhas ficaram incríveis!", en: "The service is great, Stefanie is super delicate and detailed. The nails looked incredible!", es: "¡La atención é excelente, Stefanie é súper delicada e detalista. ¡Las uñas ficaram incríveis!" },
       rating: 5
     }
   ]
