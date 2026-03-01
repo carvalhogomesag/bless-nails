@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Globe, Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { UI_STRINGS, Language } from "../constants";
-import { useSalon } from "../context/SalonContext"; // <-- Importamos para saber se há equipa
+import { useSalon } from "../context/SalonContext";
 
 interface NavbarProps {
   lang: Language;
@@ -11,7 +11,7 @@ interface NavbarProps {
 }
 
 export const Navbar = ({ lang, setLang }: NavbarProps) => {
-  const { salonData } = useSalon(); // Acedemos aos dados dinâmicos
+  const { salonData } = useSalon();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
@@ -24,19 +24,16 @@ export const Navbar = ({ lang, setLang }: NavbarProps) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Construímos a lista de links dinamicamente
   const navLinks = [
     { name: t.about, href: "#sobre" },
     { name: t.services, href: "#servicos" },
     { name: t.gallery, href: "#galeria" },
   ];
 
-  // Só adicionamos o link da equipa se houver membros cadastrados
   if (salonData.team && salonData.team.length > 0) {
     navLinks.push({ name: t.team, href: "#equipa" });
   }
 
-  // Finalizamos com os links fixos
   navLinks.push(
     { name: t.reviews, href: "#avaliacoes" },
     { name: t.location, href: "#contato" }
@@ -63,6 +60,7 @@ export const Navbar = ({ lang, setLang }: NavbarProps) => {
             </a>
           ))}
           
+          {/* Seletor de Idiomas Desktop */}
           <div className="relative">
             <button onClick={() => setIsLangMenuOpen(!isLangMenuOpen)} className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.15em] hover:text-brand-leaf transition-colors">
               <Globe size={14} /> {lang}
@@ -85,9 +83,9 @@ export const Navbar = ({ lang, setLang }: NavbarProps) => {
           </a>
         </div>
 
-        {/* BOTÃO MOBILE */}
+        {/* CABEÇALHO MOBILE (Barra de cima no telemóvel) */}
         <div className="flex items-center gap-5 lg:hidden">
-           <button onClick={() => setIsLangMenuOpen(!isLangMenuOpen)} className="text-xs font-bold text-brand-leaf uppercase">{lang}</button>
+          {/* Removi o botão de idioma aqui para evitar confusão, ele agora está dentro do menu expandido para melhor UX */}
           <button className="text-brand-dark" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
             {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
@@ -101,7 +99,7 @@ export const Navbar = ({ lang, setLang }: NavbarProps) => {
             initial={{ opacity: 0, y: -20 }} 
             animate={{ opacity: 1, y: 0 }} 
             exit={{ opacity: 0, y: -20 }} 
-            className="absolute top-full left-0 right-0 bg-white shadow-2xl border-t border-brand-straw/20 p-8 flex flex-col gap-6 lg:hidden"
+            className="absolute top-full left-0 right-0 bg-white shadow-2xl border-t border-brand-straw/20 p-8 flex flex-col gap-6 lg:hidden max-h-[90vh] overflow-y-auto"
           >
             {navLinks.map((link) => (
               <a 
@@ -113,6 +111,23 @@ export const Navbar = ({ lang, setLang }: NavbarProps) => {
                 {link.name}
               </a>
             ))}
+
+            {/* SELETOR DE IDIOMAS MOBILE (In-menu) */}
+            <div className="py-4">
+              <span className="text-[10px] uppercase tracking-widest text-brand-dark/40 font-bold block mb-4">Escolha o Idioma / Language</span>
+              <div className="flex gap-3">
+                {languages.map((l) => (
+                  <button 
+                    key={l.code} 
+                    onClick={() => { setLang(l.code); setIsMobileMenuOpen(false); }}
+                    className={`px-4 py-2 rounded-xl text-sm font-bold border transition-all ${lang === l.code ? "bg-brand-leaf text-white border-brand-leaf" : "bg-brand-cream/30 text-brand-dark/60 border-brand-straw/30"}`}
+                  >
+                    {l.code.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <a href={salonData.bookingUrl} target="_blank" rel="noreferrer" className="btn-primary text-center py-4">
               {t.bookNow}
             </a>
