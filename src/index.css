@@ -6,16 +6,20 @@
   --font-serif: "Cormorant Garamond", serif;
   --font-sans: "Inter", sans-serif;
   
-  /* NOVA PALETA DE CORES "UAUU" */
+  /* PALETA DE CORES "UAUU" */
   --color-brand-cream: #FDFBF7; /* Creme muito claro e luminoso */
   --color-brand-straw: #E2D3B6; /* Palha elegante */
   --color-brand-leaf: #5B7A61;  /* Verde folha sofisticado */
-  --color-brand-dark: #2C352D;  /* Cinza escuro esverdeado (mais suave que preto) */
+  --color-brand-dark: #2C352D;  /* Cinza escuro esverdeado */
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth; /* Deslize suave entre seções */
+  }
+
   body {
-    @apply bg-brand-cream text-brand-dark font-sans antialiased selection:bg-brand-straw selection:text-brand-dark;
+    @apply bg-brand-cream text-brand-dark font-sans antialiased selection:bg-brand-leaf/20 selection:text-brand-dark;
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -23,19 +27,40 @@
   }
 }
 
+/* Efeito de Vidro (Glassmorphism) para o Menu */
 .glass {
   @apply bg-white/70 backdrop-blur-xl border-b border-white/40 shadow-sm transition-all duration-500;
 }
 
+/* Espaçamento padrão de luxo (mais ar para os elementos) */
 .section-padding {
-  @apply py-24 px-6 md:px-12 lg:px-24;
+  @apply py-28 px-6 md:px-12 lg:px-24;
 }
 
-/* Botões ao estilo Luxo Silencioso */
+/* Botão Principal: Verde Folha */
 .btn-primary {
   @apply bg-brand-leaf text-white px-8 py-3.5 rounded-full text-xs tracking-[0.2em] uppercase font-semibold transition-all duration-500 hover:bg-brand-dark hover:-translate-y-1 shadow-lg shadow-brand-leaf/20 hover:shadow-xl active:scale-95;
 }
 
+/* Botão Contorno: Minimalista */
 .btn-outline {
   @apply border border-brand-leaf text-brand-leaf px-8 py-3.5 rounded-full text-xs tracking-[0.2em] uppercase font-semibold transition-all duration-500 hover:bg-brand-leaf hover:text-white hover:-translate-y-1 active:scale-95;
+}
+
+/* Barra de rolagem elegante para o Painel de Administrador */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-brand-cream;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-brand-leaf/20 rounded-full hover:bg-brand-leaf/40 transition-colors;
+}
+
+/* Ajuste para imagens que falham na galeria */
+img {
+  @apply transition-opacity duration-700;
 }
