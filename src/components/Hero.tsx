@@ -13,7 +13,7 @@ export const Hero = ({ lang }: { lang: Language }) => {
       {/* ── IMAGEM DOMINANTE com overlay gradiente ── */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://picsum.photos/seed/salon/1920/1080"
+          src="https://i.ibb.co/p6sXL1dQ/Captura-de-ecr-2026-02-28-220133.png"
           alt="Bless Nails Lisbon"
           className="w-full h-full object-cover opacity-60"
           loading="eager"

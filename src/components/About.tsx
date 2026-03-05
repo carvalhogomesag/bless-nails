@@ -22,7 +22,7 @@ export const About = ({ lang }: { lang: Language }) => {
           >
             <div className="aspect-4/5 overflow-hidden border border-brand-gold/20">
               <img
-                src="https://picsum.photos/seed/about/800/1000"
+                src="https://i.ibb.co/99SZskLY/Captura-de-ecr-2026-02-28-220502.png"
                 alt="Bless Nails Experience"
                 className="w-full h-full object-cover grayscale-20 hover:scale-105 transition-transform duration-1000"
                 referrerPolicy="no-referrer"
