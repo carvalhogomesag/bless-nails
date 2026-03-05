@@ -1,115 +1,94 @@
 // src/components/Footer.tsx
-import { useState } from "react";
-import { Instagram, Facebook } from "lucide-react";
+import { motion } from "motion/react";
 import { UI_STRINGS, Language } from "../constants";
 import { useSalon } from "../context/SalonContext";
-
-const TikTokIcon = ({ size = 20 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
-  </svg>
-);
+import { Instagram, Facebook, MapPin, Phone, Mail } from "lucide-react";
 
 export const Footer = ({ lang }: { lang: Language }) => {
   const t = UI_STRINGS[lang];
   const { salonData } = useSalon();
-  const [clickCount, setClickCount] = useState(0);
-
-  const handleSecretClick = () => {
-    if (clickCount >= 4) {
-      window.dispatchEvent(new Event("open-admin"));
-      setClickCount(0);
-    } else {
-      setClickCount(prev => prev + 1);
-    }
-  };
-
-  const socials = salonData.socialLinks || { instagram: "", facebook: "", tiktok: "" };
-
-  // --- LÓGICA DE LINKS DINÂMICOS (Igual à Navbar) ---
-  const footerLinks = [
-    { name: t.about, href: "#sobre" },
-    { name: t.services, href: "#servicos" },
-    { name: t.gallery, href: "#galeria" },
-  ];
-
-  if (salonData.team && salonData.team.length > 0) {
-    footerLinks.push({ name: t.team, href: "#equipa" });
-  }
-
-  footerLinks.push(
-    { name: t.reviews, href: "#avaliacoes" },
-    { name: t.location, href: "#contato" }
-  );
 
   return (
-    <footer className="bg-brand-dark text-brand-cream pt-24 pb-12 px-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-4 gap-12 mb-20">
-          <div className="col-span-2">
-            <h2 className="text-4xl font-serif mb-6">Bless Nails <span className="text-brand-straw italic font-light">Lisbon</span></h2>
-            <p className="text-brand-cream/60 max-w-md leading-relaxed mb-8 font-light text-lg">
-              {t.footerDescription}
-            </p>
-            <p className="text-[10px] text-brand-cream/30 uppercase tracking-[0.2em]">
-              NIF: 123 456 789 — Bless Nails Lisbon Unipessoal Lda
-            </p>
-          </div>
+    <footer className="bg-brand-dark pt-24 pb-12 overflow-hidden grain relative">
+      {/* Gold line above footer content */}
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-brand-gold/30 to-transparent" />
+
+      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-20">
           
-          {/* COLUNA DE LINKS DINÂMICOS */}
+          {/* Logo & Bio */}
+          <div className="space-y-8">
+            <h3 className="text-3xl font-serif text-white tracking-tighter">
+              Bless <span className="italic font-light text-brand-gold">Nails</span>
+            </h3>
+            <p className="text-white/50 text-sm font-light leading-relaxed">
+              {salonData.tagline[lang]}
+            </p>
+            <div className="flex gap-4">
+              <a href={salonData.socialLinks.instagram} target="_blank" rel="noreferrer" className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-brand-gold hover:border-brand-gold transition-all">
+                <Instagram size={18} />
+              </a>
+              <a href={salonData.socialLinks.facebook} target="_blank" rel="noreferrer" className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/60 hover:text-brand-gold hover:border-brand-gold transition-all">
+                <Facebook size={18} />
+              </a>
+            </div>
+          </div>
+
+          {/* Links rápidos */}
           <div>
-            <h4 className="text-brand-straw uppercase tracking-[0.2em] text-[10px] font-bold mb-6">{t.quickLinks}</h4>
-            <ul className="space-y-4 text-brand-cream/70 text-sm font-light">
-              {footerLinks.map((link) => (
-                <li key={link.name}>
-                  <a href={link.href} className="hover:text-brand-straw hover:translate-x-1 inline-block transition-all duration-300">
-                    {link.name}
+            <h4 className="text-brand-gold uppercase tracking-[0.3em] text-[10px] font-bold mb-8">Navigation</h4>
+            <ul className="space-y-4">
+              {["sobre", "servicos", "galeria", "equipa", "contacto"].map((item) => (
+                <li key={item}>
+                  <a href={`#${item}`} className="text-white/60 text-sm font-light hover:text-white transition-colors capitalize">
+                    {item}
                   </a>
                 </li>
               ))}
-              {/* Links Legais Obrigatórios em Portugal */}
-              <li className="pt-2 border-t border-brand-cream/10">
-                <a href="https://www.livroreclamacoes.pt" target="_blank" rel="noreferrer" className="text-[10px] uppercase tracking-widest opacity-50 hover:opacity-100 hover:text-brand-straw transition-all">
-                  Livro de Reclamações
-                </a>
+            </ul>
+          </div>
+
+          {/* Contacto */}
+          <div>
+            <h4 className="text-brand-gold uppercase tracking-[0.3em] text-[10px] font-bold mb-8">Contact</h4>
+            <ul className="space-y-6">
+              <li className="flex items-start gap-4 text-white/60 group">
+                <MapPin size={18} className="text-brand-gold shrink-0" />
+                <span className="text-sm font-light leading-relaxed group-hover:text-white transition-colors">
+                  {salonData.address}
+                </span>
               </li>
-              <li>
-                <a href="#" className="text-[10px] uppercase tracking-widest opacity-50 hover:opacity-100 hover:text-brand-straw transition-all">
-                  Resolução de Litígios
-                </a>
+              <li className="flex items-center gap-4 text-white/60 group">
+                <Phone size={18} className="text-brand-gold shrink-0" />
+                <span className="text-sm font-light group-hover:text-white transition-colors">
+                  {salonData.phoneNumber}
+                </span>
               </li>
             </ul>
           </div>
 
+          {/* Horário */}
           <div>
-            <h4 className="text-brand-straw uppercase tracking-[0.2em] text-[10px] font-bold mb-6">{t.followUs}</h4>
-            <div className="flex gap-4">
-              {socials.instagram && (
-                <a href={socials.instagram} target="_blank" rel="noreferrer" className="w-12 h-12 rounded-full border border-brand-cream/20 flex items-center justify-center hover:bg-brand-straw hover:border-brand-straw hover:text-brand-dark transition-all duration-500">
-                  <Instagram size={20} strokeWidth={1.5} />
-                </a>
-              )}
-              {socials.facebook && (
-                <a href={socials.facebook} target="_blank" rel="noreferrer" className="w-12 h-12 rounded-full border border-brand-cream/20 flex items-center justify-center hover:bg-brand-straw hover:border-brand-straw hover:text-brand-dark transition-all duration-500">
-                  <Facebook size={20} strokeWidth={1.5} />
-                </a>
-              )}
-              {socials.tiktok && (
-                <a href={socials.tiktok} target="_blank" rel="noreferrer" className="w-12 h-12 rounded-full border border-brand-cream/20 flex items-center justify-center hover:bg-brand-straw hover:border-brand-straw hover:text-brand-dark transition-all duration-500">
-                  <TikTokIcon size={20} />
-                </a>
-              )}
-            </div>
+            <h4 className="text-brand-gold uppercase tracking-[0.3em] text-[10px] font-bold mb-8">Hours</h4>
+            <ul className="space-y-4">
+              {salonData.hours.map((h, i) => (
+                <li key={i} className="flex justify-between text-sm font-light">
+                  <span className="text-white/40">{h.day[lang]}</span>
+                  <span className="text-white/70">{h.time}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
-        
-        <div className="pt-8 border-t border-brand-cream/10 flex flex-col md:flex-row justify-between items-center gap-6 text-brand-cream/40 text-xs font-light tracking-wide">
-          <p onClick={handleSecretClick} className="select-none cursor-default">
-            © {new Date().getFullYear()} Bless Nails Lisbon. {t.allRightsReserved}
+
+        {/* Copyright */}
+        <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="text-white/30 text-[10px] uppercase tracking-widest">
+            © 2024 Bless Nails Lisbon. All rights reserved.
           </p>
           <div className="flex gap-8">
-            <button className="hover:text-brand-straw transition-colors">{t.privacy}</button>
-            <button className="hover:text-brand-straw transition-colors">{t.terms}</button>
+            <a href="#" className="text-white/30 text-[10px] uppercase tracking-widest hover:text-white transition-colors">Privacy Policy</a>
+            <a href="#" className="text-white/30 text-[10px] uppercase tracking-widest hover:text-white transition-colors">Terms of Service</a>
           </div>
         </div>
       </div>

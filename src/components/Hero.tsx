@@ -1,62 +1,111 @@
 // src/components/Hero.tsx
 import { motion } from "motion/react";
 import { UI_STRINGS, Language } from "../constants";
-import { useSalon } from "../context/SalonContext"; // Importamos o contexto dinâmico
+import { useSalon } from "../context/SalonContext";
 
 export const Hero = ({ lang }: { lang: Language }) => {
   const t = UI_STRINGS[lang];
-  const { salonData } = useSalon(); // Acedemos aos dados em tempo real
+  const { salonData } = useSalon();
 
   return (
-    <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-brand-cream">
-      {/* Background Otimizado */}
+    <section className="relative min-h-[100svh] flex items-end justify-center overflow-hidden bg-brand-dark grain">
+      
+      {/* ── IMAGEM DOMINANTE com overlay gradiente ── */}
       <div className="absolute inset-0 z-0">
-        <img 
-          src="/hero-bg.png" 
-          alt="Bless Nails Interior" 
-          className="w-full h-full object-cover opacity-25 mix-blend-multiply" 
-          loading="eager" // Mobile First: Imagem de topo carrega imediatamente
+        <img
+          src="https://picsum.photos/seed/salon/1920/1080"
+          alt="Bless Nails Lisbon"
+          className="w-full h-full object-cover opacity-60"
+          loading="eager"
+          referrerPolicy="no-referrer"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-brand-cream/60 via-brand-cream/20 to-brand-cream"></div>
+        {/* Gradiente de baixo para cima — cria profundidade sem esconder a imagem */}
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/50 to-brand-dark/10" />
+        {/* Vinheta lateral subtil */}
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/30 via-transparent to-brand-dark/30" />
       </div>
 
-      {/* Conteúdo Central */}
-      <div className="relative z-10 text-center px-6 max-w-5xl mx-auto pt-24 md:pt-32">
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <span className="text-brand-leaf uppercase tracking-[0.3em] text-[9px] md:text-xs font-bold mb-6 block">
-            Príncipe Real, Lisboa
-          </span>
-          
-          {/* Tipografia Responsiva: Menor no telemóvel para não forçar scroll excessivo */}
-          <h1 className="text-5xl md:text-8xl lg:text-9xl font-serif mb-8 leading-[1.1] md:leading-[0.9] text-brand-dark">
+      {/* ── CONTEÚDO — alinhado à esquerda em baixo (editorial) ── */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-24 pb-24 md:pb-32">
+        <div className="max-w-3xl">
+
+          {/* Eyebrow */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+            className="flex items-center gap-4 mb-8"
+          >
+            <div className="w-8 h-px bg-brand-gold" />
+            <span className="text-brand-gold uppercase tracking-[0.35em] text-[9px] font-medium">
+              Príncipe Real · Lisboa
+            </span>
+          </motion.div>
+
+          {/* Título principal */}
+          <motion.h1
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] font-serif leading-[0.92] text-white mb-6"
+          >
             {lang === "pt" ? (
-              <>Elegância em <br className="hidden md:block" /><span className="italic text-brand-leaf font-light">cada detalhe.</span></>
+              <>Elegância<br /><span className="italic font-light text-brand-sage">em cada detalhe.</span></>
             ) : lang === "en" ? (
-              <>Elegance in <br className="hidden md:block" /><span className="italic text-brand-leaf font-light">every detail.</span></>
+              <>Elegance<br /><span className="italic font-light text-brand-sage">in every detail.</span></>
             ) : (
-              <>Elegancia en <br className="hidden md:block" /><span className="italic text-brand-leaf font-light">cada detalle.</span></>
+              <>Elegancia<br /><span className="italic font-light text-brand-sage">en cada detalle.</span></>
             )}
-          </h1>
+          </motion.h1>
 
-          <p className="text-base md:text-2xl text-brand-dark/60 mb-12 max-w-2xl mx-auto font-light leading-relaxed px-2 md:px-0">
+          {/* Linha decorativa */}
+          <motion.div
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: 1, opacity: 1 }}
+            transition={{ delay: 0.7, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            style={{ transformOrigin: "left" }}
+            className="w-32 h-px bg-gradient-to-r from-brand-gold to-transparent mb-8"
+          />
+
+          {/* Tagline */}
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.85, duration: 0.8 }}
+            className="text-white/60 text-base md:text-lg font-sans font-light leading-relaxed mb-12 max-w-md"
+          >
             {salonData.tagline[lang]}
-          </p>
+          </motion.p>
 
-          {/* Botões: Largura total no telemóvel para facilitar o toque (Thumb Zone) */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
-            <a href={salonData.bookingUrl} target="_blank" rel="noreferrer" className="btn-primary w-full sm:w-auto">
+          {/* CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.05, duration: 0.7 }}
+            className="flex flex-col sm:flex-row gap-4"
+          >
+            <a href={salonData.bookingUrl} target="_blank" rel="noreferrer" className="btn-primary">
               {t.bookTreatment}
             </a>
-            <a href="#servicos" className="btn-outline w-full sm:w-auto">
+            <a href="#servicos" className="btn-outline border-white/30 text-white hover:bg-white hover:text-brand-dark">
               {t.viewServices}
             </a>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
+
+      {/* ── SCROLL INDICATOR ── */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5, duration: 1 }}
+        className="absolute bottom-8 right-8 md:right-12 z-10 flex flex-col items-center gap-2 text-white/30"
+      >
+        <span className="text-[8px] tracking-[0.35em] uppercase font-medium rotate-90 origin-center mb-4">
+          {t.scroll}
+        </span>
+        <div className="w-px h-12 bg-gradient-to-b from-white/30 to-transparent" />
+      </motion.div>
     </section>
   );
 };

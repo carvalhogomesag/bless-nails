@@ -1,6 +1,6 @@
 # AI Context Export
 
-Gerado em: 2026-03-01T11:46:04.200Z
+Gerado em: 2026-03-05T21:36:36.142Z
 Projeto: bless-nails-lisbon
 Arquivos incluídos: 22
 
@@ -157,7 +157,7 @@ export default function App() {
       </main>
 
       <Footer lang={lang} />
-      <CookieBanner />
+      <CookieBanner lang={lang} />
       
       {/* Botões flutuantes para Desktop */}
       <FloatingContact />
@@ -188,7 +188,7 @@ export default function App() {
             href={salonData.bookingUrl} 
             target="_blank" 
             rel="noreferrer" 
-            className="flex-[3] bg-brand-leaf text-white h-14 rounded-2xl flex items-center justify-center gap-2 shadow-xl shadow-brand-leaf/20 active:scale-95 transition-transform font-bold text-[10px] uppercase tracking-[0.2em]"
+            className="flex-3 bg-brand-leaf text-white h-14 rounded-2xl flex items-center justify-center gap-2 shadow-xl shadow-brand-leaf/20 active:scale-95 transition-transform font-bold text-[10px] uppercase tracking-[0.2em]"
           >
             <Calendar size={18} />
             {t.bookNow}
@@ -225,7 +225,7 @@ export const About = ({ lang }: { lang: Language }) => {
           className="relative px-4 md:px-0"
         >
           {/* A moldura da imagem agora usa um leve brilho creme para destacar no fundo escuro */}
-          <div className="aspect-[4/5] rounded-tl-[6rem] rounded-br-[6rem] md:rounded-tl-[10rem] md:rounded-br-[10rem] rounded-tr-3xl rounded-bl-3xl overflow-hidden shadow-2xl shadow-black/20 relative border border-brand-cream/10">
+          <div className="aspect-4/5 rounded-tl-[6rem] rounded-br-[6rem] md:rounded-tl-[10rem] md:rounded-br-[10rem] rounded-tr-3xl rounded-bl-3xl overflow-hidden shadow-2xl shadow-black/20 relative border border-brand-cream/10">
             <div className="absolute inset-0 bg-brand-leaf/10 mix-blend-overlay z-10"></div>
             <img 
               src="/sobre-principal.png" 
@@ -236,7 +236,7 @@ export const About = ({ lang }: { lang: Language }) => {
           </div>
           
           {/* O detalhe circular agora tem a borda na cor do fundo (Leaf) para parecer flutuar sobre a foto */}
-          <div className="absolute -bottom-10 -right-10 w-56 h-56 rounded-full overflow-hidden border-[12px] border-brand-leaf shadow-2xl hidden lg:block">
+          <div className="absolute -bottom-10 -right-10 w-56 h-56 rounded-full overflow-hidden border-12px border-brand-leaf shadow-2xl hidden lg:block">
             <img src="/sobre-detalhe.png" alt="Detail" className="w-full h-full object-cover" loading="lazy" />
           </div>
         </motion.div>
@@ -365,8 +365,8 @@ export const AdminPanel = ({ onClose }: { onClose: () => void }) => {
   const gallerySlots = Array(10).fill("").map((_, i) => formData.galleryPhotos[i] || "");
 
   return (
-    <div className="fixed inset-0 z-[100] bg-brand-dark/80 backdrop-blur-md flex items-center justify-center p-6">
-      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-brand-cream w-full max-w-5xl h-[85vh] rounded-[2rem] shadow-2xl flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-100 bg-brand-dark/80 backdrop-blur-md flex items-center justify-center p-6">
+      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-brand-cream w-full max-w-5xl h-[85vh] rounded-4xl shadow-2xl flex flex-col overflow-hidden">
         
         {/* Header */}
         <div className="bg-white p-6 border-b border-brand-straw/30 flex justify-between items-center">
@@ -664,7 +664,7 @@ export const Contact = ({ lang }: { lang: Language }) => {
              No mobile, reduzimos a altura para 350px para não dominar o ecrã todo.
              A moldura orgânica escala proporcionalmente.
           */
-          className="relative overflow-hidden shadow-2xl shadow-brand-leaf/10 h-[350px] md:h-[500px] rounded-tl-[4rem] rounded-br-[4rem] md:rounded-tl-[6rem] md:rounded-br-[6rem] rounded-tr-2xl rounded-bl-2xl border-4 md:border-8 border-white"
+          className="relative overflow-hidden shadow-2xl shadow-brand-leaf/10 h-87.5 md:h-125 rounded-tl-[4rem] rounded-br-[4rem] md:rounded-tl-[6rem] md:rounded-br-[6rem] rounded-tr-2xl rounded-bl-2xl border-4 md:border-8 border-white"
         >
           {/* Overlay de ajuda para scroll no mobile (evita que o utilizador fique "preso" no mapa ao fazer scroll) */}
           <div className="absolute inset-0 pointer-events-none bg-brand-dark/5 z-10 md:hidden"></div>
@@ -691,20 +691,34 @@ export const Contact = ({ lang }: { lang: Language }) => {
 // src/components/CookieBanner.tsx
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ShieldCheck } from "lucide-react";
+import { Cookie, ShieldCheck } from "lucide-react";
+import { UI_STRINGS, Language } from "../constants";
 
-export const CookieBanner = () => {
+interface CookieBannerProps {
+  lang: Language;
+}
+
+export const CookieBanner = ({ lang }: CookieBannerProps) => {
   const [isVisible, setIsVisible] = useState(false);
+  const t = UI_STRINGS[lang];
 
   useEffect(() => {
-    const consent = localStorage.getItem("cookie-consent");
+    // Verifica se já existe um consentimento gravado
+    const consent = localStorage.getItem("bless_nails_consent");
     if (!consent) {
-      setTimeout(() => setIsVisible(true), 2000);
+      // Aparece após 2 segundos para uma entrada suave
+      const timer = setTimeout(() => setIsVisible(true), 2000);
+      return () => clearTimeout(timer);
     }
-  },[]);
+  }, []);
 
-  const acceptCookies = () => {
-    localStorage.setItem("cookie-consent", "true");
+  const handleAcceptAll = () => {
+    localStorage.setItem("bless_nails_consent", "all");
+    setIsVisible(false);
+  };
+
+  const handleEssentialsOnly = () => {
+    localStorage.setItem("bless_nails_consent", "essentials");
     setIsVisible(false);
   };
 
@@ -712,33 +726,55 @@ export const CookieBanner = () => {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ y: 50, opacity: 0 }}
+          initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 50, opacity: 0, scale: 0.95 }}
-          className="fixed bottom-6 left-6 right-6 md:left-auto md:right-10 md:w-[400px] z-50 bg-white/80 backdrop-blur-xl shadow-2xl shadow-brand-leaf/10 rounded-3xl p-6 border border-brand-straw/30"
+          exit={{ y: 100, opacity: 0, scale: 0.95 }}
+          transition={{ type: "spring", damping: 25, stiffness: 200 }}
+          /* bottom-24 no mobile para ficar acima da barra de agendamento */
+          className="fixed bottom-24 md:bottom-10 left-6 right-6 md:left-auto md:right-10 md:w-[400px] z-[100]"
         >
-          <div className="flex items-start gap-5">
-            <div className="bg-brand-leaf/10 p-3 rounded-2xl text-brand-leaf shrink-0">
-              <ShieldCheck size={24} strokeWidth={1.5} />
-            </div>
-            <div>
-              <h4 className="font-serif text-xl mb-1 text-brand-dark">Privacidade & Cookies</h4>
-              <p className="text-sm text-brand-dark/60 mb-6 font-light leading-relaxed">
-                Utilizamos cookies para personalizar a sua experiência e garantir a segurança dos agendamentos. Ao continuar, aceita a nossa política.
-              </p>
-              <div className="flex gap-4 items-center">
-                <button 
-                  onClick={acceptCookies}
-                  className="bg-brand-leaf text-white px-6 py-2.5 rounded-full text-[10px] tracking-widest uppercase font-bold hover:bg-brand-dark hover:-translate-y-0.5 transition-all duration-300 w-full shadow-lg shadow-brand-leaf/20"
-                >
-                  Aceitar Tudo
-                </button>
-                <button 
-                  onClick={() => setIsVisible(false)}
-                  className="text-brand-dark/40 text-[10px] tracking-widest uppercase font-bold hover:text-brand-dark transition-all duration-300"
-                >
-                  Fechar
-                </button>
+          {/* Contentor Glassmorphism de Luxo */}
+          <div className="bg-white/80 backdrop-blur-xl border border-brand-straw/30 p-6 md:p-8 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] relative overflow-hidden">
+            
+            {/* Detalhe lateral de marca */}
+            <div className="absolute top-0 left-0 w-1.5 h-full bg-brand-leaf/20"></div>
+
+            <div className="flex items-start gap-5">
+              <div className="bg-brand-leaf/10 p-3 rounded-2xl text-brand-leaf shrink-0">
+                <Cookie size={24} strokeWidth={1.5} />
+              </div>
+
+              <div className="flex-1">
+                <h4 className="font-serif text-xl mb-1 text-brand-dark">{t.cookiesTitle}</h4>
+                <p className="text-[11px] text-brand-dark/60 mb-6 font-light leading-relaxed">
+                  {t.cookiesText}
+                </p>
+
+                {/* Estrutura de Botões RGPD */}
+                <div className="flex flex-col gap-3 items-center w-full">
+                  <button 
+                    onClick={handleAcceptAll}
+                    className="bg-brand-leaf text-white px-6 py-3 rounded-full text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-brand-dark hover:-translate-y-0.5 transition-all duration-300 w-full shadow-lg shadow-brand-leaf/20"
+                  >
+                    {t.cookiesAccept}
+                  </button>
+                  
+                  <div className="flex gap-4 w-full justify-center pt-1">
+                    <button 
+                      onClick={handleEssentialsOnly}
+                      className="text-brand-dark/40 text-[9px] tracking-widest uppercase font-bold hover:text-brand-leaf transition-all duration-300"
+                    >
+                      {t.cookiesReject}
+                    </button>
+                    
+                    <a 
+                      href="#" 
+                      className="text-brand-dark/40 text-[9px] tracking-widest uppercase font-bold hover:text-brand-leaf border-b border-transparent hover:border-brand-leaf transition-all duration-300"
+                    >
+                      {t.cookiesMore}
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1588,7 +1624,13 @@ export const UI_STRINGS = {
     scroll: "Scroll",
     closed: "Fechado",
     team: "Nossa Equipa",
-    teamSubtitle: "Especialistas dedicadas a realçar a sua melhor versão."
+    teamSubtitle: "Especialistas dedicadas a realçar a sua melhor versão.",
+    // RGPD Cookies
+    cookiesTitle: "Privacidade & Cookies",
+    cookiesText: "Utilizamos cookies para melhorar a sua experiência e analisar o tráfego. Ao clicar em 'Aceitar', concorda com a nossa política.",
+    cookiesAccept: "Aceitar Todos",
+    cookiesReject: "Apenas Necessários",
+    cookiesMore: "Saber Mais"
   },
   en: {
     about: "About",
@@ -1622,7 +1664,13 @@ export const UI_STRINGS = {
     scroll: "Scroll",
     closed: "Closed",
     team: "Our Team",
-    teamSubtitle: "Specialists dedicated to enhancing your best version."
+    teamSubtitle: "Specialists dedicated to enhancing your best version.",
+    // RGPD Cookies
+    cookiesTitle: "Privacy & Cookies",
+    cookiesText: "We use cookies to enhance your experience and analyze traffic. By clicking 'Accept All', you agree to our privacy policy.",
+    cookiesAccept: "Accept All",
+    cookiesReject: "Essentials Only",
+    cookiesMore: "Learn More"
   },
   es: {
     about: "Sobre",
@@ -1656,33 +1704,39 @@ export const UI_STRINGS = {
     scroll: "Scroll",
     closed: "Cerrado",
     team: "Nuestro Equipo",
-    teamSubtitle: "Especialistas dedicadas a realzar tu mejor versión."
+    teamSubtitle: "Especialistas dedicadas a realzar tu mejor versión.",
+    // RGPD Cookies
+    cookiesTitle: "Privacidad & Cookies",
+    cookiesText: "Utilizamos cookies para mejorar su experiencia y analizar el tráfico. Al hacer clic en 'Aceptar Todo', acepta nuestra política.",
+    cookiesAccept: "Aceptar Todo",
+    cookiesReject: "Solo Necesarios",
+    cookiesMore: "Saber Más"
   }
 };
 
 export const SALON_DATA = {
-  "name": "Bless Nails Lisbon",
-  "tagline": {
-    "pt": "O seu destino de eleição para tratamentos de unhas de luxo no centro de Lisboa.",
-    "en": "Your premier destination for luxury nail treatments in the center of Lisbon.",
-    "es": "Tu destino preferido para tratamientos de uñas de lujo en el centro de Lisboa."
+  name: "Bless Nails Lisbon",
+  tagline: {
+    pt: "O seu destino de eleição para tratamentos de unhas de luxo no centro de Lisboa.",
+    en: "Your premier destination for luxury nail treatments in the center of Lisbon.",
+    es: "Tu destino preferido para tratamientos de uñas de lujo en el centro de Lisboa."
   },
-  "description": {
-    "pt": "Entre na Bless Nails, o seu destino de eleição para tratamentos de unhas de luxo no centro de Lisboa. Desfrute de um ambiente sereno e sofisticado onde os nossos técnicos especializados proporcionam manicures, pedicures e nail art personalizada impecáveis. Utilizando apenas os melhores produtos, garantimos uma experiência de mimo que a deixa rejuvenescida e glamorosa.",
-    "en": "Step into Bless Nails, your premier destination for luxury nail treatments in the center of Lisbon. Indulge in a serene and sophisticated environment where our expert technicians provide impeccable manicures, pedicures, and bespoke nail art. Using only the finest products, we ensure a pampering experience that leaves you feeling rejuvenated and glamorous.",
-    "es": "Entra en Bless Nails, tu destino preferido para tratamientos de uñas de lujo en el centro de Lisboa. Disfruta de un ambiente sereno e sofisticado onde nuestros técnicos expertos ofrecen manicuras, pedicuras y nail art personalizado impecables. Utilizando solo los mejores produtos, garantizamos una experiencia de mimo que te dejará rejuvenecida e glamurosa."
+  description: {
+    pt: "Entre na Bless Nails, o seu destino de eleição para tratamentos de unhas de luxo no centro de Lisboa. Desfrute de um ambiente sereno e sofisticado onde os nossos técnicos especializados proporcionam manicures, pedicures e nail art personalizada impecáveis. Utilizando apenas os melhores produtos, garantimos uma experiência de mimo que a deixa rejuvenescida e glamorosa.",
+    en: "Step into Bless Nails, your premier destination for luxury nail treatments in the center of Lisbon. Indulge in a serene and sophisticated environment where our expert technicians provide impeccable manicures, pedicures, and bespoke nail art. Using only the finest products, we ensure a pampering experience that leaves you feeling rejuvenated and glamorous.",
+    es: "Entra en Bless Nails, tu destino preferido para tratamientos de uñas de lujo en el centro de Lisboa. Disfruta de un ambiente sereno e sofisticado onde nuestros técnicos expertos ofrecen manicuras, pedicuras y nail art personalizado impecables. Utilizando solo los mejores produtos, garantizamos una experiencia de mimo que te dejará rejuvenecida e glamurosa."
   },
-  "address": "Rua de O Século 154, 154, Príncipe Real, Lisboa",
-  "phoneNumber": "+351937832777",
-  "googleMapsUrl": "https://maps.google.com/?daddr=Rua%20de%20O%20S%C3%A9culo%20154%2C%20154%2C%20Lisboa%2C%201200-437",
-  "bookingUrl": "https://www.fresha.com/pt/a/bless-nails-lisbon-lisboa-rua-de-o-seculo-154-xcgfypxc/all-offer?venue=true",
-  "mapEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3113.123456789!2d-9.148!3d38.716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd19337f7f7f7f7f%3A0x7f7f7f7f7f7f7f7f!2sRua%20de%20O%20S%C3%A9culo%20154%2C%201200-437%20Lisboa!5e0!3m2!1spt!2spt!4v1234567890",
-  "socialLinks": {
-    "instagram": "https://www.instagram.com/blessnailslisbon/",
-    "facebook": "",
-    "tiktok": ""
+  address: "Rua de O Século 154, 154, Príncipe Real, Lisboa",
+  phoneNumber: "+351937832777",
+  googleMapsUrl: "https://maps.google.com/?daddr=Rua%20de%20O%20S%C3%A9culo%20154%2C%20154%2C%20Lisboa%2C%201200-437",
+  bookingUrl: "https://www.fresha.com/pt/a/bless-nails-lisbon-lisboa-rua-de-o-seculo-154-xcgfypxc/all-offer?venue=true",
+  mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3113.123456789!2d-9.148!3d38.716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd19337f7f7f7f7f%3A0x7f7f7f7f7f7f7f7f!2sRua%20de%20O%20S%C3%A9culo%20154%2C%201200-437%20Lisboa!5e0!3m2!1spt!2spt!4v1234567890",
+  socialLinks: {
+    instagram: "https://www.instagram.com/blessnailslisbon/",
+    facebook: "",
+    tiktok: ""
   },
-  "galleryPhotos": [
+  galleryPhotos: [
     "https://i.ibb.co/99SZskLY/Captura-de-ecr-2026-02-28-220502.png",
     "https://i.ibb.co/3mGvP98B/Captura-de-ecr-2026-02-28-220245.png",
     "https://i.ibb.co/NdDp9vRJ/Captura-de-ecr-2026-02-28-220234.png",
@@ -1694,153 +1748,125 @@ export const SALON_DATA = {
     "",
     ""
   ],
-  "team": [
+  team: [
     {
-      "name": "Stefanie",
-      "role": {
-        "pt": "Nail Designer",
-        "en": "Master Stylist",
-        "es": "Master Stylist"
+      name: "Stefanie",
+      role: {
+        pt: "Nail Designer",
+        en: "Master Stylist",
+        es: "Master Stylist"
       },
-      "image": "https://i.ibb.co/B5dryZzg/Captura-de-ecr-2026-03-01-111655.png"
+      image: "https://i.ibb.co/B5dryZzg/Captura-de-ecr-2026-03-01-111655.png"
     },
     {
-      "name": "Stacy",
-      "role": {
-        "pt": "Nail Artist",
-        "en": "",
-        "es": ""
+      name: "Stacy",
+      role: {
+        pt: "Nail Artist",
+        en: "Nail Artist",
+        es: "Nail Artist"
       },
-      "image": "https://i.ibb.co/0ydrZJsV/Captura-de-ecr-2026-03-01-111635.png"
+      image: "https://i.ibb.co/0ydrZJsV/Captura-de-ecr-2026-03-01-111635.png"
     },
     {
-      "name": "Andreza",
-      "role": {
-        "pt": "Nail Artist",
-        "en": "",
-        "es": ""
+      name: "Andreza",
+      role: {
+        pt: "Nail Artist",
+        en: "Nail Artist",
+        es: "Nail Artist"
       },
-      "image": "https://i.ibb.co/Xr3H5KMZ/Captura-de-ecr-2026-03-01-111713.png"
+      image: "https://i.ibb.co/Xr3H5KMZ/Captura-de-ecr-2026-03-01-111713.png"
     }
   ],
-  "services": [
+  services: [
     {
-      "name": {
-        "pt": "Manicure Verniz Gel",
-        "en": "Gel Polish Manicure",
-        "es": "Manicura Esmalte Gel"
+      name: {
+        pt: "Manicure Verniz Gel",
+        en: "Gel Polish Manicure",
+        es: "Manicura Esmalte Gel"
       },
-      "price": "25",
-      "duration": "1h",
-      "description": {
-        "pt": "Verniz gel de longa duração com acabamento impecável.",
-        "en": "Long-lasting gel polish with an impeccable finish.",
-        "es": "Esmalte en gel de larga duración com un acabado impecable."
+      price: "25",
+      duration: "1h",
+      description: {
+        pt: "Verniz gel de longa duração com acabamento impecável.",
+        en: "Long-lasting gel polish with an impeccable finish.",
+        es: "Esmalte en gel de larga duración com un acabado impecable."
       }
     },
     {
-      "name": {
-        "pt": "Manicure Clássica ",
-        "en": "Classic Manicure",
-        "es": "Manicura Clásica"
+      name: {
+        pt: "Manicure Clássica ",
+        en: "Classic Manicure",
+        es: "Manicura Clásica"
       },
-      "price": "15",
-      "duration": "1h",
-      "description": {
-        "pt": "Tratamento tradicional para mãos elegantes e cuidadas.",
-        "en": "Traditional treatment for elegant and well-cared hands.",
-        "es": "Tratamiento tradicional para manos elegantes e cuidadas."
+      price: "15",
+      duration: "1h",
+      description: {
+        pt: "Tratamento tradicional para mãos elegantes e cuidadas.",
+        en: "Traditional treatment for elegant and well-cared hands.",
+        es: "Tratamiento tradicional para manos elegantes e cuidadas."
       }
     },
     {
-      "name": {
-        "pt": "Pedicure Verniz Gel",
-        "en": "Gel Polish Pedicure",
-        "es": "Pedicura Esmalte Gel"
+      name: {
+        pt: "Pedicure Verniz Gel",
+        en: "Gel Polish Pedicure",
+        es: "Pedicura Esmalte Gel"
       },
-      "price": "35",
-      "duration": "1h",
-      "description": {
-        "pt": "Cuidado completo para pés com verniz gel duradouro.",
-        "en": "Complete foot care with long-lasting gel polish.",
-        "es": "Cuidado completo de pies con esmalte en gel duradero."
+      price: "35",
+      duration: "1h",
+      description: {
+        pt: "Cuidado completo para pés com verniz gel duradouro.",
+        en: "Complete foot care with long-lasting gel polish.",
+        es: "Cuidado completo de pies con esmalte en gel duradero."
       }
     },
     {
-      "name": {
-        "pt": "Pedicure Clássico ",
-        "en": "Classic Pedicure",
-        "es": "Pedicura Clásica"
+      name: {
+        pt: "Pedicure Clássico ",
+        en: "Classic Pedicure",
+        es: "Pedicura Clásica"
       },
-      "price": "25",
-      "duration": "1h",
-      "description": {
-        "pt": "O essencial para pés relaxados e unhas perfeitas.",
-        "en": "The essential for relaxed feet and perfect nails.",
-        "es": "Lo esencial para pies relaxados e uñas perfectas."
+      price: "25",
+      duration: "1h",
+      description: {
+        pt: "O essencial para pés relaxados e unhas perfeitas.",
+        en: "The essential for relaxed feet and perfect nails.",
+        es: "Lo esencial para pies relaxados e uñas perfectas."
       }
     }
   ],
-  "hours": [
+  hours: [
     {
-      "day": {
-        "pt": "Segunda-feira",
-        "en": "Monday",
-        "es": "Lunes"
-      },
-      "time": "10:00 - 19:00"
+      day: { pt: "Segunda-feira", en: "Monday", es: "Lunes" },
+      time: "10:00 - 19:00"
     },
     {
-      "day": {
-        "pt": "Terça-feira",
-        "en": "Tuesday",
-        "es": "Martes"
-      },
-      "time": "10:00 - 19:00"
+      day: { pt: "Terça-feira", en: "Tuesday", es: "Martes" },
+      time: "10:00 - 19:00"
     },
     {
-      "day": {
-        "pt": "Quarta-feira",
-        "en": "Wednesday",
-        "es": "Miércoles"
-      },
-      "time": "10:00 - 19:00"
+      day: { pt: "Quarta-feira", en: "Wednesday", es: "Miércoles" },
+      time: "10:00 - 19:00"
     },
     {
-      "day": {
-        "pt": "Quinta-feira",
-        "en": "Thursday",
-        "es": "Jueves"
-      },
-      "time": "10:00 - 19:00"
+      day: { pt: "Quinta-feira", en: "Thursday", es: "Jueves" },
+      time: "10:00 - 19:00"
     },
     {
-      "day": {
-        "pt": "Sexta-feira",
-        "en": "Friday",
-        "es": "Viernes"
-      },
-      "time": "10:00 - 19:00"
+      day: { pt: "Sexta-feira", en: "Friday", es: "Viernes" },
+      time: "10:00 - 19:00"
     },
     {
-      "day": {
-        "pt": "Sábado",
-        "en": "Saturday",
-        "es": "Sábado"
-      },
-      "time": "10:00 - 19:00"
+      day: { pt: "Sábado", en: "Saturday", es: "Sábado" },
+      time: "10:00 - 19:00"
     },
     {
-      "day": {
-        "pt": "Domingo",
-        "en": "Sunday",
-        "es": "Domingo"
-      },
-      "time": "Fechado"
+      day: { pt: "Domingo", en: "Sunday", es: "Domingo" },
+      time: "Fechado"
     }
   ],
-  "features": {
-    "pt": [
+  features: {
+    pt: [
       "Produtos Veganos",
       "Pet Friendly",
       "Adequado para Crianças",
@@ -1848,7 +1874,7 @@ export const SALON_DATA = {
       "Empreendedorismo Feminino",
       "LGBTQ+ Friendly"
     ],
-    "en": [
+    en: [
       "Vegan Products",
       "Pet Friendly",
       "Kid Friendly",
@@ -1856,7 +1882,7 @@ export const SALON_DATA = {
       "Female Entrepreneurship",
       "LGBTQ+ Friendly"
     ],
-    "es": [
+    es: [
       "Productos Veganos",
       "Pet Friendly",
       "Apto para Niños",
@@ -1865,33 +1891,33 @@ export const SALON_DATA = {
       "LGBTQ+ Friendly"
     ]
   },
-  "reviews": [
+  reviews: [
     {
-      "author": "Raquel B",
-      "text": {
-        "pt": "Maravilhoso, como sempre",
-        "en": "Wonderful, as ever",
-        "es": "Maravilloso, como siempre"
+      author: "Raquel B",
+      text: {
+        pt: "Maravilhoso, como sempre",
+        en: "Wonderful, as ever",
+        es: "Maravilloso, como siempre"
       },
-      "rating": 5
+      rating: 5
     },
     {
-      "author": "Olann",
-      "text": {
-        "pt": "Absolutamente amei este salão. O serviço foi impecável, a atenção aos detalhes excepcional.",
-        "en": "Absolutely loved this salon. The service was impeccable, the attention to detail outstanding.",
-        "es": "Absolutamente me encantó este salón. El servicio fue impecable, la atención al detalle excepcional."
+      author: "Olann",
+      text: {
+        pt: "Absolutamente amei este salão. O serviço foi impecável, a atenção aos detalhes excepcional.",
+        en: "Absolutely loved this salon. The service was impeccable, the attention to detail outstanding.",
+        es: "Absolutamente me encantó este salón. El servicio fue impecable, la atención al detalle excepcional."
       },
-      "rating": 5
+      rating: 5
     },
     {
-      "author": "Isabella L",
-      "text": {
-        "pt": "O atendimento é ótimo, a Stefanie é super delicada e detalhista. As unhas ficaram incríveis!",
-        "en": "The service is great, Stefanie is super delicate and detailed. The nails looked incredible!",
-        "es": "¡La atención é excelente, Stefanie é súper delicada e detalista. ¡Las uñas ficaram incríveis!"
+      author: "Isabella L",
+      text: {
+        pt: "O atendimento é ótimo, a Stefanie é super delicada e detalhista. As unhas ficaram incríveis!",
+        en: "The service is great, Stefanie is super delicate and detailed. The nails looked incredible!",
+        es: "¡La atención é excelente, Stefanie é súper delicada e detalista. ¡Las uñas ficaram incríveis!"
       },
-      "rating": 5
+      rating: 5
     }
   ]
 };

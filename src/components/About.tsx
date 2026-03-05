@@ -8,76 +8,80 @@ export const About = ({ lang }: { lang: Language }) => {
   const { salonData } = useSalon();
 
   return (
-    /* Mudança para Fundo Verde Leaf e Texto Geral em Creme */
-    <section id="sobre" className="section-padding bg-brand-leaf text-brand-cream overflow-hidden">
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 md:gap-24 items-center">
-        
-        {/* LADO DA IMAGEM */}
-        <motion.div 
-          initial={{ opacity: 0, x: -30 }} 
-          whileInView={{ opacity: 1, x: 0 }} 
-          viewport={{ once: true }} 
-          transition={{ duration: 1 }}
-          className="relative px-4 md:px-0"
-        >
-          {/* A moldura da imagem agora usa um leve brilho creme para destacar no fundo escuro */}
-          <div className="aspect-4/5 rounded-tl-[6rem] rounded-br-[6rem] md:rounded-tl-[10rem] md:rounded-br-[10rem] rounded-tr-3xl rounded-bl-3xl overflow-hidden shadow-2xl shadow-black/20 relative border border-brand-cream/10">
-            <div className="absolute inset-0 bg-brand-leaf/10 mix-blend-overlay z-10"></div>
-            <img 
-              src="/sobre-principal.png" 
-              alt="Manicure Premium" 
-              className="w-full h-full object-cover scale-105" 
-              loading="lazy"
-            />
-          </div>
+    <section id="sobre" className="relative py-24 md:py-32 bg-brand-forest overflow-hidden grain">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           
-          {/* O detalhe circular agora tem a borda na cor do fundo (Leaf) para parecer flutuar sobre a foto */}
-          <div className="absolute -bottom-10 -right-10 w-56 h-56 rounded-full overflow-hidden border-12px border-brand-leaf shadow-2xl hidden lg:block">
-            <img src="/sobre-detalhe.png" alt="Detail" className="w-full h-full object-cover" loading="lazy" />
-          </div>
-        </motion.div>
+          {/* ── IMAGEM — Frame editorial limpo ── */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="relative"
+          >
+            <div className="aspect-4/5 overflow-hidden border border-brand-gold/20">
+              <img
+                src="https://picsum.photos/seed/about/800/1000"
+                alt="Bless Nails Experience"
+                className="w-full h-full object-cover grayscale-20 hover:scale-105 transition-transform duration-1000"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+            
+            {/* Detalhe decorativo flutuante */}
+            <div className="absolute -bottom-8 -right-8 w-32 h-32 border border-brand-gold/30 rounded-full flex items-center justify-center bg-brand-forest/80 backdrop-blur-sm">
+              <span className="text-brand-gold font-serif italic text-sm">Est. 2023</span>
+            </div>
+          </motion.div>
 
-        {/* LADO DO TEXTO */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }} 
-          whileInView={{ opacity: 1, y: 0 }} 
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          {/* Subtítulo em cor Palha (Straw) para brilhar no fundo verde */}
-          <span className="text-brand-straw uppercase tracking-[0.3em] text-[10px] md:text-xs font-bold mb-6 block">
-            {t.ourEssence}
-          </span>
-          
-          <h2 className="text-5xl md:text-7xl mb-8 leading-[1.1] text-white font-serif italic font-light">
-            {t.luxuryMeetsRelaxation}
-          </h2>
-          
-          <p className="text-lg md:text-xl text-brand-cream/80 leading-relaxed mb-12 font-light">
-            {salonData.description[lang]}
-          </p>
-          
-          {/* GRELHA DE ATRIBUTOS (Versão Editorial Clara) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 border-t border-brand-cream/20 pt-8">
-            {salonData.features[lang].map((feature, i) => (
-              <motion.div 
-                key={i} 
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.4 + (i * 0.1) }}
-                className="flex items-center gap-4 py-4 border-b border-brand-cream/10 group"
-              >
-                {/* Marcador agora em cor de Palha */}
-                <div className="w-1.5 h-1.5 rounded-full bg-brand-straw opacity-60 group-hover:scale-150 group-hover:opacity-100 transition-all duration-500"></div>
-                
-                <span className="text-xl md:text-2xl font-serif italic text-brand-cream/90 group-hover:text-brand-straw transition-colors duration-500">
-                  {feature}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+          {/* ── TEXTO — Tipografia refinada ── */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-8 h-px bg-brand-gold" />
+              <span className="text-brand-gold uppercase tracking-[0.3em] text-[10px] font-medium">
+                {t.aboutUs}
+              </span>
+            </div>
+
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-white mb-8 leading-tight">
+              {lang === "pt" ? (
+                <>Onde a arte encontra <span className="italic font-light text-brand-sage">o seu bem-estar.</span></>
+              ) : lang === "en" ? (
+                <>Where art meets <span className="italic font-light text-brand-sage">your well-being.</span></>
+              ) : (
+                <>Donde el arte encuentra <span className="italic font-light text-brand-sage">su bienestar.</span></>
+              )}
+            </h2>
+
+            <div className="w-24 h-px bg-brand-gold/30 mb-8" />
+
+            <p className="text-white/70 text-lg font-sans font-light leading-relaxed mb-12">
+              {salonData.description?.[lang] ?? salonData.description?.pt ?? ""}
+            </p>
+
+            {/* Features com marcadores gold */}
+            <div className="space-y-6">
+              {[
+                { pt: "Atendimento Personalizado", en: "Personalized Service", es: "Atención Personalizada" },
+                { pt: "Produtos Premium & Vegan", en: "Premium & Vegan Products", es: "Productos Premium y Veganos" },
+                { pt: "Ambiente Exclusivo", en: "Exclusive Atmosphere", es: "Ambiente Exclusivo" }
+              ].map((feature, idx) => (
+                <div key={idx} className="group flex items-center gap-4">
+                  <div className="w-6 h-px bg-brand-gold group-hover:w-12 transition-all duration-500" />
+                  <span className="text-white/90 text-sm uppercase tracking-widest font-medium">
+                    {feature[lang]}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

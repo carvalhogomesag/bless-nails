@@ -1,122 +1,105 @@
 // src/components/Gallery.tsx
-import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { X, ZoomIn } from "lucide-react";
+import { useRef, useState } from "react";
+import { motion } from "motion/react";
 import { UI_STRINGS, Language } from "../constants";
 import { useSalon } from "../context/SalonContext";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export const Gallery = ({ lang }: { lang: Language }) => {
   const t = UI_STRINGS[lang];
   const { salonData } = useSalon();
-  const [selectedImg, setSelectedImg] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const rawPhotos = salonData.galleryPhotos?.filter(url => url && url.trim() !== "") || [];
-  
-  // EFEITO CIRCULAR: Triplicamos a lista para permitir scroll infinito visual para ambos os lados
-  const displayPhotos = rawPhotos.length > 0 
-    ? [...rawPhotos, ...rawPhotos, ...rawPhotos] 
-    : [];
-
-  // Posiciona o scroll no "meio" da lista triplicada ao carregar
-  useEffect(() => {
-    if (scrollRef.current && rawPhotos.length > 0) {
-      const container = scrollRef.current;
-      const cardWidth = container.querySelector('div')?.offsetWidth || 0;
-      const gap = 24; // correspondente a gap-6 (1.5rem = 24px)
-      
-      // Calculamos o ponto exato para começar na primeira foto do segundo bloco (o bloco do meio)
-      const scrollTo = (cardWidth + gap) * rawPhotos.length;
-      container.scrollLeft = scrollTo;
+  const scrollToIndex = (index: number) => {
+    if (scrollRef.current) {
+      const cardWidth = scrollRef.current.offsetWidth * 0.8; // Aproximação do snap
+      scrollRef.current.scrollTo({
+        left: index * cardWidth,
+        behavior: "smooth"
+      });
+      setActiveIndex(index);
     }
-  }, [rawPhotos.length]);
+  };
 
-  if (displayPhotos.length === 0) return null;
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      const cardWidth = scrollRef.current.offsetWidth * 0.8;
+      const newIndex = Math.round(scrollRef.current.scrollLeft / cardWidth);
+      if (newIndex !== activeIndex) setActiveIndex(newIndex);
+    }
+  };
 
   return (
-    <section id="galeria" className="py-24 bg-brand-leaf text-brand-cream relative overflow-hidden">
-      {/* Luz ambiente de luxo */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px]"></div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-6 text-center mb-16 relative z-10">
-        <motion.span 
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-brand-straw uppercase tracking-[0.3em] text-[10px] md:text-xs font-bold mb-4 block"
-        >
-          {t.gallerySubtitle}
-        </motion.span>
-        <h2 className="text-5xl md:text-7xl font-serif italic font-light text-white leading-tight">
-          {t.gallery}
-        </h2>
-        <div className="w-24 h-1 bg-brand-straw/30 mx-auto mt-6 rounded-full"></div>
-      </div>
-
-      {/* --- CATÁLOGO CIRCULAR (FLUXO INFINITO VISUAL) --- */}
-      <div className="relative">
-        <div 
-          ref={scrollRef}
-          className="flex overflow-x-auto gap-6 pb-20 no-scrollbar snap-x snap-mandatory"
-          style={{ 
-            scrollbarWidth: 'none', 
-            msOverflowStyle: 'none',
-            // O padding lateral cria o efeito "peeking" (fotos das pontas visíveis)
-            paddingLeft: '15%', 
-            paddingRight: '15%' 
-          }}
-        >
-          {displayPhotos.map((photo, i) => (
-            <motion.div 
-              key={i} 
-              initial={{ opacity: 0.5, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: false, amount: 0.5 }}
-              /* 
-                 Tamanhos optimizados para Mobile e Desktop:
-                 - Mobile: w-[70vw] (permite ver 15% de cada lado)
-                 - Desktop: w-[400px]
-              */
-              className="relative flex-none w-[70vw] md:w-[400px] aspect-[3/4] rounded-[3rem] overflow-hidden snap-center cursor-pointer bg-brand-dark/20 border border-white/10 group shadow-2xl transition-all duration-500"
-              onClick={() => setSelectedImg(photo)}
+    <section id="galeria" className="py-24 md:py-32 bg-brand-forest overflow-hidden grain">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
+        
+        {/* Header editorial split */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+          <div className="max-w-xl">
+            <span className="text-brand-gold uppercase tracking-[0.4em] text-[10px] font-bold mb-4 block">
+              {t.gallery}
+            </span>
+            <h2 className="text-4xl md:text-6xl font-serif text-white leading-tight">
+              {lang === "pt" ? "A nossa curadoria visual." : "Our visual curation."}
+            </h2>
+          </div>
+          
+          {/* Controlos de navegação */}
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => scrollToIndex(Math.max(0, activeIndex - 1))}
+              className="w-12 h-12 border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-brand-forest transition-all"
             >
-              <img 
-                src={photo} 
-                alt="" 
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
-                loading="lazy"
+              <ChevronLeft size={20} />
+            </button>
+            <button
+              onClick={() => scrollToIndex(Math.min(salonData.galleryPhotos.length - 1, activeIndex + 1))}
+              className="w-12 h-12 border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-brand-forest transition-all"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </div>
+        </div>
+
+        {/* Carrossel Snap */}
+        <div
+          ref={scrollRef}
+          onScroll={handleScroll}
+          className="flex gap-6 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-12"
+        >
+          {salonData.galleryPhotos.filter(img => img).map((img, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="min-w-[80%] md:min-w-[45%] lg:min-w-[30%] aspect-[3/4] snap-start relative group overflow-hidden border border-white/10"
+            >
+              <img
+                src={img}
+                alt={`Gallery ${idx}`}
+                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                referrerPolicy="no-referrer"
               />
-              
-              {/* Overlay minimalista */}
-              <div className="absolute inset-0 bg-brand-dark/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center backdrop-blur-[2px]">
-                <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white border border-white/20">
-                  <ZoomIn size={28} strokeWidth={1} />
-                </div>
-              </div>
+              <div className="absolute inset-0 bg-brand-dark/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </motion.div>
           ))}
         </div>
-      </div>
 
-      {/* Lightbox / Modal */}
-      <AnimatePresence>
-        {selectedImg && (
-          <motion.div 
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} 
-            className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-12 bg-brand-dark/98 backdrop-blur-2xl"
-            onClick={() => setSelectedImg(null)}
-          >
-            <button className="absolute top-6 right-6 md:top-10 md:right-10 text-white/50 hover:text-white"><X size={40} /></button>
-            <motion.img 
-              initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }}
-              src={selectedImg} 
-              className="max-w-full max-h-full rounded-3xl shadow-2xl object-contain border border-white/10" 
+        {/* Indicadores de posição */}
+        <div className="flex justify-center gap-3 mt-8">
+          {salonData.galleryPhotos.filter(img => img).map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => scrollToIndex(idx)}
+              className={`h-1 transition-all duration-500 ${
+                activeIndex === idx ? "w-12 bg-brand-gold" : "w-4 bg-white/20"
+              }`}
             />
-          </motion.div>
-        )}
-      </AnimatePresence>
+          ))}
+        </div>
+      </div>
     </section>
   );
 };

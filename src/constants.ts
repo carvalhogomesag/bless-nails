@@ -1,18 +1,19 @@
-// src/constants.ts
-
 export type Language = "pt" | "en" | "es";
 
 export const UI_STRINGS = {
   pt: {
     about: "Sobre",
+    aboutUs: "Sobre Nós",
     services: "Serviços",
     gallery: "Galeria",
     gallerySubtitle: "Inspire-se com a nossa arte e espaço.",
     reviews: "Avaliações",
+    testimonials: "Testemunhos",
     location: "Localização",
     bookNow: "Agendar Agora",
     bookTreatment: "Agendar Tratamento",
     viewServices: "Ver Serviços",
+    startingAt: "A partir de",
     ourEssence: "A nossa essência",
     luxuryMeetsRelaxation: "Onde o luxo encontra o relaxamento",
     ourServices: "Nossos Serviços",
@@ -45,14 +46,17 @@ export const UI_STRINGS = {
   },
   en: {
     about: "About",
+    aboutUs: "About Us",
     services: "Services",
     gallery: "Gallery",
     gallerySubtitle: "Get inspired by our art and space.",
     reviews: "Reviews",
+    testimonials: "Testimonials",
     location: "Location",
     bookNow: "Book Now",
     bookTreatment: "Book Treatment",
     viewServices: "View Services",
+    startingAt: "Starting at",
     ourEssence: "Our Essence",
     luxuryMeetsRelaxation: "Where luxury meets relaxation",
     ourServices: "Our Services",
@@ -85,14 +89,17 @@ export const UI_STRINGS = {
   },
   es: {
     about: "Sobre",
+    aboutUs: "Sobre Nosotros",
     services: "Servicios",
     gallery: "Galería",
     gallerySubtitle: "Inspírate con nuestro arte e espacio.",
     reviews: "Reseñas",
+    testimonials: "Testimonios",
     location: "Ubicación",
     bookNow: "Reservar Ahora",
     bookTreatment: "Reservar Tratamiento",
     viewServices: "Ver Servicios",
+    startingAt: "A partir de",
     ourEssence: "Nuestra esencia",
     luxuryMeetsRelaxation: "Donde el lujo se encuentra con la relajación",
     ourServices: "Nuestros Servicios",
@@ -121,7 +128,7 @@ export const UI_STRINGS = {
     cookiesText: "Utilizamos cookies para mejorar su experiencia y analizar el tráfico. Al hacer clic en 'Aceptar Todo', acepta nuestra política.",
     cookiesAccept: "Aceptar Todo",
     cookiesReject: "Solo Necesarios",
-    cookiesMore: "Saber Más"
+    cookiesMore: "Saber Mais"
   }
 };
 

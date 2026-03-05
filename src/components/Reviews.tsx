@@ -1,73 +1,73 @@
 // src/components/Reviews.tsx
 import { motion } from "motion/react";
-import { Star } from "lucide-react";
 import { UI_STRINGS, Language } from "../constants";
-import { useSalon } from "../context/SalonContext"; // Importamos o contexto dinâmico
+import { useSalon } from "../context/SalonContext";
+import { Star, Quote } from "lucide-react";
 
 export const Reviews = ({ lang }: { lang: Language }) => {
   const t = UI_STRINGS[lang];
-  const { salonData } = useSalon(); // Acedemos às reviews reais em tempo real
+  const { salonData } = useSalon();
 
   return (
-    <section id="avaliacoes" className="section-padding bg-brand-leaf text-brand-cream relative overflow-hidden">
-      {/* Elementos decorativos de fundo - Otimizados para não causar scroll horizontal no mobile */}
-      <div className="absolute top-[-5%] right-[-10%] w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute bottom-[-5%] left-[-10%] w-[200px] h-[200px] md:w-[300px] md:h-[300px] bg-brand-dark/10 rounded-full blur-3xl pointer-events-none"></div>
-      
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* HEADER: Mobile First (Stack vertical no mobile, horizontal no desktop) */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-16 gap-6 md:gap-8">
-          <div className="max-w-xl">
-            <span className="text-brand-straw uppercase tracking-[0.2em] text-[10px] md:text-xs font-bold mb-3 md:mb-4 block">
-              {t.realExperiences}
+    <section id="reviews" className="py-24 md:py-32 bg-brand-dark overflow-hidden grain">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
+        
+        {/* Header editorial centralizado */}
+        <div className="text-center mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <span className="text-brand-gold uppercase tracking-[0.4em] text-[10px] font-bold mb-4 block">
+              {t.testimonials}
             </span>
-            <h2 className="text-4xl md:text-6xl font-serif leading-tight">
-              {t.whatClientsSay}
+            <h2 className="text-4xl md:text-6xl font-serif text-white mb-6">
+              {lang === "pt" ? "Vozes da nossa comunidade." : "Voices from our community."}
             </h2>
-          </div>
-
-          {/* Badge de Rating: Ajustado para mobile */}
-          <div className="flex items-center gap-3 bg-white/10 px-6 py-3 md:px-8 md:py-4 rounded-full backdrop-blur-md border border-white/10 shrink-0">
-            <div className="flex text-brand-straw">
-              {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" className="md:w-[18px] md:h-[18px]" />)}
-            </div>
-            <span className="font-medium tracking-wide text-sm md:text-base">
-              4.9/5 <span className="opacity-60 font-light text-xs ml-1">(336 {t.reviews.toLowerCase()})</span>
-            </span>
-          </div>
+            <div className="w-12 h-px bg-brand-gold mx-auto" />
+          </motion.div>
         </div>
 
-        {/* GRID DE REVIEWS: Mobile First (1 coluna telemóvel, 3 colunas desktop) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-          {salonData.reviews.map((review, i) => (
-            <motion.div 
-              key={i} 
-              initial={{ opacity: 0, y: 20 }} 
-              whileInView={{ opacity: 1, y: 0 }} 
-              viewport={{ once: true, margin: "-50px" }} 
-              transition={{ delay: i * 0.1, duration: 0.8 }}
-              className="bg-white/5 p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-white/10 backdrop-blur-lg hover:bg-white/10 transition-all duration-500 flex flex-col"
+        {/* Grid de Reviews */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {salonData.reviews.map((review, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 }}
+              className="bg-white/5 border border-white/10 p-10 relative group hover:bg-white/10 transition-all duration-500"
             >
-              {/* Estrelas da Review */}
-              <div className="flex gap-1 text-brand-straw mb-5 md:mb-6">
-                {[...Array(review.rating)].map((_, idx) => <Star key={idx} size={14} fill="currentColor" />)}
+              {/* Gold line at top */}
+              <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-brand-gold to-transparent opacity-30" />
+              
+              {/* Quote Icon */}
+              <div className="text-brand-gold/20 mb-8">
+                <Quote size={40} fill="currentColor" />
               </div>
 
-              {/* Texto da Review: Ajustado para não ser demasiado longo no mobile */}
-              <p className="text-lg md:text-xl italic font-serif mb-6 md:mb-8 leading-relaxed font-light text-brand-cream/90 flex-grow">
+              {/* Estrelas */}
+              <div className="flex gap-1 mb-6">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={12} className="text-brand-gold" fill="currentColor" />
+                ))}
+              </div>
+
+              {/* Texto */}
+              <p className="text-white/80 text-base font-sans font-light italic leading-relaxed mb-8">
                 "{review.text[lang]}"
               </p>
 
               {/* Autor */}
-              <div className="flex items-center gap-4 pt-4 border-t border-white/5">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-brand-straw rounded-full flex items-center justify-center text-brand-leaf font-bold text-base md:text-lg">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-brand-gold/20 flex items-center justify-center text-brand-gold font-serif italic text-sm">
                   {review.author[0]}
                 </div>
-                <div className="flex flex-col">
-                  <span className="font-semibold uppercase tracking-widest text-[10px] md:text-xs">
-                    {review.author}
-                  </span>
-                  <span className="text-[9px] uppercase tracking-widest opacity-40">Cliente Verificada</span>
+                <div>
+                  <h4 className="text-white font-medium text-sm tracking-wide">{review.author}</h4>
+                  <span className="text-brand-gold/40 text-[10px] uppercase tracking-widest">Verified Client</span>
                 </div>
               </div>
             </motion.div>
