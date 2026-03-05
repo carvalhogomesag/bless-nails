@@ -25,8 +25,8 @@ export const Hero = ({ lang }: { lang: Language }) => {
         <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/30 via-transparent to-brand-dark/30" />
       </div>
 
-      {/* ── CONTEÚDO — alinhado à esquerda em baixo (editorial) ── */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-24 pb-24 md:pb-32">
+      {/* ── CONTEÚDO — pt-32 garante espaço acima da navbar fixa ── */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-24 pt-32 pb-24 md:pb-32">
         <div className="max-w-3xl">
 
           {/* Eyebrow */}
