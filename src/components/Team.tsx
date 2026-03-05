@@ -14,7 +14,7 @@ export const Team = ({ lang }: { lang: Language }) => {
         {/* Header editorial */}
         <div className="flex flex-col items-center text-center mb-20">
           <span className="text-brand-forest uppercase tracking-[0.4em] text-[10px] font-bold mb-4 block">
-            {t.ourTeam}
+            {t.team}
           </span>
           <h2 className="text-4xl md:text-6xl font-serif text-brand-dark mb-6">
             {lang === "pt" ? "Mãos que criam arte." : "Hands that create art."}
@@ -34,7 +34,7 @@ export const Team = ({ lang }: { lang: Language }) => {
               className="group"
             >
               {/* Frame da Foto — Editorial rounded-t */}
-              <div className="aspect-[3/4] overflow-hidden rounded-t-[10rem] rounded-b-[2rem] border border-brand-forest/5 mb-8 relative">
+              <div className="aspect-3/4 overflow-hidden rounded-t-[10rem] rounded-b-4xl border border-brand-forest/5 mb-8 relative">
                 <img
                   src={member.image}
                   alt={member.name}
